@@ -1,0 +1,675 @@
+Users
+db.users.insertMany([
+  {
+    userID: ObjectId(),
+    username: 'alice_smith',
+    email: 'alice.smith@example.com',
+    password: 'alice_pass_123',
+    firstName: 'Alice',
+    lastName: 'Smith',
+    birthDate: ISODate('1999-01-15T00:00:00.000Z'),
+    creationDate: ISODate('2024-09-19T06:17:52.963Z'),
+    profilePicture: 'https://example.com/alice.jpg',
+    profileBiography: 'Loves hiking and photography.',
+    accountPrivacy: 'public'
+  },
+  {
+    userID: ObjectId(),
+    username: 'bob_jones',
+    email: 'bob.jones@example.com',
+    password: 'bob_pass_456',
+    firstName: 'Bob',
+    lastName: 'Jones',
+    birthDate: ISODate('1998-05-12T00:00:00.000Z'),
+    creationDate: ISODate('2024-09-20T08:20:00.000Z'),
+    profilePicture: 'https://example.com/bob.jpg',
+    profileBiography: 'Software developer who loves to explore new technologies.',
+    accountPrivacy: 'private'
+  },
+  {
+    userID: ObjectId(),
+    username: 'charlie_brown',
+    email: 'charlie.brown@example.com',
+    password: 'charlie_pass_789',
+    firstName: 'Charlie',
+    lastName: 'Brown',
+    birthDate: ISODate('1997-03-24T00:00:00.000Z'),
+    creationDate: ISODate('2024-09-21T09:45:00.000Z'),
+    profilePicture: 'https://example.com/charlie.jpg',
+    profileBiography: 'Graphic designer with a passion for animation.',
+    accountPrivacy: 'public'
+  },
+  {
+    userID: ObjectId(),
+    username: 'diana_wells',
+    email: 'diana.wells@example.com',
+    password: 'diana_pass_321',
+    firstName: 'Diana',
+    lastName: 'Wells',
+    birthDate: ISODate('2000-07-19T00:00:00.000Z'),
+    creationDate: ISODate('2024-09-22T10:30:00.000Z'),
+    profilePicture: 'https://example.com/diana.jpg',
+    profileBiography: 'Fitness enthusiast and a certified yoga instructor.',
+    accountPrivacy: 'public'
+  },
+  {
+    userID: ObjectId(),
+    username: 'edwin_miller',
+    email: 'edwin.miller@example.com',
+    password: 'edwin_pass_654',
+    firstName: 'Edwin',
+    lastName: 'Miller',
+    birthDate: ISODate('1995-09-30T00:00:00.000Z'),
+    creationDate: ISODate('2024-09-23T07:55:00.000Z'),
+    profilePicture: 'https://example.com/edwin.jpg',
+    profileBiography: 'Tech entrepreneur and founder of a startup.',
+    accountPrivacy: 'private'
+  },
+  {
+    userID: ObjectId(),
+    username: 'frank_kent',
+    email: 'frank.kent@example.com',
+    password: 'frank_pass_987',
+    firstName: 'Frank',
+    lastName: 'Kent',
+    birthDate: ISODate('1989-11-14T00:00:00.000Z'),
+    creationDate: ISODate('2024-09-24T11:20:00.000Z'),
+    profilePicture: 'https://example.com/frank.jpg',
+    profileBiography: 'Chef and food blogger.',
+    accountPrivacy: 'public'
+  },
+  {
+    userID: ObjectId(),
+    username: 'grace_brown',
+    email: 'grace.brown@example.com',
+    password: 'grace_pass_741',
+    firstName: 'Grace',
+    lastName: 'Brown',
+    birthDate: ISODate('1994-01-08T00:00:00.000Z'),
+    creationDate: ISODate('2024-09-25T06:35:00.000Z'),
+    profilePicture: 'https://example.com/grace.jpg',
+    profileBiography: 'Fashion designer with an eye for detail.',
+    accountPrivacy: 'private'
+  },
+  {
+    userID: ObjectId(),
+    username: 'hannah_lowe',
+    email: 'hannah.lowe@example.com',
+    password: 'hannah_pass_258',
+    firstName: 'Hannah',
+    lastName: 'Lowe',
+    birthDate: ISODate('1992-04-10T00:00:00.000Z'),
+    creationDate: ISODate('2024-09-26T08:15:00.000Z'),
+    profilePicture: 'https://example.com/hannah.jpg',
+    profileBiography: 'Journalist and part-time travel blogger.',
+    accountPrivacy: 'public'
+  },
+  {
+    userID: ObjectId(),
+    username: 'ian_thomas',
+    email: 'ian.thomas@example.com',
+    password: 'ian_pass_963',
+    firstName: 'Ian',
+    lastName: 'Thomas',
+    birthDate: ISODate('1990-08-22T00:00:00.000Z'),
+    creationDate: ISODate('2024-09-27T09:50:00.000Z'),
+    profilePicture: 'https://example.com/ian.jpg',
+    profileBiography: 'Photographer with a focus on landscapes and wildlife.',
+    accountPrivacy: 'public'
+  },
+  {
+    userID: ObjectId(),
+    username: 'julia_moore',
+    email: 'julia.moore@example.com',
+    password: 'julia_pass_654',
+    firstName: 'Julia',
+    lastName: 'Moore',
+    birthDate: ISODate('2001-12-05T00:00:00.000Z'),
+    creationDate: ISODate('2024-09-28T12:05:00.000Z'),
+    profilePicture: 'https://example.com/julia.jpg',
+    profileBiography: 'Aspiring musician and songwriter.',
+    accountPrivacy: 'private'
+  }
+]);
+
+
+
+
+
+Posts
+db.posts.insertMany([
+  {
+    postID: ObjectId(),
+    userID: ObjectId(),  // Replace with actual userID from your users collection
+    textContent: 'Enjoying a beautiful sunset at the beach!',
+    mediaContent: 'https://example.com/sunset.jpg',
+    creationDate: ISODate('2024-09-20T15:30:00.000Z')
+  },
+  {
+    postID: ObjectId(),
+    userID: ObjectId(),  // Replace with actual userID from your users collection
+    textContent: 'Just finished reading an amazing book!',
+    mediaContent: '',
+    creationDate: ISODate('2024-09-21T12:00:00.000Z')
+  },
+  {
+    postID: ObjectId(),
+    userID: ObjectId(),  // Replace with actual userID from your users collection
+    textContent: 'Had a great time hiking this weekend.',
+    mediaContent: 'https://example.com/hiking.jpg',
+    creationDate: ISODate('2024-09-22T10:15:00.000Z')
+  },
+  {
+    postID: ObjectId(),
+    userID: ObjectId(),  // Replace with actual userID from your users collection
+    textContent: 'Just tried a new recipe, and it turned out amazing!',
+    mediaContent: 'https://example.com/recipe.jpg',
+    creationDate: ISODate('2024-09-23T17:45:00.000Z')
+  },
+  {
+    postID: ObjectId(),
+    userID: ObjectId(),  // Replace with actual userID from your users collection
+    textContent: 'Excited to announce my new project!',
+    mediaContent: '',
+    creationDate: ISODate('2024-09-24T09:30:00.000Z')
+  },
+  {
+    postID: ObjectId(),
+    userID: ObjectId(),  // Replace with actual userID from your users collection
+    textContent: 'Just got back from a wonderful trip to the mountains.',
+    mediaContent: 'https://example.com/mountains.jpg',
+    creationDate: ISODate('2024-09-25T13:00:00.000Z')
+  },
+  {
+    postID: ObjectId(),
+    userID: ObjectId(),  // Replace with actual userID from your users collection
+    textContent: 'Feeling inspired after attending a great workshop!',
+    mediaContent: '',
+    creationDate: ISODate('2024-09-26T14:00:00.000Z')
+  },
+  {
+    postID: ObjectId(),
+    userID: ObjectId(),  // Replace with actual userID from your users collection
+    textContent: 'This artwork took me a week to complete.',
+    mediaContent: 'https://example.com/artwork.jpg',
+    creationDate: ISODate('2024-09-27T08:50:00.000Z')
+  },
+  {
+    postID: ObjectId(),
+    userID: ObjectId(),  // Replace with actual userID from your users collection
+    textContent: 'Had a fun day out with friends!',
+    mediaContent: 'https://example.com/friends.jpg',
+    creationDate: ISODate('2024-09-28T11:20:00.000Z')
+  },
+  {
+    postID: ObjectId(),
+    userID: ObjectId(),  // Replace with actual userID from your users collection
+    textContent: 'Just completed a marathon!',
+    mediaContent: 'https://example.com/marathon.jpg',
+    creationDate: ISODate('2024-09-29T19:45:00.000Z')
+  }
+]);
+
+
+
+
+
+
+Comments
+db.comments.insertMany([
+  {
+    commentID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f825'),  // Post ID for the sunset post
+    userID: ObjectId('66ed22001d0067a1fa42f826'),  // User ID for the commenter
+    textContent: 'Beautiful view! I wish I was there!',
+    creationDate: ISODate('2024-09-20T16:00:00.000Z')
+  },
+  {
+    commentID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f827'),  // Post ID for the book post
+    userID: ObjectId('66ed22001d0067a1fa42f828'),  // User ID for the commenter
+    textContent: 'What book did you read? I need recommendations!',
+    creationDate: ISODate('2024-09-21T12:30:00.000Z')
+  },
+  {
+    commentID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f829'),  // Post ID for the hiking post
+    userID: ObjectId('66ed22001d0067a1fa42f82a'),  // User ID for the commenter
+    textContent: 'That sounds amazing! Which trail did you hike?',
+    creationDate: ISODate('2024-09-22T10:45:00.000Z')
+  },
+  {
+    commentID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f82b'),  // Post ID for the recipe post
+    userID: ObjectId('66ed22001d0067a1fa42f82c'),  // User ID for the commenter
+    textContent: 'I’d love to try that recipe!',
+    creationDate: ISODate('2024-09-23T18:00:00.000Z')
+  },
+  {
+    commentID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f82d'),  // Post ID for the project announcement
+    userID: ObjectId('66ed22001d0067a1fa42f82e'),  // User ID for the commenter
+    textContent: 'Can’t wait to see it!',
+    creationDate: ISODate('2024-09-24T10:15:00.000Z')
+  },
+  {
+    commentID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f82f'),  // Post ID for the trip post
+    userID: ObjectId('66ed22001d0067a1fa42f830'),  // User ID for the commenter
+    textContent: 'Looks like a great time! Where did you go?',
+    creationDate: ISODate('2024-09-25T14:30:00.000Z')
+  },
+  {
+    commentID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f831'),  // Post ID for the workshop post
+    userID: ObjectId('66ed22001d0067a1fa42f832'),  // User ID for the commenter
+    textContent: 'What did you learn? Sounds interesting!',
+    creationDate: ISODate('2024-09-26T15:00:00.000Z')
+  },
+  {
+    commentID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f833'),  // Post ID for the artwork post
+    userID: ObjectId('66ed22001d0067a1fa42f834'),  // User ID for the commenter
+    textContent: 'Wow, that’s impressive! Great job!',
+    creationDate: ISODate('2024-09-27T09:15:00.000Z')
+  },
+  {
+    commentID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f835'),  // Post ID for the friends post
+    userID: ObjectId('66ed22001d0067a1fa42f836'),  // User ID for the commenter
+    textContent: 'Looks like a fun day! I miss hanging out!',
+    creationDate: ISODate('2024-09-28T11:50:00.000Z')
+  },
+  {
+    commentID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f837'),  // Post ID for the marathon post
+    userID: ObjectId('66ed22001d0067a1fa42f838'),  // User ID for the commenter
+    textContent: 'Congratulations! That’s an amazing achievement!',
+    creationDate: ISODate('2024-09-29T20:00:00.000Z')
+  }
+]);
+
+
+
+
+
+
+Threads
+db.threads.insertMany([
+  {
+    threadID: ObjectId(),
+    userID: ObjectId('66ed22001d0067a1fa42f826'),  // User ID for the thread creator
+    threadName: 'Photography Tips and Tricks',
+    creationDate: ISODate('2024-09-20T16:30:00.000Z')
+  },
+  {
+    threadID: ObjectId(),
+    userID: ObjectId('66ed22001d0067a1fa42f827'),  // User ID for the thread creator
+    threadName: 'Book Recommendations',
+    creationDate: ISODate('2024-09-21T12:45:00.000Z')
+  },
+  {
+    threadID: ObjectId(),
+    userID: ObjectId('66ed22001d0067a1fa42f828'),  // User ID for the thread creator
+    threadName: 'Hiking Adventures',
+    creationDate: ISODate('2024-09-22T11:00:00.000Z')
+  },
+  {
+    threadID: ObjectId(),
+    userID: ObjectId('66ed22001d0067a1fa42f82a'),  // User ID for the thread creator
+    threadName: 'Cooking and Recipes',
+    creationDate: ISODate('2024-09-23T19:00:00.000Z')
+  },
+  {
+    threadID: ObjectId(),
+    userID: ObjectId('66ed22001d0067a1fa42f82b'),  // User ID for the thread creator
+    threadName: 'Project Ideas and Collaboration',
+    creationDate: ISODate('2024-09-24T10:45:00.000Z')
+  },
+  {
+    threadID: ObjectId(),
+    userID: ObjectId('66ed22001d0067a1fa42f82c'),  // User ID for the thread creator
+    threadName: 'Travel Stories',
+    creationDate: ISODate('2024-09-25T14:00:00.000Z')
+  },
+  {
+    threadID: ObjectId(),
+    userID: ObjectId('66ed22001d0067a1fa42f830'),  // User ID for the thread creator
+    threadName: 'Workshops and Learning',
+    creationDate: ISODate('2024-09-26T15:30:00.000Z')
+  },
+  {
+    threadID: ObjectId(),
+    userID: ObjectId('66ed22001d0067a1fa42f831'),  // User ID for the thread creator
+    threadName: 'Art and Creativity',
+    creationDate: ISODate('2024-09-27T09:30:00.000Z')
+  },
+  {
+    threadID: ObjectId(),
+    userID: ObjectId('66ed22001d0067a1fa42f832'),  // User ID for the thread creator
+    threadName: 'Social Events and Meetups',
+    creationDate: ISODate('2024-09-28T11:45:00.000Z')
+  },
+  {
+    threadID: ObjectId(),
+    userID: ObjectId('66ed22001d0067a1fa42f833'),  // User ID for the thread creator
+    threadName: 'Fitness and Health',
+    creationDate: ISODate('2024-09-29T20:15:00.000Z')
+  }
+]);
+
+
+
+
+
+
+
+Votes
+db.votes.insertMany([
+  {
+    voteID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f825'),  // Post ID to associate the votes with
+    upvoteCount: 15,
+    downvoteCount: 3
+  },
+  {
+    voteID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f826'),  // Post ID to associate the votes with
+    upvoteCount: 8,
+    downvoteCount: 1
+  },
+  {
+    voteID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f827'),  // Post ID to associate the votes with
+    upvoteCount: 22,
+    downvoteCount: 0
+  },
+  {
+    voteID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f828'),  // Post ID to associate the votes with
+    upvoteCount: 10,
+    downvoteCount: 4
+  },
+  {
+    voteID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f829'),  // Post ID to associate the votes with
+    upvoteCount: 5,
+    downvoteCount: 2
+  },
+  {
+    voteID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f82a'),  // Post ID to associate the votes with
+    upvoteCount: 30,
+    downvoteCount: 5
+  },
+  {
+    voteID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f82b'),  // Post ID to associate the votes with
+    upvoteCount: 12,
+    downvoteCount: 6
+  },
+  {
+    voteID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f82c'),  // Post ID to associate the votes with
+    upvoteCount: 7,
+    downvoteCount: 1
+  },
+  {
+    voteID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f82d'),  // Post ID to associate the votes with
+    upvoteCount: 18,
+    downvoteCount: 3
+  },
+  {
+    voteID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f82e'),  // Post ID to associate the votes with
+    upvoteCount: 25,
+    downvoteCount: 4
+  }
+]);
+
+
+
+
+
+
+
+Tags
+db.tags.insertMany([
+  {
+    tagID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f825'),  // Post ID to associate the tag with
+    tagName: 'sunset'
+  },
+  {
+    tagID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f826'),  // Post ID to associate the tag with
+    tagName: 'reading'
+  },
+  {
+    tagID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f827'),  // Post ID to associate the tag with
+    tagName: 'hiking'
+  },
+  {
+    tagID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f828'),  // Post ID to associate the tag with
+    tagName: 'recipe'
+  },
+  {
+    tagID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f829'),  // Post ID to associate the tag with
+    tagName: 'project'
+  },
+  {
+    tagID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f82a'),  // Post ID to associate the tag with
+    tagName: 'travel'
+  },
+  {
+    tagID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f82b'),  // Post ID to associate the tag with
+    tagName: 'workshop'
+  },
+  {
+    tagID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f82c'),  // Post ID to associate the tag with
+    tagName: 'art'
+  },
+  {
+    tagID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f82d'),  // Post ID to associate the tag with
+    tagName: 'friends'
+  },
+  {
+    tagID: ObjectId(),
+    postID: ObjectId('66ed22001d0067a1fa42f82e'),  // Post ID to associate the tag with
+    tagName: 'marathon'
+  }
+]);
+
+
+
+
+
+
+Messages
+db.messages.insertMany([
+  {
+    messageID: ObjectId(),
+    userID: ObjectId('66ed22001d0067a1fa42f826'),  // User ID to associate the message with
+    messageContent: 'Hey there! How are you?',
+    messageDate: ISODate('2024-09-30T09:00:00.000Z')
+  },
+  {
+    messageID: ObjectId(),
+    userID: ObjectId('66ed22001d0067a1fa42f827'),  // User ID to associate the message with
+    messageContent: 'Can we catch up later?',
+    messageDate: ISODate('2024-09-30T10:15:00.000Z')
+  },
+  {
+    messageID: ObjectId(),
+    userID: ObjectId('66ed22001d0067a1fa42f828'),  // User ID to associate the message with
+    messageContent: 'Just wanted to say I loved your last post!',
+    messageDate: ISODate('2024-09-30T11:30:00.000Z')
+  },
+  {
+    messageID: ObjectId(),
+    userID: ObjectId('66ed22001d0067a1fa42f829'),  // User ID to associate the message with
+    messageContent: 'Looking forward to our meeting!',
+    messageDate: ISODate('2024-09-30T12:45:00.000Z')
+  },
+  {
+    messageID: ObjectId(),
+    userID: ObjectId('66ed22001d0067a1fa42f82a'),  // User ID to associate the message with
+    messageContent: 'Let’s plan a trip together!',
+    messageDate: ISODate('2024-09-30T14:00:00.000Z')
+  },
+  {
+    messageID: ObjectId(),
+    userID: ObjectId('66ed22001d0067a1fa42f82b'),  // User ID to associate the message with
+    messageContent: 'I found this great article you might like!',
+    messageDate: ISODate('2024-09-30T15:15:00.000Z')
+  },
+  {
+    messageID: ObjectId(),
+    userID: ObjectId('66ed22001d0067a1fa42f82c'),  // User ID to associate the message with
+    messageContent: 'Thanks for your help yesterday!',
+    messageDate: ISODate('2024-09-30T16:30:00.000Z')
+  },
+  {
+    messageID: ObjectId(),
+    userID: ObjectId('66ed22001d0067a1fa42f82d'),  // User ID to associate the message with
+    messageContent: 'Hope you’re having a great day!',
+    messageDate: ISODate('2024-09-30T17:45:00.000Z')
+  },
+  {
+    messageID: ObjectId(),
+    userID: ObjectId('66ed22001d0067a1fa42f82e'),  // User ID to associate the message with
+    messageContent: 'Any plans for the weekend?',
+    messageDate: ISODate('2024-09-30T18:00:00.000Z')
+  },
+  {
+    messageID: ObjectId(),
+    userID: ObjectId('66ed22001d0067a1fa42f82f'),  // User ID to associate the message with
+    messageContent: 'Let’s grab coffee soon!',
+    messageDate: ISODate('2024-09-30T19:15:00.000Z')
+  }
+]);
+
+
+
+
+
+
+Follows
+db.follows.insertMany([
+  {
+    userID: ObjectId('66ed22001d0067a1fa42f826'),  // User ID for the follower
+    requestStatus: 'accepted'  // Status can be 'accepted', 'pending', or 'rejected'
+  },
+  {
+    userID: ObjectId('66ed22001d0067a1fa42f827'),  // User ID for the follower
+    requestStatus: 'pending'
+  },
+  {
+    userID: ObjectId('66ed22001d0067a1fa42f828'),  // User ID for the follower
+    requestStatus: 'accepted'
+  },
+  {
+    userID: ObjectId('66ed22001d0067a1fa42f829'),  // User ID for the follower
+    requestStatus: 'rejected'
+  },
+  {
+    userID: ObjectId('66ed22001d0067a1fa42f82a'),  // User ID for the follower
+    requestStatus: 'accepted'
+  },
+  {
+    userID: ObjectId('66ed22001d0067a1fa42f82b'),  // User ID for the follower
+    requestStatus: 'pending'
+  },
+  {
+    userID: ObjectId('66ed22001d0067a1fa42f82c'),  // User ID for the follower
+    requestStatus: 'accepted'
+  },
+  {
+    userID: ObjectId('66ed22001d0067a1fa42f82d'),  // User ID for the follower
+    requestStatus: 'rejected'
+  },
+  {
+    userID: ObjectId('66ed22001d0067a1fa42f82e'),  // User ID for the follower
+    requestStatus: 'accepted'
+  },
+  {
+    userID: ObjectId('66ed22001d0067a1fa42f82f'),  // User ID for the follower
+    requestStatus: 'pending'
+  }
+]);
+
+
+
+
+
+Joins 
+db.joins.insertMany([
+  {
+    userID: ObjectId('66df36c1004ad4557e42f807'),
+    threadID: ObjectId('66ed034943e9cd130a42f807'),
+    joinStatus: true,
+    joinDate: new Date('2024-09-20T10:00:00Z')
+  },
+  {
+    userID: ObjectId('66df36c1004ad4557e42f808'),
+    threadID: ObjectId('66ed034943e9cd130a42f808'),
+    joinStatus: false,
+    joinDate: new Date('2024-09-21T11:00:00Z')
+  },
+  {
+    userID: ObjectId('66df36c1004ad4557e42f809'),
+    threadID: ObjectId('66ed034943e9cd130a42f809'),
+    joinStatus: true,
+    joinDate: new Date('2024-09-22T12:00:00Z')
+  },
+  {
+    userID: ObjectId('66df36c1004ad4557e42f810'),
+    threadID: ObjectId('66ed034943e9cd130a42f810'),
+    joinStatus: true,
+    joinDate: new Date('2024-09-23T13:00:00Z')
+  },
+  {
+    userID: ObjectId('66df36c1004ad4557e42f811'),
+    threadID: ObjectId('66ed034943e9cd130a42f811'),
+    joinStatus: false,
+    joinDate: new Date('2024-09-24T14:00:00Z')
+  },
+  {
+    userID: ObjectId('66df36c1004ad4557e42f812'),
+    threadID: ObjectId('66ed034943e9cd130a42f812'),
+    joinStatus: true,
+    joinDate: new Date('2024-09-25T15:00:00Z')
+  },
+  {
+    userID: ObjectId('66df36c1004ad4557e42f813'),
+    threadID: ObjectId('66ed034943e9cd130a42f813'),
+    joinStatus: true,
+    joinDate: new Date('2024-09-26T16:00:00Z')
+  },
+  {
+    userID: ObjectId('66df36c1004ad4557e42f814'),
+    threadID: ObjectId('66ed034943e9cd130a42f814'),
+    joinStatus: false,
+    joinDate: new Date('2024-09-27T17:00:00Z')
+  },
+  {
+    userID: ObjectId('66df36c1004ad4557e42f815'),
+    threadID: ObjectId('66ed034943e9cd130a42f815'),
+    joinStatus: true,
+    joinDate: new Date('2024-09-28T18:00:00Z')
+  },
+  {
+    userID: ObjectId('66df36c1004ad4557e42f816'),
+    threadID: ObjectId('66ed034943e9cd130a42f816'),
+    joinStatus: true,
+    joinDate: new Date('2024-09-29T19:00:00Z')
+  }
+])
