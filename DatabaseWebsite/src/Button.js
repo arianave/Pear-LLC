@@ -19,27 +19,50 @@ function Button() {
     setCollection(collectionName)
   };
 
+  // Handle dropdown selection
+  const handleSelectChange = (event) => {
+    const selectedCollection = event.target.value;
+    if (selectedCollection) {
+      handleClick(selectedCollection);
+    }
+  };
+
   //describes what the component renders on the screen
   return (
     <div>
-      {/* Buttons to fetch different collections */}
-      <div className="button-container">
-        <button onClick={() => handleClick('users')}>Show Users</button>
-        <button onClick={() => handleClick('posts')}>Show Posts</button>
-        <button onClick={() => handleClick('comments')}>Show Comments</button>
+      {/* Dropdown to select different collections */}
+      <div className="dropdown-container">
+        <select onChange={handleSelectChange}>
+        <option value="">Select Collection</option> {/* Default option */}
+          <option value="users">Users</option>
+          <option value="posts">Posts</option>
+          <option value="comments">Comments</option>
+          <option value="threads">Threads</option>
+          <option value="votes">Votes</option>
+          <option value="tags">Tags</option>
+          <option value="messages">Messages</option>
+          <option value="follows">Follows</option>
+          <option value="joins">Joins</option>
+        </select>
       </div>
 
       {/* Display the fetched data */}
-      <div className="data-container">
+      <div className="scrollable-panel">
         {collection && <h1>{collection.charAt(0).toUpperCase() + collection.slice(1)} Collection</h1>} {/* Display the collection name */}
 
         {collection === 'users' && (
           <ul>
             {data.map(user => (
               <li key={user._id}>
-                <p>Name: {user.name}</p>
-                <p>Age: {user.age}</p>
+                <p>User ID: {user.userID}</p>
+                <p>Username: {user.username}</p>
                 <p>Email: {user.email}</p>
+                <p>First Name: {user.firstName}</p>
+                <p>Last Name: {user.lastName}</p>
+                <p>Birthdate: {new Date(user.birthDate).toLocaleDateString()}</p>
+                <p>Account Created: {new Date(user.creationDate).toLocaleString()}</p>
+                <p>Biography: {user.profileBiography}</p>
+                <p>Privacy: {user.accountPrivacy}</p>
               </li>
             ))}
           </ul>
@@ -49,12 +72,11 @@ function Button() {
           <ul>
             {data.map(post => (
               <li key={post._id}>
-                <p>Content: {post.content}</p>
-                <p>Media: {post.media_url}</p>
-                <p>Timestamp: {new Date(post.timestamp).toLocaleString()}</p>
-                <p>Votes: {post.votes_count}</p>
-                <p>Tags: {post.tags.join(', ')}</p>
-                <p>Comments: {post.comments.length}</p>
+                <p>Post ID: {post.postID}</p>
+                <p>User ID: {post.userID}</p>
+                <p>Text Content: {post.textContent}</p>
+                <p>Media Content: {post.mediaContent}</p>
+                <p>Posted On: {new Date(post.creationDate).toLocaleString()}</p>
               </li>
             ))}
           </ul>
@@ -64,18 +86,100 @@ function Button() {
           <ul>
             {data.map(comment => (
               <li key={comment._id}>
-                <p>Comment: {comment.content}</p>
-                <p>Post ID: {comment.post_id}</p>
-                <p>Timestamp: {new Date(comment.timestamp).toLocaleString()}</p>
-                <p>Votes: {comment.votes_count}</p>
+                <p>Comment ID: {comment.commentID}</p>
+                <p>Post ID: {comment.postID}</p>
+                <p>User ID: {comment.userID}</p>
+                <p>Comment: {comment.textContent}</p>
+                <p>Commented On: {new Date(comment.creationDate).toLocaleString()}</p>
               </li>
             ))}
           </ul>
         )}
+
+        {/* Threads Collection */}
+        {collection === 'threads' && (
+          <ul>
+            {data.map(thread => (
+              <li key={thread.threadID}>
+                <p>Thread ID: {thread.threadID}</p>
+                <p>Thread Name: {thread.threadName}</p>
+                <p>User ID: {thread.userID}</p>
+                <p>Created On: {new Date(thread.creationDate).toLocaleString()}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {/* Votes Collection */}
+        {collection === 'votes' && (
+          <ul>
+            {data.map(vote => (
+              <li key={vote.voteID}>
+                <p>Vote ID: {vote.voteID}</p>
+                <p>Post ID: {vote.postID}</p>
+                <p>Upvotes: {vote.upvoteCount}</p>
+                <p>Downvotes: {vote.downvoteCount}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {/* Tags Collection */}
+        {collection === 'tags' && (
+          <ul>
+            {data.map(tag => (
+              <li key={tag.tagID}>
+                <p>Tag ID: {tag.tagID}</p>
+                <p>Post ID: {tag.postID}</p>
+                <p>Tag: {tag.tagName}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {/* Messages Collection */}
+        {collection === 'messages' && (
+          <ul>
+            {data.map(message => (
+              <li key={message.messageID}>
+                <p>Message ID: {message.messageID}</p>
+                <p>User ID: {message.userID}</p>
+                <p>Message: {message.messageContent}</p>
+                <p>Date: {new Date(message.messageDate).toLocaleString()}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {/* Follows Collection */}
+        {collection === 'follows' && (
+          <ul>
+            {data.map(follow => (
+              <li key={follow._id}>
+                <p>User ID: {follow.userID}</p>
+                <p>Request Status: {follow.requestStatus}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        {/* Joins Collection */}
+        {collection === 'joins' && (
+          <ul>
+            {data.map(join => (
+              <li key={join._id}>
+                <p>User ID: {join.userID}</p>
+                <p>Thread ID: {join.threadID}</p>
+                <p>Join Status: {join.joinStatus ? "Joined" : "Not Joined"}</p>
+                <p>Joined: {new Date(join.joinDate).toLocaleString()}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+
       </div>
     </div>
   );
 }
 
 export default Button;
-
