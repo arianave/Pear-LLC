@@ -31,6 +31,77 @@ const UserSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', UserSchema);
 
+const PostSchema = new mongoose.Schema({
+  postID:mongoose.Schema.Types.ObjectId,
+  userID: mongoose.Schema.Types.ObjectId,  
+  textContent: String,                         
+  mediaContent: String,                        
+  creationDate: Date,                               
+});
+
+const Post = mongoose.model('Post', PostSchema);
+
+const CommentSchema = new mongoose.Schema({
+  commentID: mongoose.Schema.Types.ObjectId,
+  postID: mongoose.Schema.Types.ObjectId, 
+  userID: mongoose.Schema.Types.ObjectId, 
+  textContent: String,                         
+  creationDate: Date,   
+});
+
+const Comment = mongoose.model('Comment', CommentSchema);
+
+const ThreadSchema = new mongoose.Schema({
+threadID: mongoose.Schema.Types.ObjectId,
+userID: mongoose.Schema.Types.ObjectId,
+threadName: String,                         
+creationDate: Date,
+});
+
+const Thread = mongoose.model('Thread', ThreadSchema);
+
+const VoteSchema = new mongoose.Schema({
+voteID: mongoose.Schema.Types.ObjectId,
+postID: mongoose.Schema.Types.ObjectId,
+upvoteCount: Number,
+downvoteCount: Number
+});
+
+const Vote = mongoose.model('Vote', VoteSchema);
+
+const TagSchema = new mongoose.Schema({
+tagID: mongoose.Schema.Types.ObjectId,
+postID: mongoose.Schema.Types.ObjectId,
+tagName: String
+});
+
+const Tag = mongoose.model('Tag', TagSchema);
+
+const MessageSchema = new mongoose.Schema({
+messageID: mongoose.Schema.Types.ObjectId,
+userID: mongoose.Schema.Types.ObjectId,
+messageContent: String,
+messageDate: Date
+});
+
+const Message = mongoose.model('Message', MessageSchema);
+
+const FollowSchema = new mongoose.Schema({
+userID: mongoose.Schema.Types.ObjectId,
+requestStatus: String
+});
+
+const Follow = mongoose.model('Follow', FollowSchema);
+
+const JoinSchema = new mongoose.Schema({
+userID: mongoose.Schema.Types.ObjectId,
+threadID: mongoose.Schema.Types.ObjectId,
+joinStatus: Boolean,
+joinDate: Date
+});
+
+const Join = mongoose.model('Join', JoinSchema);
+
 app.post('/api/users', async (req, res) => {
   const { firstName, lastName, email, username, password, birthDate } = req.body;
 
