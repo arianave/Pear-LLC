@@ -1,0 +1,99 @@
+.centered-button {
+  padding: 10px 20px;
+  margin: 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Flexbox layout for buttons */
+.button-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+/* Flexbox layout for the data lists */
+.data-container {
+  display: flex;
+  justify-content: space-around;
+  /*align-items: flex-start; /* Align items at the top */
+  margin-top: 30px;
+  padding: 10px;
+  gap: 60px;
+}
+
+/* Individual list containers for Name, Age, and Email */
+.list-section {
+  width: auto; /* Adjust the width of each section */
+  min-width: 30%;
+  padding: 20px;
+  border: 1px solid #ccc; /* Optional: Adds a border around each section */
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Ensure the text doesn't wrap */
+.list-section li {
+  white-space: nowrap; /* Prevent the text from wrapping */
+  overflow: visible; /* Ensure the overflow is visible */
+}
+
+h1 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.dropdown-container {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.dropdown-container select {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.data-container {
+  margin-top: 20px;
+}
+
+.scrollable-panel {
+  max-height: 400px; /* Set max height for the scrollable area */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 20px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  margin-top: 20px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.scrollable-panel h1 {
+  margin-bottom: 20px;
+}
+
+.button-container {
+  margin-bottom: 20px;
+}

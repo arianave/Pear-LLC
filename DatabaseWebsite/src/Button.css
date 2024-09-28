@@ -1,0 +1,9 @@
+/* Button.css */
+.centered-button {
+    display: block;
+    margin: 0 auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
