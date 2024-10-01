@@ -20,13 +20,13 @@ function CreateAccountPage() {
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
 
   // Handle input change
-  const handleChange = (e) => {
+  const handleChange = async (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
 
@@ -59,19 +59,39 @@ function CreateAccountPage() {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      // Submit the form data
-      console.log('Form submitted:', formData);
-      // Reset form
-      setFormData({
-        firstName: '',
-        lastName: '',
-        birthDate: '',
-        email: '',
-        username: '',
-        password: '',
-        confirmPassword: '',
-      });
-      setErrors({});
+      try {
+        // Submit the form data to the backend
+        const response = await fetch('http://98.80.48.42:3000/api/users', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          console.log('Account created:', result);
+          // Reset form
+          setFormData({
+            firstName: '',
+            lastName: '',
+            birthDate: '',
+            email: '',
+            username: '',
+            password: '',
+            confirmPassword: '',
+          });
+          setErrors({});
+        } else {
+          console.error('Failed to create account:', result.message);
+          setErrors({ apiError: result.message });
+        }
+      } catch (error) {
+        console.error('Error creating account:', error);
+        setErrors({ apiError: 'There was an error creating your account. Please try again.' });
+      }
     }
   };
 
