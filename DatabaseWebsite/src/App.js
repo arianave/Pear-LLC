@@ -6,10 +6,12 @@ import CreateAccountPage from './pages/CreateAccountPage'; // Import the CreateA
 import LoginPage from './pages/LogInPage'; // Import the LoginPage component
 import ResetPassword from './pages/ResetPassword'; // Import ResetPassword
 import ProfilePage from './pages/ProfilePage'; //Import ProfilePage
+import BottomBar from './BottomBar'; //Import BottomBar
 
 function App() {
   return (
     <BrowserRouter>
+    <div>
       <main>
         <Routes>
           {/* Set LogInPage as the default page */}
@@ -20,6 +22,8 @@ function App() {
           <Route path="ProfilePage" element={<ProfilePage />} />
         </Routes>
       </main>
+      <BottomBar /> {/* Always visible on all pages */}
+      </div>
     </BrowserRouter>
   );
 }
