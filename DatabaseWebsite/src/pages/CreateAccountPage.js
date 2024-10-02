@@ -35,6 +35,7 @@ function CreateAccountPage() {
     return age;
   };
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 
   const calculateAge = (birthDate) => {
     const today = new Date();
@@ -48,6 +49,8 @@ function CreateAccountPage() {
     }
     return age;
   };
+=======
+>>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes
 
@@ -90,7 +93,11 @@ function CreateAccountPage() {
 
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
      // Age validation (user must be 13 or older)
+=======
+    // Age validation (user must be 13 or older)
+>>>>>>> Stashed changes
 =======
     // Age validation (user must be 13 or older)
 >>>>>>> Stashed changes
