@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import './CreateAccountPage.css'; // Import the CSS file
 
 function CreateAccountPage() {
   const [formData, setFormData] = useState({
@@ -19,14 +21,14 @@ function CreateAccountPage() {
   const validatePassword = (password) =>
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password);
 
-  // Handle input change
-  const handleChange = (e) => {
+    // Handle input change
+  const handleChange = async (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
+   // Handle form submission
+   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
 
@@ -59,24 +61,45 @@ function CreateAccountPage() {
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
     } else {
-      // Submit the form data
-      console.log('Form submitted:', formData);
-      // Reset form
-      setFormData({
-        firstName: '',
-        lastName: '',
-        birthDate: '',
-        email: '',
-        username: '',
-        password: '',
-        confirmPassword: '',
-      });
-      setErrors({});
+      try {
+        // Submit the form data to the backend
+        const response = await fetch('http://98.80.48.42:3000/api/users', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          console.log('Account created:', result);
+          // Reset form
+          setFormData({
+            firstName: '',
+            lastName: '',
+            birthDate: '',
+            email: '',
+            username: '',
+            password: '',
+            confirmPassword: '',
+          });
+          setErrors({});
+        } else {
+          console.error('Failed to create account:', result.message);
+          setErrors({ apiError: result.message });
+        }
+      } catch (error) {
+        console.error('Error creating account:', error);
+        setErrors({ apiError: 'There was an error creating your account. Please try again.' });
+      }
     }
   };
 
+
   return (
-    <div>
+    <div className="create-account-container">
       <h2>Create an Account</h2>
       <p>New to Peer to Pear? Fill out the details below to create an account today!</p>
       <form onSubmit={handleSubmit}>
@@ -155,10 +178,14 @@ function CreateAccountPage() {
           />
           {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
         </div>
-        <button type="submit">Create Account</button>
+        <button type="submit" className="login-form-button">Create Account</button>
       </form>
+      <p>
+        Already have an account? <Link to="/LogInPage">Log in here</Link>
+      </p>
     </div>
   );
 }
 
 export default CreateAccountPage;
+
