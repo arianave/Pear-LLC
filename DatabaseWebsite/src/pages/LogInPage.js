@@ -77,7 +77,7 @@ function LogInPage() { //manage state of log in form
             New to Pear to Peer? <Link to="/CreateAccountPage">Create an account</Link> {/* Use Link component for navigation */}
           </p>
           <p>
-            Forgot your password? <a href="/reset-password">Reset your password</a>
+            Forgot your password? <Link to="/ResetPassword">Reset your password</Link> {/* Use Link component for navigation */}
           </p>
         </div>
       </form>

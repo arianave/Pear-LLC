@@ -1,5 +1,18 @@
 /* CreateAccountPage.css */
 
+
+/* Set the background image for the entire webpage */
+body {
+    background-image: url('https://i0.wp.com/onaircode.com/wp-content/uploads/2019/09/simple-pattern-css.jpg?resize=1024%2C580&ssl=1'); /* Using image URL */
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    background-position: center; /* Centers the image */
+    background-attachment: fixed; /* Keeps the background fixed during scrolling */
+    background-size: cover; /* Ensures the image covers the entire viewport */
+    margin: 0; /* Remove default margin */
+    height: 100vh; /* Full height for the body */
+}
+
+
 /* Centering the main container */
 .create-account-container { 
     display: flex;
@@ -8,7 +21,7 @@
     justify-content: center; /* Center items vertically */
     height: 90vh;          /* Full viewport height */
     max-width: 400px; /* Set a max width for the box */
-    margin: 0 auto; /* Center the box horizontally */
+    margin: 50px auto 0; /* Add margin at the top to push it down, adjust as needed */
     padding: 20px; /* Add padding inside the box */
     border: 1px solid #ccc; /* Border around the box */
     border-radius: 8px; /* Rounded corners */
@@ -67,4 +80,6 @@
     color: red;              
     text-align: center;      
   }
+
+  
   

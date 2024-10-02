@@ -4,6 +4,7 @@ import './App.css';
 import WelcomePage from './pages/WelcomePage'; // Import the WelcomePage component
 import CreateAccountPage from './pages/CreateAccountPage'; // Import the CreateAccountPage component
 import LoginPage from './pages/LogInPage'; // Import the LoginPage component
+import ResetPassword from './pages/ResetPassword'; // Import ResetPassword
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="LogInPage" element={<LoginPage />} />
           {/* If you still want a dedicated route for WelcomePage */}
           <Route path="WelcomePage" element={<WelcomePage />} />
+          <Route path="ResetPassword" element={<ResetPassword />} /> {/* Make sure the path matches */}
         </Routes>
       </main>
     </BrowserRouter>

@@ -99,6 +99,7 @@ function CreateAccountPage() {
 
 
   return (
+
     <div className="create-account-container">
       <h2>Create an Account</h2>
       <p>New to Peer to Pear? Fill out the details below to create an account today!</p>
