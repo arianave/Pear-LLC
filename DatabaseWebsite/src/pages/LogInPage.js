@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './LogInPage.css'; // importing the css 
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import { Link, useNavigate } from 'react-router-dom'; // Import Link from react-router-dom
 
 
 function LogInPage() { //manage state of log in form
@@ -10,6 +10,10 @@ function LogInPage() { //manage state of log in form
   });
 
   const [errors, setErrors] = useState({}); // useState manages the errors 
+  const [serverError, setServerError] = useState(''); // Manages server-side login errors
+
+  // Get navigate function from useNavigate
+  const navigate = useNavigate();
 
   const validateUsername = (username) => username.trim() !== ''; // removing whitespace from the user input assuming it is not empty
   const validatePassword = (password) => password.trim() !== '';
@@ -21,7 +25,7 @@ function LogInPage() { //manage state of log in form
   };
 
   // Handle form submission, triggered when log in button is clicked 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault(); //suppress page reload 
     const newErrors = {}; // holds errors with user input
 
@@ -36,14 +40,39 @@ function LogInPage() { //manage state of log in form
     if (Object.keys(newErrors).length > 0) { // store error messages 
       setErrors(newErrors);
     } else { // if no errors found from if, proceed with submission
-      console.log('Form submitted:', formData); //where data will be sent to server 
-      setFormData({ //reset values after successful log in
-        username: '',
-        password: '',
-      });
-      setErrors({}); // reset errors state
+      try {
+        const response = await fetch('http://98.80.48.42:3000/api/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+
+        // Check if login was successful
+        if (response.ok) {
+          console.log('Login successful:', result);
+          setFormData({ //reset values after successful log in
+            username: '',
+            password: '',
+          });
+          setErrors({}); // reset errors state
+          setServerError(''); // reset server error state
+
+          // Redirect to profile page
+          navigate('/ProfilePage'); // Navigate to the dashboard page
+        } else {
+          // Display error if login fails
+          setServerError('Invalid username or password. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error during login:', error);
+        setServerError('There was a problem with the login. Please try again later.');
+      }
     }
-  };
+ };
 
   return ( //styling and CSS connections 
     <div className="login-container">  
@@ -77,6 +106,8 @@ function LogInPage() { //manage state of log in form
          <img src="Designer.png" alt="Logo" className="logo" />
             <h1>Pear to Peer</h1>
         </div>
+
+        {serverError && <p className="error">{serverError}</p>} {/* Display server-side errors */}
 
         <button type="submit">Login</button> 
         <div className="links">
