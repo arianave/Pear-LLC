@@ -1,0 +1,153 @@
+/* ProfilePage.css */
+
+.profile-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .profile-header h1 {
+    font-size: 2rem;
+    color: #333;
+  }
+  
+  .logout-button {
+    background-color: #ff4d4d;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .logout-button:hover {
+    background-color: #ff1a1a;
+  }
+  
+  .profile-body {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 20px 0;
+  }
+  
+  .profile-picture {
+    margin-right: 30px;
+  }
+  
+  .avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #ccc;
+    object-fit: cover;
+  }
+  
+  .profile-info {
+    flex-grow: 1;
+  }
+  
+  .profile-info p {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 20px;
+  }
+  
+  .profile-stats {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .stat {
+    text-align: center;
+  }
+  
+  .stat p:first-child {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+  }
+  
+  .stat p:last-child {
+    font-size: 1rem;
+    color: #777;
+  }
+  
+  .edit-profile-button,
+  .follow-button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .edit-profile-button:hover,
+  .follow-button:hover {
+    background-color: #45a049;
+  }
+  
+  .follow-button {
+    background-color: #007bff;
+  }
+  
+  .follow-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .profile-uploads-section {
+    padding-top: 20px;
+  }
+  
+  hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin-bottom: 20px;
+  }
+  
+  .upload-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .upload-buttons button {
+    flex: 1;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    margin-right: 10px;
+  }
+  
+  .upload-buttons button:last-child {
+    margin-right: 0;
+  }
+  
+  .upload-buttons button:hover {
+    background-color: #e0e0e0;
+  }
+  
