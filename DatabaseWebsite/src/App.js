@@ -5,6 +5,7 @@ import WelcomePage from './pages/WelcomePage'; // Import the WelcomePage compone
 import CreateAccountPage from './pages/CreateAccountPage'; // Import the CreateAccountPage component
 import LoginPage from './pages/LogInPage'; // Import the LoginPage component
 import ResetPassword from './pages/ResetPassword'; // Import ResetPassword
+import ProfilePage from './pages/ProfilePage'; //Import ProfilePage
 
 function App() {
   return (
@@ -15,9 +16,8 @@ function App() {
           <Route index element={<LoginPage />} />
           <Route path="CreateAccountPage" element={<CreateAccountPage />} />
           <Route path="LogInPage" element={<LoginPage />} />
-          {/* If you still want a dedicated route for WelcomePage */}
-          <Route path="WelcomePage" element={<WelcomePage />} />
           <Route path="ResetPassword" element={<ResetPassword />} /> {/* Make sure the path matches */}
+          <Route path="ProfilePage" element={<ProfilePage />} />
         </Routes>
       </main>
     </BrowserRouter>
