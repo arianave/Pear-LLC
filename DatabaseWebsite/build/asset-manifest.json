@@ -1,25 +1,13 @@
 {
   "files": {
-<<<<<<< HEAD
-    "main.css": "/static/css/main.7cf7ec4c.css",
-    "main.js": "/static/js/main.cec295e2.js",
+    "main.css": "/static/css/main.79d38051.css",
+    "main.js": "/static/js/main.e6f49a2f.js",
     "index.html": "/index.html",
-    "main.7cf7ec4c.css.map": "/static/css/main.7cf7ec4c.css.map",
-    "main.cec295e2.js.map": "/static/js/main.cec295e2.js.map"
+    "main.79d38051.css.map": "/static/css/main.79d38051.css.map",
+    "main.e6f49a2f.js.map": "/static/js/main.e6f49a2f.js.map"
   },
   "entrypoints": [
-    "static/css/main.7cf7ec4c.css",
-    "static/js/main.cec295e2.js"
-=======
-    "main.css": "/static/css/main.27253104.css",
-    "main.js": "/static/js/main.55214a12.js",
-    "index.html": "/index.html",
-    "main.27253104.css.map": "/static/css/main.27253104.css.map",
-    "main.55214a12.js.map": "/static/js/main.55214a12.js.map"
-  },
-  "entrypoints": [
-    "static/css/main.27253104.css",
-    "static/js/main.55214a12.js"
->>>>>>> 28c46d40e57139c87e671df9f1caf40fd2f377ab
+    "static/css/main.79d38051.css",
+    "static/js/main.e6f49a2f.js"
   ]
 }

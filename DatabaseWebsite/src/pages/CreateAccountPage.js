@@ -21,23 +21,14 @@ function CreateAccountPage() {
   const validatePassword = (password) =>
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password); //regex to match password requirements 
 
-<<<<<<< HEAD
     // Handle input change
-=======
-  // Handle input change
->>>>>>> 28c46d40e57139c87e671df9f1caf40fd2f377ab
   const handleChange = async (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-<<<<<<< HEAD
    // Handle form submission
    const handleSubmit = async (e) => {
-=======
-  // Handle form submission
-  const handleSubmit = async (e) => {
->>>>>>> 28c46d40e57139c87e671df9f1caf40fd2f377ab
     e.preventDefault();
     const newErrors = {};
 
