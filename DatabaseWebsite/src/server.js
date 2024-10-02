@@ -122,6 +122,29 @@ app.post('/api/users', async (req, res) => {
   }
 });
 
+app.post('/api/login', async (req, res) => {
+    const { username, password } = req.body;
+    try {
+      // Check if the user exists in the database
+      const user = await User.findOne({ username });
+
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      // Compare the provided password with the one stored in the database
+      if (user.password !== password) {
+        return res.status(400).json({ message: 'Invalid credentials' });
+      }
+
+      // If login is successful, send success response
+      res.status(200).json({ message: 'Login successful', user: { username: user.username } });
+    } catch (error) {
+      console.error('Error during login:', error);
+      res.status(500).json({ message: 'Server error', error });
+    }
+  });
+
 // API endpoint to fetch data
 app.get('/api/users', async (req, res) => {
     try {
