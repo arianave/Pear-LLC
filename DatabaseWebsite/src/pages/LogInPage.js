@@ -69,15 +69,22 @@ function LogInPage() { //manage state of log in form
             onChange={handleChange}
             required
           />
+          
           {errors.password && <p className="error">{errors.password}</p>}
         </div>
+
+        <div className="header">
+         <img src="Designer.png" alt="Logo" className="logo" />
+            <h1>Pear to Peer</h1>
+        </div>
+
         <button type="submit">Login</button> 
         <div className="links">
-          <p>
-            New to Pear to Peer? <Link to="/CreateAccountPage">Create an account</Link> {/* Use Link component for navigation */}
+          <p className="login2-link">
+          New to Pear to Peer? <Link to="/CreateAccountPage" className="b-link">Create an account</Link>
           </p>
-          <p>
-            Forgot your password? <Link to="/ResetPassword">Reset your password</Link> {/* Use Link component for navigation */}
+          <p className="login3-link">
+          Forgot your password? <Link to="/ResetPassword" className="blu-link">Reset your password</Link> 
           </p>
         </div>
       </form>

@@ -54,6 +54,11 @@ function ResetPassword() {
           />
           {errors && <p className="error">{errors}</p>}
         </div>
+
+        <div className="header">
+         <img src="Designer.png" alt="Logo" className="logo" />
+            <h1>Pear to Peer</h1>
+        </div>
         
         <button type="submit" className="send-email-button">Send Email</button> 
         

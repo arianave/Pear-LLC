@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './CreateAccountPage.css'; // Import the CSS file
 
+
 function CreateAccountPage() {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -20,6 +21,20 @@ function CreateAccountPage() {
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validatePassword = (password) =>
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(password); //regex to match password requirements 
+ 
+  const calculateAge = (birthDate) => {
+    const today = new Date();
+    const birthDateObj = new Date(birthDate);
+    let age = today.getFullYear() - birthDateObj.getFullYear();
+    const monthDiff = today.getMonth() - birthDateObj.getMonth();
+
+    // Adjust age if the birthdate hasn't occurred yet this year
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
+      age--;
+    }
+    return age;
+  };
+<<<<<<< Updated upstream
 
   const calculateAge = (birthDate) => {
     const today = new Date();
@@ -33,6 +48,8 @@ function CreateAccountPage() {
     }
     return age;
   };
+=======
+>>>>>>> Stashed changes
 
     // Handle input change
   const handleChange = async (e) => {
@@ -71,7 +88,15 @@ function CreateAccountPage() {
       newErrors.confirmPassword = 'Passwords do not match.';
     }
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
      // Age validation (user must be 13 or older)
+=======
+    // Age validation (user must be 13 or older)
+>>>>>>> Stashed changes
+=======
+    // Age validation (user must be 13 or older)
+>>>>>>> Stashed changes
     const age = calculateAge(formData.birthDate);
       if (age < 13) {
         newErrors.birthDate = 'You must be 13 years or older to create an account.';
@@ -188,6 +213,12 @@ function CreateAccountPage() {
           />
           {errors.password && <p className="error">{errors.password}</p>}
         </div>
+
+        <div className="header">
+         <img src="Designer.png" alt="Logo" className="logo" />
+            <h1>Pear to Peer</h1>
+        </div>
+
         <div>
           <label>Confirm Password:</label>
           <input
@@ -201,9 +232,9 @@ function CreateAccountPage() {
         </div>
         <button type="submit" className="login-form-button">Create Account</button>
       </form>
-      <p>
-        Already have an account? <Link to="/LogInPage">Log in here</Link>
-      </p>
+      <p className="login1-link">
+         Already have an account? <Link to="/LogInPage" className="bl-link">Log in here</Link>
+        </p>
     </div>
   );
 }

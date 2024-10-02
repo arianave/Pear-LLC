@@ -1,3 +1,32 @@
+/* LogInPage.css */
+
+/* Positioning for the logo and title */
+.header {
+    position: fixed; /*top left corner */
+    top: 20px; 
+    left: 35px; 
+    display: flex; /* Aligns logo and text horizontally */
+    align-items: center; /* Centers items vertically */
+    z-index: 1000; /* Ensures it stays on top of other elements */
+}
+
+/* Styling for the logo */
+.logo {
+    width: 60px; 
+    height: 60px; 
+    border-radius: 50%; 
+    margin-right: 15px; /* Space between the logo and title */
+}
+
+/* styling for title */
+.header h1 {
+    font-size: 30px;
+    font-family: 'Pacifico', sans-serif; /* Change to Arial */ 
+    margin: 0; /* Removes default margin */
+    letter-spacing: 2px; /* Adjust the value as needed for spacing */
+    color: #1b1a1a; 
+}
+
 
 /* Set the background image for the entire webpage , eventually make this a shared style component*/
 body {
@@ -14,7 +43,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Full viewport height */
+    height: 90vh; /* Full viewport height */
   }
   
   .login-form {
@@ -63,15 +92,34 @@ body {
     background-color: #a6a3ec;
   }
   
-  .links {
+  .login2-link {
+    font-size: 14px;
     text-align: center;
     margin-top: 10px;
   }
   
-  .links a {
-    color: blue;
+  .b-link {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .b-link:hover {
     text-decoration: underline;
-    cursor: pointer;
+  }
+
+  .login3-link {
+    font-size: 14px;
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  .blu-link {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .blu-link:hover {
+    text-decoration: underline;
   }
   
   .error {
