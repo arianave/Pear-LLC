@@ -5,7 +5,7 @@ function BottomBar() {
   return (
     <div className="bottom-bar">
         {/* Need to include feed button and message button once implemented */}
-      <a href="/PostCreationPage">Post</a>
+      <a href="/PostCreation">Post</a>
       <a href="/LogInPage">Login</a>
       <a href="/ProfilePage">Profile</a>
     </div>
