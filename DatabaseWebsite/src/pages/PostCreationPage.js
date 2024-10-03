@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './PostCreationPage.css';
-import { getUserId } from '../user';
+import { getUserId } from '../userData/user';
 
 function PostCreationPage() {
   const [postType, setPostType] = useState(''); // Manages post type (text, picture, video, thread)

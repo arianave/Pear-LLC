@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './LogInPage.css'; // importing the css 
-import { storeUserId } from '../user';
+import { storeUserId } from '../userData/user';
 import { Link, useNavigate } from 'react-router-dom'; // Import Link from react-router-dom
 
 

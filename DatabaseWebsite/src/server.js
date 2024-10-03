@@ -229,6 +229,15 @@ app.get('/api/users', async (req, res) => {
       res.status(500).json({ message: err.message });
     }
   });
+
+  app.get('/api/posts', async (req, res) => {
+    try {
+      const posts = await Post.find();
+      res.json(posts);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
+  });
   
   // Start the server
   app.listen(port, () => {

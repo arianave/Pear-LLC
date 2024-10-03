@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './ProfilePage.css'; 
 import { useNavigate } from 'react-router-dom';
+import { getUserPosts } from '../userData/userPosts';
 
 function ProfilePage() {
   // Mock data, info will be fetched from the server
