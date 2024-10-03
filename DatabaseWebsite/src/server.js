@@ -35,7 +35,7 @@ const PostSchema = new mongoose.Schema({
   postID:mongoose.Schema.Types.ObjectId,
   userID: mongoose.Schema.Types.ObjectId,  
   textContent: String,                         
-  mediaContent: mongoose.Schema.Types.Mixed,                        
+  mediaContent: String,                        
   creationDate: Date,                               
 });
 
@@ -174,31 +174,51 @@ app.post('/api/login', async (req, res) => {
   
       let newPost;
   
-      if (postType === "picture") {
-        newPost = new Post({
-          userID,
-          textContent,
-          photoContent: mediaContent, // Save media in the correct field
-          creationDate: new Date(),
-        });
-      } else if (postType === "video") {
-        newPost = new Post({
-          userID,
-          textContent,
-          videoContent: mediaContent, // Save media in the correct field
-          creationDate: new Date(),
-        });
-      } else {
-        return res.status(400).json({ success: false, message: 'Invalid post type' });
+      // Handle text posts (no media)
+    if (postType === 'text') {
+      newPost = new Post({
+        userID,
+        textContent, // Save text content for text posts
+        creationDate: new Date(),
+      });
+    } 
+    // Handle picture posts
+    else if (postType === 'picture') {
+      if (!mediaContent) {
+        return res.status(400).json({ success: false, message: 'Picture file is required' });
       }
-  
-      await newPost.save();
-      res.status(201).json({ success: true, post: newPost });
-  
-    } catch (error) {
-      res.status(500).json({ success: false, message: 'Error creating post', error });
+      newPost = new Post({
+        userID,
+        textContent, // Save caption for picture posts
+        photoContent: mediaContent, // Save media in the correct field
+        creationDate: new Date(),
+      });
+    } 
+    // Handle video posts
+    else if (postType === 'video') {
+      if (!mediaContent) {
+        return res.status(400).json({ success: false, message: 'Video file is required' });
+      }
+      newPost = new Post({
+        userID,
+        textContent, // Save caption for video posts
+        videoContent: mediaContent, // Save media in the correct field
+        creationDate: new Date(),
+      });
+    } 
+    // Handle invalid post types
+    else {
+      return res.status(400).json({ success: false, message: 'Invalid post type' });
     }
-  });
+
+    // Save the new post to the database
+    await newPost.save();
+    res.status(201).json({ success: true, post: newPost });
+
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error creating post', error });
+  }
+});
 
 // API endpoint to fetch data
 app.get('/api/users', async (req, res) => {

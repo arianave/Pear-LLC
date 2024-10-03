@@ -4,9 +4,10 @@ import { getUserId } from '../user';
 
 function PostCreationPage() {
   const [postType, setPostType] = useState(''); // Manages post type (text, picture, video, thread)
-  const [postContent, setPostContent] = useState(''); // Manages post content
-  const [caption, setCaption] = useState(''); // Manages post caption
-  const userID = getUserId(); //Retrieves the user's ID
+  const [textContent, setTextContent] = useState(''); // Manages text post content
+  const [mediaContent, setMediaContent] = useState(null); // Manages media content (picture or video)
+  const [caption, setCaption] = useState(''); // Manages caption for media posts
+  const userID = getUserId(); // Retrieves the user's ID
   const [error, setError] = useState(''); // Handles validation errors
 
   // Handle post type selection (text, picture, video, thread)
@@ -14,9 +15,15 @@ function PostCreationPage() {
     setPostType(type);
   };
 
-  // Handle post content input (for text, caption, etc.)
-  const handleInputChange = (e) => {
-    setPostContent(e.target.value);
+  // Handle text post input
+  const handleTextChange = (e) => {
+    setTextContent(e.target.value);
+  };
+
+  // Handle media (picture or video) input
+  const handleMediaChange = (e) => {
+    const file = e.target.files[0];
+    setMediaContent(file); // Save the selected file
   };
 
   // Handle caption input
@@ -31,36 +38,45 @@ function PostCreationPage() {
 
   // Handle post submission
   const handleSubmit = async () => {
-    if (caption.trim() === '' || postContent.trim() === '') {
-      setError('Both post content and caption are required.');
+    if (postType === 'text' && textContent.trim() === '') {
+      setError('Text post content is required.');
+    } else if ((postType === 'picture' || postType === 'video') && (!mediaContent || caption.trim() === '')) {
+      setError('Both media content and caption are required.');
     } else {
-        try {
-            const formData = new FormData();
-            formData.append('postType', postType);
-            formData.append('postContent', postContent); 
-            formData.append('caption', caption);
-            formData.append('userID', userID);
+      try {
+        const formData = new FormData();
+        formData.append('postType', postType);
 
-            const response = await fetch('http://98.80.48.42:3000/api/post', {
-            method: 'POST',
-            body: formData,
-            });
-        
-            const result = await response.json();
+        if (postType === 'text') {
+          formData.append('textContent', textContent); // Send text content for text posts
+        } else {
+          formData.append('mediaContent', mediaContent); // Send media content (picture or video)
+          formData.append('caption', caption); // Send caption for media posts
+        }
 
-            if (result.success) {
-              console.log('Post created successfully:', result);
-        
-              // Reset form after submission
-              setPostType('');
-              setPostContent('');
-              setCaption('');
-            } else {
-              console.error('Error creating post:', result.error);
-            }
-          } catch (error) {
-            console.error('Error during post creation:', error);
-          }
+        formData.append('userID', userID);
+
+        const response = await fetch('http://98.80.48.42:3000/api/post', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          console.log('Post created successfully:', result);
+
+          // Reset form after submission
+          setPostType('');
+          setTextContent('');
+          setMediaContent(null);
+          setCaption('');
+        } else {
+          console.error('Error creating post:', result.error);
+        }
+      } catch (error) {
+        console.error('Error during post creation:', error);
+      }
     }
   };
 
@@ -79,32 +95,28 @@ function PostCreationPage() {
       {/* Conditionally render input fields based on post type */}
       {postType === 'text' && (
         <textarea
-          placeholder="Write your text post here..."
-          value={postContent}
-          onChange={handleInputChange}
+          placeholder="Write your text post here (max 250 characters)..."
+          value={textContent}
+          onChange={handleTextChange}
           maxLength={250} // Character limit for text posts
         />
       )}
-      {postType === 'picture' && (
-        <input type="file" accept="image/*" onChange={handleInputChange} />
-      )}
-      {postType === 'video' && (
-        <input type="file" accept="video/*" onChange={handleInputChange} />
-      )}
-      {postType === 'thread' && (
-        <textarea
-          placeholder="Enter your thread name..."
-          value={postContent}
-          onChange={handleInputChange}
-        />
+      {(postType === 'picture' || postType === 'video') && (
+        <>
+          <input
+            type="file"
+            accept={postType === 'picture' ? 'image/*' : 'video/*'}
+            onChange={handleMediaChange}
+          />
+          {/* Caption input for media posts */}
+          <textarea
+            placeholder="Add a caption (max 250 characters)..."
+            value={caption}
+            onChange={handleCaptionChange}
+          />
+        </>
       )}
 
-      {/* Caption input */}
-      <textarea
-        placeholder="Add a caption (max 250 characters)..."
-        value={caption}
-        onChange={handleCaptionChange}
-      />
       {error && <p className="error-message">{error}</p>}
 
       {/* Submit button */}
