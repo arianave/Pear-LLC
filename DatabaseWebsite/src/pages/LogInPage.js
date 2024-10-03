@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './LogInPage.css'; // importing the css 
+import { storeUserId } from '../user';
 import { Link, useNavigate } from 'react-router-dom'; // Import Link from react-router-dom
 
 
@@ -54,6 +55,8 @@ function LogInPage() { //manage state of log in form
         // Check if login was successful
         if (response.ok) {
           console.log('Login successful:', result);
+          const userId = result.user.userId;
+          storeUserId(userId);
           setFormData({ //reset values after successful log in
             username: '',
             password: '',

@@ -35,7 +35,7 @@ const PostSchema = new mongoose.Schema({
   postID:mongoose.Schema.Types.ObjectId,
   userID: mongoose.Schema.Types.ObjectId,  
   textContent: String,                         
-  mediaContent: String,                        
+  mediaContent: mongoose.Schema.Types.Mixed,                        
   creationDate: Date,                               
 });
 
@@ -102,6 +102,22 @@ joinDate: Date
 
 const Join = mongoose.model('Join', JoinSchema);
 
+const multer = require('multer');
+const path = require('path');
+
+// Set up Multer for file storage
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/'); // Directory where the files will be saved
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname)); // Use the current timestamp as the filename
+  }
+});
+
+// Initialize the multer upload middleware
+const upload = multer({ storage: storage });
+
 app.post('/api/users', async (req, res) => {
   const { firstName, lastName, email, username, password, birthDate } = req.body;
 
@@ -137,11 +153,50 @@ app.post('/api/login', async (req, res) => {
         return res.status(400).json({ message: 'Invalid credentials' });
       }
 
-      // If login is successful, send success response
-      res.status(200).json({ message: 'Login successful', user: { username: user.username } });
+      // If login is successful, send success response including user ID
+      res.status(200).json({ 
+        message: 'Login successful', 
+        user: { 
+          username: user.username,
+          userId: user._id // Include the user ID in the response
+        } 
+      });
     } catch (error) {
       console.error('Error during login:', error);
       res.status(500).json({ message: 'Server error', error });
+    }
+  });
+
+  app.post('/api/post', upload.single('mediaContent'), async (req, res) => {
+    try {
+      const { userID, textContent, postType } = req.body;
+      const mediaContent = req.file ? req.file.path : null; // Handle file upload (if any)
+  
+      let newPost;
+  
+      if (postType === "picture") {
+        newPost = new Post({
+          userID,
+          textContent,
+          photoContent: mediaContent, // Save media in the correct field
+          creationDate: new Date(),
+        });
+      } else if (postType === "video") {
+        newPost = new Post({
+          userID,
+          textContent,
+          videoContent: mediaContent, // Save media in the correct field
+          creationDate: new Date(),
+        });
+      } else {
+        return res.status(400).json({ success: false, message: 'Invalid post type' });
+      }
+  
+      await newPost.save();
+      res.status(201).json({ success: true, post: newPost });
+  
+    } catch (error) {
+      res.status(500).json({ success: false, message: 'Error creating post', error });
     }
   });
 
