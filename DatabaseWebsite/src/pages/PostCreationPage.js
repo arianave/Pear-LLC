@@ -6,7 +6,7 @@ function PostCreationPage() {
   const [postType, setPostType] = useState(''); // Manages post type (text, picture, video, thread)
   const [postContent, setPostContent] = useState(''); // Manages post content
   const [caption, setCaption] = useState(''); // Manages post caption
-  const userID = getUserId; //Retrieves the user's ID
+  const userID = getUserId(); //Retrieves the user's ID
   const [error, setError] = useState(''); // Handles validation errors
 
   // Handle post type selection (text, picture, video, thread)
@@ -56,7 +56,7 @@ function PostCreationPage() {
               setPostContent('');
               setCaption('');
             } else {
-              console.error('Error creating post:', result.message);
+              console.error('Error creating post:', result.error);
             }
           } catch (error) {
             console.error('Error during post creation:', error);
