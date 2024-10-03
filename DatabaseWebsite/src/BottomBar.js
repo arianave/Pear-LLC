@@ -4,10 +4,10 @@ import './BottomBar.css'; // CSS for the bottom bar
 function BottomBar() {
   return (
     <div className="bottom-bar">
-        {/* Other links will be placed but these are an example */}
-      <a href="/ProfilePage">Profile</a>
-      <a href="/CreateAccountPage">Create Account</a>
+        {/* Need to include feed button and message button once implemented */}
+      <a href="/PostCreationPage">Post</a>
       <a href="/LogInPage">Login</a>
+      <a href="/ProfilePage">Profile</a>
     </div>
   );
 }

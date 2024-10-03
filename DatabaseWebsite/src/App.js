@@ -1,30 +1,43 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import './App.css';
-import WelcomePage from './pages/WelcomePage'; // Import the WelcomePage component
-import CreateAccountPage from './pages/CreateAccountPage'; // Import the CreateAccountPage component
-import LoginPage from './pages/LogInPage'; // Import the LoginPage component
-import ResetPassword from './pages/ResetPassword'; // Import ResetPassword
-import ProfilePage from './pages/ProfilePage'; //Import ProfilePage
-import BottomBar from './BottomBar'; //Import BottomBar
+import CreateAccountPage from './pages/CreateAccountPage'; 
+import LoginPage from './pages/LogInPage'; 
+import ResetPassword from './pages/ResetPassword'; 
+import ProfilePage from './pages/ProfilePage'; 
+import BottomBar from './BottomBar'; 
+import PostCreationPage from './pages/PostCreationPage';
 
 function App() {
   return (
     <BrowserRouter>
+      <AppContent /> {/* Separate content with hooks into a different function */}
+    </BrowserRouter>
+  );
+}
+
+function AppContent() {
+  const location = useLocation(); // Hook to get the current location
+
+  // Define the pages where the BottomBar should not appear
+  const hideBottomBarOnPages = ['/LogInPage', '/CreateAccountPage', '/ResetPassword'];
+
+  return (
     <div>
       <main>
         <Routes>
-          {/* Set LogInPage as the default page */}
           <Route index element={<LoginPage />} />
           <Route path="CreateAccountPage" element={<CreateAccountPage />} />
           <Route path="LogInPage" element={<LoginPage />} />
-          <Route path="ResetPassword" element={<ResetPassword />} /> {/* Make sure the path matches */}
+          <Route path="ResetPassword" element={<ResetPassword />} />
           <Route path="ProfilePage" element={<ProfilePage />} />
+          <Route path="PostCreation" element={<PostCreationPage />} />
         </Routes>
       </main>
-      <BottomBar /> {/* Always visible on all pages */}
-      </div>
-    </BrowserRouter>
+      
+      {/* Conditionally render BottomBar based on the current path */}
+      {!hideBottomBarOnPages.includes(location.pathname) && <BottomBar />}
+    </div>
   );
 }
 
