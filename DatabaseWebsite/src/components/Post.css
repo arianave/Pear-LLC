@@ -1,0 +1,104 @@
+/* Container for the entire post */
+.post-container {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  /* Post header for creator name and date */
+  .post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .post-header h4 {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0;
+    color: #333;
+  }
+  
+  .post-header p {
+    font-size: 14px;
+    color: #777;
+    margin: 0;
+  }
+  
+  /* Content area styling */
+  .post-content {
+    margin-bottom: 15px;
+  }
+  
+  .post-content p {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #444;
+  }
+  
+  .post-content img {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  
+  .post-content video {
+    width: 100%;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  
+  /* Upvote/Downvote buttons section */
+  .post-votes {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 15px;
+  }
+  
+  .post-votes button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    background-color: #f0f0f0;
+    color: #333;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .post-votes button:hover {
+    background-color: #e0e0e0;
+  }
+  
+  /* Comment section */
+  .post-comments {
+    margin-top: 20px;
+  }
+  
+  .post-comments h5 {
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #555;
+  }
+  
+  .post-comments ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .post-comments li {
+    padding: 8px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  
