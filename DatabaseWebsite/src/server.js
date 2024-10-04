@@ -106,17 +106,10 @@ const multer = require('multer');
 const path = require('path');
 
 // Set up Multer for file storage
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/'); // Directory where the files will be saved
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname)); // Use the current timestamp as the filename
-  }
-});
+
 
 // Initialize the multer upload middleware
-const upload = multer({ storage: storage });
+const upload = multer({ dest: './uploads' });
 
 app.post('/api/users', async (req, res) => {
   const { firstName, lastName, email, username, password, birthDate } = req.body;
@@ -170,6 +163,7 @@ app.post('/api/login', async (req, res) => {
   app.post('/api/post', upload.single('mediaContent'), async (req, res) => {
     try {
       const { userID, textContent, postType } = req.body;
+      console.log(req.file.path);
       const mediaContent = req.file ? req.file.path : null; // Handle file upload (if any)
   
       let newPost;
