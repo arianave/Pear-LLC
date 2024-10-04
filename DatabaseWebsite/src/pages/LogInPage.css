@@ -43,7 +43,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 90vh; /* Full viewport height */
+    height: 95vh; /* Full viewport height */
   }
   
   .login-form {
@@ -51,12 +51,12 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 40px;
+    padding: 50px;
     border: 1px solid #ccc;
     border-radius: 10px;
     background-color: #fff;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 300px; /* Set a width for the form */
+    width: 350px; /* Set a width for the form */
   }
   
   .login-form div {
