@@ -11,10 +11,16 @@
   }
   
   .profile-header {
-      width: 100%;
-      padding: 20px;
+   
+      display: flex;
+      justify-content: space-between; /* Ensures items are pushed to opposite ends */
+      align-items: center;
+      padding-bottom: 20px;
       border-bottom: 1px solid #ddd;
-      box-sizing: border-box;
+      width: 100%; /* Ensure it spans the full width of the container */
+      box-sizing: border-box; /* Include padding in the width calculation */
+  
+  
   
   
   }
