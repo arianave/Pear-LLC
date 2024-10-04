@@ -238,6 +238,20 @@ app.get('/api/users', async (req, res) => {
     }
   });
   
+  app.get('/api/comments/:postId', async (req, res) => {
+    try {
+      const postId = req.params.postId; // Extract postId from the URL
+      const comments = await Comment.find({ postID: postId }); // Find comments by postID
+  
+      if (!comments || comments.length === 0) {
+        return res.status(404).json({ success: false, message: 'No comments found for this post' });
+      }
+  
+      res.json({ success: true, comments }); // Send the comments in the response
+    } catch (err) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  });
 
   app.get('/api/posts', async (req, res) => {
     try {

@@ -131,6 +131,7 @@ function ProfilePage() {
               creator={profile.username} 
               postDate={post.creationDate}
               postContent={post.textContent || 'No content available'}  // Only showing textContent for now
+              postID={post._id}       // Passing the postID to the Post component
             />
           ))
         ) : (
