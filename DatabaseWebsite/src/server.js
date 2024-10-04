@@ -163,11 +163,10 @@ app.post('/api/login', async (req, res) => {
   app.post('/api/post', upload.single('mediaContent'), async (req, res) => {
     try {
       const { userID, textContent, postType } = req.body;
-      console.log(req.file.path);
       const mediaContent = req.file ? req.file.path : null; // Handle file upload (if any)
   
       let newPost;
-  
+
       // Handle text posts (no media)
     if (postType === 'text') {
       newPost = new Post({
@@ -223,6 +222,22 @@ app.get('/api/users', async (req, res) => {
       res.status(500).json({ message: err.message });
     }
   });
+
+  app.get('/api/users/:userId', async (req, res) => {
+    try {
+      const userId = req.params.userId; // Extract userId from URL
+      const user = await User.findById(userId); // Find user by ID
+  
+      if (!user) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+      }
+  
+      res.json({ success: true, user }); // Send the user object in the response
+    } catch (err) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  });
+  
 
   app.get('/api/posts', async (req, res) => {
     try {

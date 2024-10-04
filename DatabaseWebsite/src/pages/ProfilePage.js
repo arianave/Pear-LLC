@@ -128,7 +128,7 @@ function ProfilePage() {
           userPosts.map((post) => (
             <Post 
               key={post._id}
-              creator={post.userID}  // Temporarily using userID as the creator
+              creator={profile.username} 
               postDate={post.creationDate}
               postContent={post.textContent || 'No content available'}  // Only showing textContent for now
             />
