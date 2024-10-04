@@ -118,7 +118,7 @@ function LogInPage() { //manage state of log in form
           New to Pear to Peer? <Link to="/CreateAccountPage" className="b-link">Create an account</Link>
           </p>
           <p className="login3-link">
-          Forgot your password? <Link to="/ResetPassword" className="blu-link">Reset your password</Link> 
+          Forgot password? <Link to="/ResetPassword" className="blu-link">Reset your password</Link> 
           </p>
         </div>
       </form>
