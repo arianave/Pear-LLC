@@ -36,7 +36,7 @@
   .logout-button {
     
       margin-left: auto; /* If necessary to push to the right without exceeding container */
-      background-color: #ff4d4d;
+      background-color: #fd4141;
       color: white;
       border: none;
       padding: 8px 16px;
@@ -48,7 +48,7 @@
   }
   
   .logout-button:hover {
-    background-color: #ff1a1a;
+    background-color: #fb9e9e;
   }
   
   .profile-body {

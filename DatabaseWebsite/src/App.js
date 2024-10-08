@@ -7,7 +7,11 @@ import ResetPassword from './pages/ResetPassword';
 import ProfilePage from './pages/ProfilePage'; 
 import BottomBar from './BottomBar'; 
 import PostCreationPage from './pages/PostCreationPage';
-
+import MessagePage from './pages/MessagePage';
+import HomeFeed from './pages/HomeFeed';
+import FeedSearch from './pages/FeedSearch';
+import Activity from './pages/Activity'; 
+import FeedColumn from './pages/FeedColumn';
 function App() {
   return (
     <BrowserRouter>
@@ -20,7 +24,7 @@ function AppContent() {
   const location = useLocation(); // Hook to get the current location
 
   // Define the pages where the BottomBar should not appear
-  const hideBottomBarOnPages = ['/LogInPage', '/CreateAccountPage', '/ResetPassword'];
+  const hideBottomBarOnPages = ['/CreateAccountPage', '/ResetPassword']; // taking out '/LogInPage' for testing currently
 
   return (
     <div>
@@ -32,6 +36,11 @@ function AppContent() {
           <Route path="ResetPassword" element={<ResetPassword />} />
           <Route path="ProfilePage" element={<ProfilePage />} />
           <Route path="PostCreation" element={<PostCreationPage />} />
+          <Route path="Messages" element={<MessagePage />} />
+          <Route path="HomeFeed" element={<HomeFeed />} />
+          <Route path="FeedSearch" element={<FeedSearch />} />  
+          <Route path="Activity" element={<Activity />} />    
+          <Route path="FeedColumn" element={<FeedColumn />} />    
         </Routes>
       </main>
       
