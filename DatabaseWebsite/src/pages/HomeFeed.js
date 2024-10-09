@@ -80,6 +80,3 @@ function HomeFeed() {
 }
 
 export default HomeFeed;
-
-
-

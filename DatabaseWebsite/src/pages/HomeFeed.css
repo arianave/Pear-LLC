@@ -10,7 +10,7 @@
     box-sizing: border-box; /* Include padding in height calculation */
 }
 
-.header {
+.home-feed-header {
     display: flex;
     justify-content: flex-end; /* Align buttons to the right */
     padding: 10px 17px 0 0; /* Adjust padding to create space on the right */
@@ -40,4 +40,3 @@
     border-radius: 5px; /* Rounded corners */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Shadow effect */
 }
-
