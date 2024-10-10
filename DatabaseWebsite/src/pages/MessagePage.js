@@ -3,7 +3,7 @@ import './MessagePage.css';
 import { getChats } from '../userData/chats';
 import { getUsername } from '../userData/user';
 
-function MessagePage() {
+function MessagePage({sender, receiver}) {
   const [chats, setChats] = useState([]); // State for storing existing chats
   const [showSearch, setShowSearch] = useState(false); // State to show/hide search bar
   const [searchTerm, setSearchTerm] = useState(''); // State for search input
@@ -11,6 +11,7 @@ function MessagePage() {
   const [showPopup, setShowPopup] = useState(false); // State for popup window
   const [selectedUser, setSelectedUser] = useState(null); // The user currently chatting with
   const [messages, setMessages] = useState([]); // Messages with the selected user
+  const [newMessage, setNewMessage] = useState([])
 
   // Function to handle starting a chat (simple search for now)
   const handleStartChat = () => {
@@ -51,6 +52,35 @@ function MessagePage() {
       console.log("Unique Chat Users:", userObjects.filter(user => user !== null));
     }
     
+  };
+
+  const sendMessage = async () => {
+    if (newMessage.trim() === '') return; // Prevent empty messages
+
+    try {
+      const response = await fetch(`http://<your-aws-server-ip>:<port>/api/messages`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          senderId: sender, // Use the sender prop
+          receiverId: receiver, // Use the receiver prop
+          content: newMessage,
+        }),
+      });
+
+      const message = await response.json();
+
+      if (response.ok) {
+        setMessages((prevMessages) => [...prevMessages, message]); // Append new message to chat
+        setNewMessage(''); // Clear input field
+      } else {
+        console.error('Failed to send message:', message.error);
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+    }
   };
 
    // useEffect hook to fetch chats on component mount
