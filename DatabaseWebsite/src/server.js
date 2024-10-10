@@ -79,7 +79,8 @@ const Tag = mongoose.model('Tag', TagSchema);
 
 const MessageSchema = new mongoose.Schema({
 messageID: mongoose.Schema.Types.ObjectId,
-userID: mongoose.Schema.Types.ObjectId,
+sender: mongoose.Schema.Types.ObjectId,
+receiver: mongoose.Schema.Types.ObjectId,
 messageContent: String,
 messageDate: Date
 });
@@ -291,7 +292,36 @@ app.get('/api/users', async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 });
-  
+
+  app.get('/api/chats/:userId', async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+      // Fetch chats where the user is either the sender or receiver
+      const chats = await Message.find({
+        $or: [{ sender: userId }, { receiver: userId }]
+      }).sort({ messageDate: -1 }); // Sort by most recent messages
+
+      if (chats.length > 0) {
+        res.status(200).json({
+          success: true,
+          chats
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: 'No chats found for this user'
+        });
+      }
+    } catch (error) {
+      console.error('Error retrieving chats:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Error retrieving chats'
+      });
+    }
+  });
+
   // Start the server
   app.listen(port, () => {
     console.log(`Server running on port ${port}`);

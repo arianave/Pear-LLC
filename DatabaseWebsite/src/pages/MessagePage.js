@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './MessagePage.css'; 
+import { getChats } from '../userData/chats';
 
 function MessagePage() {
   const [chats, setChats] = useState([]); // State for storing existing chats
@@ -20,6 +21,29 @@ function MessagePage() {
     console.log(`Searching for ${searchTerm}`);
     setShowSearch(false); // Hide search after submission
   };
+
+  // Fetch chats from backend or database
+  const fetchChats = async () => {
+    // Use the getChats function to fetch chat data
+    const chatsData = await getChats();
+
+    if (chatsData) {
+      setChats(chatsData); // Update state with the fetched chats
+    }
+  };
+
+  useEffect(() => {
+    // Call fetchChats when component mounts
+    fetchChats();
+
+    // Polling every 10 seconds to check for new chats
+    const interval = setInterval(() => {
+      fetchChats();
+    }, 10000); // Fetch new chats every 10 seconds
+
+    // Cleanup the interval on component unmount
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div className="messages-page">
@@ -46,7 +70,7 @@ function MessagePage() {
           chats.map((chat, index) => (
             <div key={index} className="chat-item">
               {/* Display chat item (to be developed later) */}
-              <p>Chat with {chat.username}</p>
+              <p>Chat with {chat.receiver}</p>
             </div>
           ))
         )}
