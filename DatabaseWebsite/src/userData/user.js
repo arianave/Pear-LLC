@@ -30,3 +30,20 @@ export function storeUserId(userId) {
       return null;
     }
   };
+
+  export const getUsername = async (userID) => {
+    const userId = userID;
+    try {
+      const response = await fetch(`http://98.80.48.42:3000/api/username/${userId}`);
+      const result = await response.json();
+  
+      if (result.success) {
+        return result.user.username; // Returns just the username string
+      } else {
+        throw new Error('Error retrieving username');
+      }
+    } catch (error) {
+      console.error('Error fetching username:', error);
+      return null;
+    }
+  };
