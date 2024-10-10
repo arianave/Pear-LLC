@@ -238,6 +238,26 @@ app.get('/api/users', async (req, res) => {
       res.status(500).json({ success: false, message: err.message });
     }
   });
+
+  app.get('/api/username/:userId', async (req, res) => {
+    const { userId } = req.params; // Extract userId from request parameters
+  
+    try {
+      // Find the user in the database by userId
+      const user = await User.findById(userId);
+  
+      // Check if user exists
+      if (!user) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+      }
+  
+      // Respond with the user's details (you can send only the username if needed)
+      res.json({ success: true, user: { username: user.username } });
+    } catch (error) {
+      console.error('Error retrieving username:', error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+  });
   
   app.get('/api/comments/:postId', async (req, res) => {
     try {
