@@ -342,6 +342,23 @@ app.get('/api/users', async (req, res) => {
     }
   });
 
+  app.post('/api/messages', async (req, res) => {
+    const { senderId, receiverId, content } = req.body;
+  
+    try {
+      const newMessage = new Message({
+        sender : senderId,
+        receiver : receiverId,
+        messageContent : content,
+        messageDate: new Date() // Automatically set creation date
+      });
+      await newMessage.save(); // Save to the database
+      res.status(201).json({ success: true, newMessage });
+    } catch (error) {
+      res.status(500).json({ success: false, message: 'Error creating message', error });
+    }
+  });
+
   // Start the server
   app.listen(port, () => {
     console.log(`Server running on port ${port}`);

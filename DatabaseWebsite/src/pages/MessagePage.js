@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './MessagePage.css'; 
 import { getChats } from '../userData/chats';
 import { getUsername } from '../userData/user';
+import { getUserId } from '../userData/user';
 
 function MessagePage({sender, receiver}) {
   const [chats, setChats] = useState([]); // State for storing existing chats
@@ -12,6 +13,7 @@ function MessagePage({sender, receiver}) {
   const [selectedUser, setSelectedUser] = useState(null); // The user currently chatting with
   const [messages, setMessages] = useState([]); // Messages with the selected user
   const [newMessage, setNewMessage] = useState([])
+  const userID = getUserId();
 
   // Function to handle starting a chat (simple search for now)
   const handleStartChat = () => {
@@ -34,6 +36,7 @@ function MessagePage({sender, receiver}) {
   
     if (chatsData) {
       setChats(chatsData); // Update state with the fetched chats
+      console.log(chatsData)
   
       // Get unique user IDs from chats (both sender and receiver)
       const userIds = [...new Set(chatsData.flatMap(chat => [chat.sender, chat.receiver]))]; 
@@ -58,25 +61,26 @@ function MessagePage({sender, receiver}) {
     if (newMessage.trim() === '') return; // Prevent empty messages
 
     try {
-      const response = await fetch(`http://<your-aws-server-ip>:<port>/api/messages`, {
+      const response = await fetch(`http://98.80.48.42:3000/api/messages`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          senderId: sender, // Use the sender prop
-          receiverId: receiver, // Use the receiver prop
+          senderId: userID, // Use the sender prop
+          receiverId: selectedUser.userId, // Use the receiver prop
           content: newMessage,
         }),
       });
 
-      const message = await response.json();
+      const result = await response.json();
 
-      if (response.ok) {
-        setMessages((prevMessages) => [...prevMessages, message]); // Append new message to chat
+      if (response.ok && result.success) {
+        // Append the new message from result.newMessage
+        setMessages((prevMessages) => [...prevMessages, result.newMessage]);
         setNewMessage(''); // Clear input field
       } else {
-        console.error('Failed to send message:', message.error);
+        console.error('Failed to send message:', result.message);
       }
     } catch (error) {
       console.error('Error sending message:', error);
@@ -176,8 +180,13 @@ function MessagePage({sender, receiver}) {
             )}
           </div>
           <div className="chat-input">
-            <input type="text" placeholder="Type a message..." />
-            <button onClick={() => console.log('Send message')}>Send</button>
+             <input 
+              type="text" 
+              placeholder="Type a message..." 
+              value={newMessage} 
+              onChange={(e) => setNewMessage(e.target.value)} // Update newMessage state
+            />
+            <button onClick={sendMessage}>Send</button> {/* Call sendMessage on click */}
           </div>
         </div>
       )}
