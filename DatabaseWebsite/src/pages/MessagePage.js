@@ -16,7 +16,7 @@ function MessagePage({}) {
   const userID = getUserId();
   const intervalRef = useRef(null); // Ref to store interval ID for cleanup
   const [newChats, setNewChats] = useState([]); // To track manually created chats
-
+  const chatMessagesRef = useRef(null);
 
   // Function to handle starting a chat (simple search for now)
   const handleStartChat = () => {
@@ -45,7 +45,7 @@ function MessagePage({}) {
   
         if (filteredResults.length > 0) {
           const newChatEntries = filteredResults.map(user => ({
-            userId: user._id,
+            userId: user._id.toString(),
             username: user.username
           }));
 
@@ -165,9 +165,19 @@ function MessagePage({}) {
   // Trigger fetchMessages when selectedUser changes
   useEffect(() => {
     if (selectedUser) {
-      fetchMessages(selectedUser.userId);
+      const filteredMessages = chats.filter(chat => 
+        (chat.sender === userID && chat.receiver === selectedUser.userId) ||
+        (chat.receiver === userID && chat.sender === selectedUser.userId)
+      );
+      setMessages(filteredMessages);
     }
-  }, [selectedUser]);
+  }, [selectedUser, chats, userID]);
+
+  useEffect(() => {
+    if (chatMessagesRef.current) {
+      chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   // Open chat with selected user
   const handleOpenChat = (user) => {
@@ -222,8 +232,8 @@ function MessagePage({}) {
       {uniqueChatUsers.length === 0 ? (
           <p>No messages found, try starting a chat!</p>
         ) : (
-          uniqueChatUsers.map((user, index) => (
-            <div key={index} className="chat-item" onClick={() => handleOpenChat(user)}>
+          uniqueChatUsers.map((user) => (
+            <div key={user.userId} className="chat-item" onClick={() => handleOpenChat(user)}>
               <p>{user.username}</p> {/* Display username instead of userId */}
             </div>
           ))
@@ -243,8 +253,8 @@ function MessagePage({}) {
               messages
               .slice() // Create a copy of the array to avoid mutating the original state
               .sort((a, b) => new Date(a.messageDate) - new Date(b.messageDate)) // Sort by date in ascending order
-              .map((message, index) => (
-                <div key={index} className="message-item">
+              .map((message) => (
+                <div key={message._id || message.messageDate} className="message-item">
                   <p>{message.messageContent}</p>
                   <small>{new Date(message.messageDate).toLocaleString()}</small>
                 </div>
