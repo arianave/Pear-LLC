@@ -15,6 +15,8 @@ function MessagePage({}) {
   const [newMessage, setNewMessage] = useState([])
   const userID = getUserId();
   const intervalRef = useRef(null); // Ref to store interval ID for cleanup
+  const [newChats, setNewChats] = useState([]); // To track manually created chats
+
 
   // Function to handle starting a chat (simple search for now)
   const handleStartChat = () => {
@@ -25,9 +27,30 @@ function MessagePage({}) {
     setSearchTerm(e.target.value);
   };
 
-  const handleSearchSubmit = () => {
-    // Handle chat search functionality here
+  const handleSearchSubmit = async () => {
     console.log(`Searching for ${searchTerm}`);
+    if (searchTerm.trim() === '') return; // Prevent empty searches
+    
+    try {
+      // Make a request to your backend API to search for users
+      const response = await fetch(`http://98.80.48.42:3000/api/searchUsers/${searchTerm}`);
+      const result = await response.json();
+      
+      if (result.success) {
+        // Handle search results
+        if (result.users.length > 0) {
+          console.log("Search Results:", result.users);
+          setUniqueChatUsers(result.users); // Update the list of chat users to show search results
+        } else {
+          console.log("No users found.");
+        }
+      } else {
+        console.error('Error searching users:', result.message);
+      }
+    } catch (error) {
+      console.error('Search request failed:', error);
+    }
+    
     setShowSearch(false); // Hide search after submission
   };
 

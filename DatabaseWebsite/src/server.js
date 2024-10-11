@@ -239,6 +239,17 @@ app.get('/api/users', async (req, res) => {
     }
   });
 
+  app.get('/api/searchUsers/:username', async (req, res) => {
+    const username = req.params.username;
+    
+    try {
+      const users = await User.find({ username: { $regex: username, $options: 'i' } }); // Case-insensitive search
+      res.json({ success: true, users });
+    } catch (err) {
+      res.status(500).json({ success: false, message: 'Error searching users' });
+    }
+  });
+
   app.get('/api/username/:userId', async (req, res) => {
     const { userId } = req.params; // Extract userId from request parameters
   
