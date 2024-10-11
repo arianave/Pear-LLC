@@ -37,12 +37,22 @@ function MessagePage({}) {
       const result = await response.json();
       
       if (result.success) {
-        // Handle search results
-        if (result.users.length > 0) {
-          console.log("Search Results:", result.users);
-          setUniqueChatUsers(result.users); // Update the list of chat users to show search results
+        // Filter out users that are already in uniqueChatUsers to avoid duplicates
+        const filteredResults = result.users.filter(user => 
+          !uniqueChatUsers.some(chatUser => chatUser.userId === user._id) &&
+          !newChats.some(newChat => newChat.userId === user._id) // Also check against newChats
+        );
+  
+        if (filteredResults.length > 0) {
+          const newChatEntries = filteredResults.map(user => ({
+            userId: user._id,
+            username: user.username
+          }));
+
+          setNewChats(prevNewChats => [...prevNewChats, ...newChatEntries]); // Safely update newChats
+          setUniqueChatUsers(prevUsers => [...prevUsers, ...newChatEntries]); // Ensure UI reflects changes immediately
         } else {
-          console.log("No users found.");
+          console.log("All users in search results are already in chats.");
         }
       } else {
         console.error('Error searching users:', result.message);
@@ -60,7 +70,7 @@ function MessagePage({}) {
   
     if (chatsData) {
       setChats(chatsData); // Update state with the fetched chats
-      console.log(chatsData)
+      console.log("Fetched chats:", chatsData);
   
       // Get unique user IDs from chats (both sender and receiver), excluding the current user
       const userIds = [...new Set(
@@ -71,7 +81,7 @@ function MessagePage({}) {
     
       // Fetch usernames for those user IDs
       const userObjects = await Promise.all(userIds.map(async (id) => {
-        console.log(id)
+        console.log("Fetching username for ID:", id);
         const username = await getUsername(id);
         if (username) {
           return { userId: id, username }; // Return both userId and username
@@ -80,11 +90,23 @@ function MessagePage({}) {
       }));
   
       // Filter out any null values (in case some usernames don't exist)
-      setUniqueChatUsers(userObjects.filter(user => user !== null)); 
-      console.log("Unique Chat Users:", userObjects.filter(user => user !== null));
-    }
+    const fetchedUniqueUsers = userObjects.filter(user => user !== null);
     
-  };
+    // Merge newly created chats with fetched chats, avoiding duplicates
+    setUniqueChatUsers(prevUniqueChatUsers => {
+      const existingUserIds = new Set(prevUniqueChatUsers.map(user => user.userId));
+      const mergedUsers = [
+        ...prevUniqueChatUsers,
+        ...fetchedUniqueUsers.filter(user => !existingUserIds.has(user.userId)),
+        ...newChats.filter(newChat => !existingUserIds.has(newChat.userId))
+      ];
+      console.log("Merged Users:", mergedUsers);
+      return mergedUsers;
+    });
+
+    console.log("Updated uniqueChatUsers:", uniqueChatUsers);
+  }
+};
 
   const sendMessage = async () => {
     if (newMessage.trim() === '') return; // Prevent empty messages
@@ -108,6 +130,9 @@ function MessagePage({}) {
         // Append the new message from result.newMessage
         setMessages((prevMessages) => [...prevMessages, result.newMessage]);
         setNewMessage(''); // Clear input field
+
+        // Remove from newChats since it's now an actual chat with messages
+        setNewChats(prevChats => prevChats.filter(chat => chat.userId !== selectedUser.userId));
       } else {
         console.error('Failed to send message:', result.message);
       }
@@ -149,9 +174,6 @@ function MessagePage({}) {
     setSelectedUser(user);
     setShowPopup(true);
     console.log("unique chat users: ", uniqueChatUsers);
-
-    // Fetch the message history with this user from existing chats
-    fetchMessages(user.userId);
   };
 
   // Filter messages between current user and selected user
