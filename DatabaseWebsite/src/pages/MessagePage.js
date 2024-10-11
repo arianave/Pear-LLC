@@ -186,23 +186,6 @@ function MessagePage({}) {
     console.log("unique chat users: ", uniqueChatUsers);
   };
 
-  // Filter messages between current user and selected user
-  const fetchMessages = (userId) => {
-    console.log("UserID: ", userId);
-    
-    // Filter messages between the current user and the selected user
-    if (selectedUser) { // Check if selectedUser is not null
-      const filteredMessages = chats.filter(chat => 
-        (chat.sender === userId || chat.receiver === userId) &&
-        (chat.sender === selectedUser.userId || chat.receiver === selectedUser.userId)
-      );
-    
-    console.log(filteredMessages);
-    setMessages(filteredMessages); // Update state with filtered messages
-    } else {
-       console.log("No user selected, cannot fetch messages.");
-    }
-  };
   // Close the chat popup
   const handleCloseChat = () => {
     setShowPopup(false);
@@ -251,14 +234,18 @@ function MessagePage({}) {
               <p>No messages yet.</p>
             ) : (
               messages
-              .slice() // Create a copy of the array to avoid mutating the original state
-              .sort((a, b) => new Date(a.messageDate) - new Date(b.messageDate)) // Sort by date in ascending order
-              .map((message) => (
-                <div key={message._id || message.messageDate} className="message-item">
-                  <p>{message.messageContent}</p>
-                  <small>{new Date(message.messageDate).toLocaleString()}</small>
-                </div>
-              ))
+              .slice()
+              .sort((a, b) => new Date(a.messageDate) - new Date(b.messageDate))
+              .map((message) => {
+                const senderUsername = message.sender === userID ? 'You' : uniqueChatUsers.find(user => user.userId === message.sender)?.username || 'Unknown';
+                
+                return (
+                  <div key={message._id || message.messageDate} className="message-item">
+                    <p><strong>{senderUsername}:</strong> {message.messageContent}</p>
+                    <small>{new Date(message.messageDate).toLocaleString()}</small>
+                  </div>
+                );
+              })
             )}
           </div>
           <div className="chat-input">
