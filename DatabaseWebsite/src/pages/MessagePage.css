@@ -90,8 +90,8 @@
   position: fixed;
   bottom: 20px;
   right: 20px;
-  width: 300px;
-  height: 400px; /* Set a fixed height for the popup */
+  width: 400px;
+  height: 500px; /* Set a fixed height for the popup */
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -128,7 +128,7 @@
   flex-grow: 1; /* Take up available space */
   padding: 10px;
   overflow-y: auto; /* Enable vertical scrolling */
-  max-height: 300px; /* Limit height so that it becomes scrollable */
+  max-height: 400px; /* Limit height so that it becomes scrollable */
   background-color: #f9f9f9;
 }
 
