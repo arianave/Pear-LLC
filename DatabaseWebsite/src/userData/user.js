@@ -33,6 +33,7 @@ export function storeUserId(userId) {
 
   export const getUsername = async (userID) => {
     const userId = userID;
+    if(userID){
     try {
       const response = await fetch(`http://98.80.48.42:3000/api/username/${userId}`);
       const result = await response.json();
@@ -46,4 +47,5 @@ export function storeUserId(userId) {
       console.error('Error fetching username:', error);
       return null;
     }
+  }
   };

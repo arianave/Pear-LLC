@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './MessagePage.css'; 
 import { getChats } from '../userData/chats';
 import { getUsername } from '../userData/user';
 import { getUserId } from '../userData/user';
 
-function MessagePage({sender, receiver}) {
+function MessagePage({}) {
   const [chats, setChats] = useState([]); // State for storing existing chats
   const [showSearch, setShowSearch] = useState(false); // State to show/hide search bar
   const [searchTerm, setSearchTerm] = useState(''); // State for search input
@@ -14,6 +14,7 @@ function MessagePage({sender, receiver}) {
   const [messages, setMessages] = useState([]); // Messages with the selected user
   const [newMessage, setNewMessage] = useState([])
   const userID = getUserId();
+  const intervalRef = useRef(null); // Ref to store interval ID for cleanup
 
   // Function to handle starting a chat (simple search for now)
   const handleStartChat = () => {
@@ -38,11 +39,16 @@ function MessagePage({sender, receiver}) {
       setChats(chatsData); // Update state with the fetched chats
       console.log(chatsData)
   
-      // Get unique user IDs from chats (both sender and receiver)
-      const userIds = [...new Set(chatsData.flatMap(chat => [chat.sender, chat.receiver]))]; 
-  
+      // Get unique user IDs from chats (both sender and receiver), excluding the current user
+      const userIds = [...new Set(
+        chatsData
+          .flatMap(chat => [chat.sender, chat.receiver])
+          .filter(id => id !== userID) // Exclude the current user
+      )];
+    
       // Fetch usernames for those user IDs
       const userObjects = await Promise.all(userIds.map(async (id) => {
+        console.log(id)
         const username = await getUsername(id);
         if (username) {
           return { userId: id, username }; // Return both userId and username
@@ -87,15 +93,33 @@ function MessagePage({sender, receiver}) {
     }
   };
 
-   // useEffect hook to fetch chats on component mount
-   useEffect(() => {
+  useEffect(() => {
+    // Initial fetch on component mount
     const fetchData = async () => {
-      await fetchChats(); // Call the async fetchChats function inside this new function
+      await fetchChats(); // Fetch initial chats
     };
 
     fetchData(); // Call the internal async function
 
-  }, []);
+    // Set up polling to refetch chats every 5 seconds (5000ms)
+    intervalRef.current = setInterval(() => {
+      fetchChats(); // Fetch chats periodically
+    }, 5000); // Update every 5 seconds
+
+    // Cleanup: Clear interval when component unmounts
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+    };
+  }, []); // Empty dependency array means it runs on mount/unmount
+
+  // Trigger fetchMessages when selectedUser changes
+  useEffect(() => {
+    if (selectedUser) {
+      fetchMessages(selectedUser.userId);
+    }
+  }, [selectedUser]);
 
   // Open chat with selected user
   const handleOpenChat = (user) => {
@@ -171,7 +195,10 @@ function MessagePage({sender, receiver}) {
             {messages.length === 0 ? (
               <p>No messages yet.</p>
             ) : (
-              messages.map((message, index) => (
+              messages
+              .slice() // Create a copy of the array to avoid mutating the original state
+              .sort((a, b) => new Date(a.messageDate) - new Date(b.messageDate)) // Sort by date in ascending order
+              .map((message, index) => (
                 <div key={index} className="message-item">
                   <p>{message.messageContent}</p>
                   <small>{new Date(message.messageDate).toLocaleString()}</small>
