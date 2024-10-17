@@ -12,7 +12,7 @@ import HomeFeed from './pages/HomeFeed';
 import FeedSearch from './pages/FeedSearch';
 import Activity from './pages/Activity'; 
 import FeedColumn from './pages/FeedColumn';
-import Follow from './Follow';
+import Follow from './pages/Follow';
 
 function App() {
   return (
