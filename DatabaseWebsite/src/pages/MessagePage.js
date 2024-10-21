@@ -175,7 +175,10 @@ function MessagePage({}) {
 
   useEffect(() => {
     if (chatMessagesRef.current) {
-      chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
+      chatMessagesRef.current.scrollTo({
+        top: chatMessagesRef.current.scrollHeight,
+        behavior: 'smooth' // For smooth scrolling
+      });
     }
   }, [messages]);
 
@@ -229,7 +232,7 @@ function MessagePage({}) {
             <h2>Chat with {selectedUser.username}</h2>
             <button onClick={handleCloseChat}>Close</button>
           </div>
-          <div className="chat-messages">
+          <div className="chat-messages" ref={chatMessagesRef}>
             {messages.length === 0 ? (
               <p>No messages yet.</p>
             ) : (
