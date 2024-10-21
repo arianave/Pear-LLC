@@ -176,9 +176,17 @@ function MessagePage({}) {
 
   useLayoutEffect(() => {
     if (chatMessagesRef.current) {
-      chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
+      const { scrollHeight, clientHeight, scrollTop } = chatMessagesRef.current;
+      console.log(`Scroll Height: ${scrollHeight}, Client Height: ${clientHeight}, Scroll Top: ${scrollTop}`);
+      if (scrollHeight > clientHeight) {
+        chatMessagesRef.current.scrollTop = scrollHeight;
+        console.log("Scrolled to bottom");
+      } else {
+        console.log("No need to scroll");
+      }
     }
   }, [messages]);
+  
   
   
 
