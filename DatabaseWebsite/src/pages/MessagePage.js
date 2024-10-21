@@ -175,12 +175,12 @@ function MessagePage({}) {
 
   useEffect(() => {
     if (chatMessagesRef.current) {
-      chatMessagesRef.current.scrollTo({
-        top: chatMessagesRef.current.scrollHeight,
-        behavior: 'smooth' // For smooth scrolling
-      });
+      setTimeout(() => {
+        chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
+      }, 100); // Adjust the delay if necessary
     }
   }, [messages]);
+  
 
   // Open chat with selected user
   const handleOpenChat = (user) => {
