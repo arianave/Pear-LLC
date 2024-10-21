@@ -370,6 +370,52 @@ app.get('/api/users', async (req, res) => {
     }
   });
 
+
+
+
+
+  // Fetch followers for a user
+app.get('/api/followers/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const followData = await Follow.findOne({ userID: userId });
+    if (!followData) return res.status(404).json({ message: 'No followers found.' });
+    const followers = await User.find({ _id: { $in: followData.followers } });
+    res.json(followers);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+});
+
+// Fetch following for a user
+app.get('/api/following/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const followData = await Follow.findOne({ userID: userId });
+    if (!followData) return res.status(404).json({ message: 'No following found.' });
+    const following = await User.find({ _id: { $in: followData.following } });
+    res.json(following);
+  } catch (error) {
+    res.status(500).json({ message: 'Server error', error });
+  }
+});
+
+// Unfollow a user
+app.post('/api/unfollow', async (req, res) => {
+  const { userId, unfollowUserId } = req.body;
+  try {
+    const followData = await Follow.findOne({ userID: userId });
+    followData.following = followData.following.filter(id => id.toString() !== unfollowUserId);
+    await followData.save();
+    res.status(200).json({ message: 'Unfollowed successfully.' });
+  } catch (error) {
+    res.status(500).json({ message: 'Error unfollowing user', error });
+  }
+});
+
+
+
+
   // Start the server
   app.listen(port, () => {
     console.log(`Server running on port ${port}`);

@@ -3,8 +3,10 @@ import './ProfilePage.css';
 import { useNavigate } from 'react-router-dom';
 import { getUserPosts } from '../userData/userPosts';
 import Post from '../components/Post';
-import { getUserInfo } from '../userData/user'; 
+//import { getUserInfo } from '../userData/user'; 
+import { getUserInfo, getUserFollowers, getUserFollowing } from '../userData/user'; // Update this to fetch followers/following data
 
+/*
 function ProfilePage() {
   const [profile, setProfile] = useState({
     username: '', // Will show user's username
@@ -14,6 +16,17 @@ function ProfilePage() {
     following: 150, // Following/threads count
     isFollowing: false, // State for following/unfollowing
   });
+*/
+function ProfilePage() {
+  const [profile, setProfile] = useState({
+    username: '',
+    bio: '',
+    totalPosts: 0,
+    followers: 0, // Dynamically loaded
+    following: 0, // Dynamically loaded
+    isFollowing: false,
+  });
+
 
   const [showModel, setShowModel] = useState(false);
   const [userPosts, setUserPosts] = useState([]);
@@ -26,6 +39,8 @@ function ProfilePage() {
     const posts = await getUserPosts();
     const num = posts.length;
     const userInfo = await getUserInfo(); // Get the user info from the function
+    const followers = await getUserFollowers(); // Fetch number of followers
+    const following = await getUserFollowing(); // Fetch number of following
      // If userInfo is successfully retrieved, update the profile state
     if (userInfo) {
       setProfile((prevProfile) => ({
@@ -33,6 +48,8 @@ function ProfilePage() {
         username: userInfo.username || 'No username', // Use the username or a default value
         bio: userInfo.profileBiography || 'No bio available',      // Use the bio or a default value
         totalPosts: num, // Update the post count
+        followers: followers.length, // Set followers count
+        following: following.length, // Set following count
       }));
     }
   };
@@ -76,6 +93,15 @@ function ProfilePage() {
     console.log('Viewing threads...');
   };
 
+   // Navigate to the followers or following pages
+   const handleViewFollowers = () => {
+    navigate('/usersFollowers');
+  };
+
+  const handleViewFollowing = () => {
+    navigate('/usersFollowing');
+  };
+
   return (
     <div className="profile-container">
       <div className="profile-header">
@@ -95,12 +121,16 @@ function ProfilePage() {
               <p>Posts</p>
             </div>
             <div className="stat">
-              <p>{profile.followers}</p>
-              <p>Followers</p>
+              <button onClick={handleViewFollowers}>
+                <p>{profile.followers}</p>
+                <p>Followers</p>
+              </button>  
             </div>
             <div className="stat">
+            <button onClick={handleViewFollowing}>
               <p>{profile.following}</p>
               <p>Following</p>
+            </button>  
             </div>
           </div>
 

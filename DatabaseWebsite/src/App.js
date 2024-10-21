@@ -14,6 +14,9 @@ import Activity from './pages/Activity';
 import FeedColumn from './pages/FeedColumn';
 import Follow from './pages/Follow';
 
+import UsersFollowers from './pages/usersFollowers';
+import UsersFollowing from './pages/usersFollowing';
+
 function App() {
   return (
     <BrowserRouter>
@@ -44,6 +47,10 @@ function AppContent() {
           <Route path="Activity" element={<Activity />} />    
           <Route path="FeedColumn" element={<FeedColumn />} />  
           <Route path = "Follow" element = {<Follow /> } />  
+
+          <Route path="usersFollowers" element={<UsersFollowers />} />
+          <Route path="usersFollowing" element={<UsersFollowing />} />
+          
         </Routes>
       </main>
       

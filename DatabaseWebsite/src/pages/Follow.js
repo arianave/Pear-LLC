@@ -1,3 +1,4 @@
+/*
 import React, { useState, useEffect, useRef} from 'react';
 import './Follow.css'
 import { getUsername } from '../userData/user';
@@ -5,7 +6,7 @@ import { getUserId } from '../userData/user';
 import { getFollowing } from '../userData/follows'
 import { getFollowers } from '../userData/follows'
 /*other imports?*/
-
+/*
 function Follow({}) {
     const userID = getUserID();
     const [following, setFollowing] = useState([]);
@@ -29,3 +30,4 @@ function Follow({}) {
 }
 
 export default Follow;
+*/
