@@ -3,6 +3,7 @@ import './MessagePage.css';
 import { getChats } from '../userData/chats';
 import { getUsername } from '../userData/user';
 import { getUserId } from '../userData/user';
+import { useLayoutEffect } from 'react'; // Ensure you import useLayoutEffect
 
 function MessagePage({}) {
   const [chats, setChats] = useState([]); // State for storing existing chats
