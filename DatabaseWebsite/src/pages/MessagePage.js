@@ -173,14 +173,9 @@ function MessagePage({}) {
     }
   }, [selectedUser, chats, userID]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (chatMessagesRef.current) {
-      console.log("Scroll Height:", chatMessagesRef.current.scrollHeight);
-      console.log("Scroll Top:", chatMessagesRef.current.scrollTop);
-      setTimeout(() => {
-        chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
-        console.log("After Scroll - Scroll Top:", chatMessagesRef.current.scrollTop);
-      }, 100);
+      chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
     }
   }, [messages]);
   
