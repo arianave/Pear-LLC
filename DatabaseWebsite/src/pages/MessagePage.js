@@ -175,11 +175,15 @@ function MessagePage({}) {
 
   useEffect(() => {
     if (chatMessagesRef.current) {
+      console.log("Scroll Height:", chatMessagesRef.current.scrollHeight);
+      console.log("Scroll Top:", chatMessagesRef.current.scrollTop);
       setTimeout(() => {
         chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
-      }, 100); // Adjust the delay if necessary
+        console.log("After Scroll - Scroll Top:", chatMessagesRef.current.scrollTop);
+      }, 100);
     }
   }, [messages]);
+  
   
 
   // Open chat with selected user
