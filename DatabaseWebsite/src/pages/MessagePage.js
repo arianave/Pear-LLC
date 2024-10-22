@@ -3,6 +3,7 @@ import './MessagePage.css';
 import { getChats } from '../userData/chats';
 import { getUsername } from '../userData/user';
 import { getUserId } from '../userData/user';
+import { useLayoutEffect } from 'react'; // Ensure you import useLayoutEffect
 
 function MessagePage({}) {
   const [chats, setChats] = useState([]); // State for storing existing chats
@@ -173,11 +174,21 @@ function MessagePage({}) {
     }
   }, [selectedUser, chats, userID]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (chatMessagesRef.current) {
-      chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
+      const { scrollHeight, clientHeight, scrollTop } = chatMessagesRef.current;
+      console.log(`Scroll Height: ${scrollHeight}, Client Height: ${clientHeight}, Scroll Top: ${scrollTop}`);
+      if (scrollHeight > clientHeight) {
+        chatMessagesRef.current.scrollTop = scrollHeight;
+        console.log("Scrolled to bottom");
+      } else {
+        console.log("No need to scroll");
+      }
     }
   }, [messages]);
+  
+  
+  
 
   // Open chat with selected user
   const handleOpenChat = (user) => {
@@ -229,7 +240,7 @@ function MessagePage({}) {
             <h2>Chat with {selectedUser.username}</h2>
             <button onClick={handleCloseChat}>Close</button>
           </div>
-          <div className="chat-messages">
+          <div className="chat-messages" ref={chatMessagesRef}>
             {messages.length === 0 ? (
               <p>No messages yet.</p>
             ) : (
