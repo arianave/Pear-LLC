@@ -50,17 +50,27 @@ export function storeUserId(userId) {
   }
   };
 
-  // Function to fetch followers of the current user
+ // Function to fetch followers of the current user
 export const getUserFollowers = async () => {
   const userId = getUserId(); // Get the current user's ID
-  try {
-    const response = await fetch(`http://98.80.48.42:3000/api/followers/${userId}`);
-    const result = await response.json();
+  console.log(`Fetching followers for user ID: ${userId}`);
 
-    if (result.success) {
-      return result.followers; // Return the list of followers
+  try {
+    const url = `http://98.80.48.42:3000/api/followers/${userId}`;
+    console.log(`Requesting followers from URL: ${url}`);
+    
+    const response = await fetch(url);
+    console.log(`Received response with status: ${response.status}`);
+    
+    const result = await response.json();
+    console.log('Response body:', result);
+
+    if (!result.success) {
+      console.log('Followers successfully retrieved:', result.followers);
+      return result; // Return the list of followers
     } else {
-      throw new Error('Error retrieving followers');
+      console.error('Error: Followers retrieval failed with message:', result.message);
+      throw new Error(`Error retrieving followers: ${result.message}`);
     }
   } catch (error) {
     console.error('Error fetching followers:', error);
@@ -71,18 +81,54 @@ export const getUserFollowers = async () => {
 // Function to fetch users the current user is following
 export const getUserFollowing = async () => {
   const userId = getUserId(); // Get the current user's ID
-  try {
-    const response = await fetch(`http://98.80.48.42:3000/api/following/${userId}`);
-    const result = await response.json();
+  console.log(`Fetching following for user ID: ${userId}`);
 
-    if (result.success) {
-      return result.following; // Return the list of users the current user is following
+  try {
+    const url = `http://98.80.48.42:3000/api/following/${userId}`;
+    console.log(`Requesting following from URL: ${url}`);
+    
+    const response = await fetch(url);
+    console.log(`Received response with status: ${response.status}`);
+    
+    const result = await response.json();
+    console.log('Response body:', result);
+
+    if (!result.success) {
+      console.log('Following list successfully retrieved:', result.following);
+      return result; // Return the list of users the current user is following
     } else {
-      throw new Error('Error retrieving following');
+      console.error('Error: Following retrieval failed with message:', result.message);
+      throw new Error(`Error retrieving following: ${result.message}`);
     }
   } catch (error) {
     console.error('Error fetching following:', error);
     return [];
+  }
+};
+
+// Function to follow a specific user
+export const followUser = async (followUserId) => {
+  const userId = getUserId(); // Get the current user's ID
+
+  try {
+    const response = await fetch('http://98.80.48.42:3000/api/follow', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId, followUserId }), // Send both userId and followUserId
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      return true; // Follow successful
+    } else {
+      throw new Error('Error following user');
+    }
+  } catch (error) {
+    console.error('Error following user:', error);
+    return false;
   }
 };
 
@@ -107,6 +153,31 @@ export const unfollowUser = async (unfollowUserId) => {
     }
   } catch (error) {
     console.error('Error unfollowing user:', error);
+    return false;
+  }
+};
+
+// Function to remove a specific user from following
+export const removeUserFromFollowing = async (removeUserId) => {
+  const userId = getUserId(); // Get the current user's ID
+  try {
+    const response = await fetch('http://98.80.48.42:3000/api/removeFollower', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId, removeUserId }), // Send both userId and removeUserId
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      return true; // Removal from followers successful
+    } else {
+      throw new Error('Error removing user from followers');
+    }
+  } catch (error) {
+    console.error('Error removing user from followers:', error);
     return false;
   }
 };

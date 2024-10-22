@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getUserFollowers, unfollowUser } from '../userData/user'; // API functions
+import { getUserFollowers, removeUserFromFollowing } from '../userData/user'; // API functions
 import './ProfilePage.css'; // Reuse profile styles
 
 function UsersFollowers() {
@@ -15,7 +15,7 @@ function UsersFollowers() {
   }, []);
 
   const handleUnfollow = async (userId) => {
-    await unfollowUser(userId);
+    await removeUserFromFollowing(userId);
     setFollowers(followers.filter(follower => follower._id !== userId)); // Remove from the list
   };
 
@@ -26,7 +26,7 @@ function UsersFollowers() {
         {followers.map((follower) => (
           <li key={follower._id}>
             {follower.username}
-            <button onClick={() => handleUnfollow(follower._id)}>Unfollow</button>
+            <button onClick={() => handleUnfollow(follower._id)}>Remove</button>
           </li>
         ))}
       </ul>

@@ -88,8 +88,10 @@ messageDate: Date
 const Message = mongoose.model('Message', MessageSchema);
 
 const FollowSchema = new mongoose.Schema({
-userID: mongoose.Schema.Types.ObjectId,
-requestStatus: String
+  userID: { type: mongoose.Schema.Types.ObjectId, required: true },
+  requestStatus: String,
+  followers: [{ type: mongoose.Schema.Types.ObjectId }],
+  following: [{ type: mongoose.Schema.Types.ObjectId }]
 });
 
 const Follow = mongoose.model('Follow', FollowSchema);
@@ -371,32 +373,86 @@ app.get('/api/users', async (req, res) => {
   });
 
 
-
-
-
-  // Fetch followers for a user
+ // Fetch followers for a user with detailed debugging
 app.get('/api/followers/:userId', async (req, res) => {
   const userId = req.params.userId;
+  console.log(`Received request for followers of user with ID: ${userId}`);
+
   try {
     const followData = await Follow.findOne({ userID: userId });
-    if (!followData) return res.status(404).json({ message: 'No followers found.' });
+    
+    if (!followData) {
+      console.error(`No follow data found for user with ID: ${userId}`);
+      return res.status(404).json({ message: 'No followers found.' });
+    }
+
+    console.log(`Follow data retrieved: ${JSON.stringify(followData)}`);
+
     const followers = await User.find({ _id: { $in: followData.followers } });
+    
+    if (!followers.length) {
+      console.warn(`No followers found in User collection for user with ID: ${userId}`);
+    } else {
+      console.log(`Followers found: ${JSON.stringify(followers)}`);
+    }
+
     res.json(followers);
   } catch (error) {
+    console.error('Error fetching followers:', error);
     res.status(500).json({ message: 'Server error', error });
   }
 });
 
-// Fetch following for a user
+// Fetch following for a user with detailed debugging
 app.get('/api/following/:userId', async (req, res) => {
   const userId = req.params.userId;
+  console.log(`Received request for following users of user with ID: ${userId}`);
+
   try {
     const followData = await Follow.findOne({ userID: userId });
-    if (!followData) return res.status(404).json({ message: 'No following found.' });
+
+    if (!followData) {
+      console.error(`No follow data found for user with ID: ${userId}`);
+      return res.status(404).json({ message: 'No following found.' });
+    }
+
+    console.log(`Follow data retrieved: ${JSON.stringify(followData)}`);
+
     const following = await User.find({ _id: { $in: followData.following } });
+
+    if (!following.length) {
+      console.warn(`No following users found in User collection for user with ID: ${userId}`);
+    } else {
+      console.log(`Following users found: ${JSON.stringify(following)}`);
+    }
+
     res.json(following);
   } catch (error) {
+    console.error('Error fetching following users:', error);
     res.status(500).json({ message: 'Server error', error });
+  }
+});
+
+// Route to follow a user
+app.post('/api/follow', async (req, res) => {
+  const { userId, followUserId } = req.body;
+
+  try {
+    const followData = await Follow.findOne({ userID: userId });
+
+    // Check if the user is already being followed
+    if (followData.following.includes(followUserId)) {
+      return res.status(400).json({ success: false, message: 'Already following this user' });
+    }
+
+    // Add the user to the following list
+    followData.following.push(followUserId);
+    await followData.save();
+
+    res.status(200).json({ success: true, message: 'Followed successfully' });
+  } catch (error) {
+    console.error('Error following user:', error);
+    res.status(500).json({ success: false, error: 'Error following user' });
   }
 });
 
@@ -413,7 +469,30 @@ app.post('/api/unfollow', async (req, res) => {
   }
 });
 
+// Remove a follower
+app.post('/api/removeFollower', async (req, res) => {
+  const { userId, removeUserId } = req.body;
 
+  try {
+    // Find the Follow document for the user
+    const followData = await Follow.findOne({ userID: userId });
+
+    if (!followData) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Filter out the follower's ID from the 'followers' array
+    followData.followers = followData.followers.filter(id => id.toString() !== removeUserId);
+
+    // Save the updated Follow document
+    await followData.save();
+
+    res.status(200).json({ message: 'Follower removed successfully.' });
+  } catch (error) {
+    console.error('Error removing follower:', error);
+    res.status(500).json({ message: 'Error removing follower', error });
+  }
+});
 
 
   // Start the server

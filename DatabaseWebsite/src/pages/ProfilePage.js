@@ -2,21 +2,9 @@ import React, { useState, useEffect } from 'react';
 import './ProfilePage.css'; 
 import { useNavigate } from 'react-router-dom';
 import { getUserPosts } from '../userData/userPosts';
-import Post from '../components/Post';
-//import { getUserInfo } from '../userData/user'; 
+import Post from '../components/Post'; 
 import { getUserInfo, getUserFollowers, getUserFollowing } from '../userData/user'; // Update this to fetch followers/following data
 
-/*
-function ProfilePage() {
-  const [profile, setProfile] = useState({
-    username: '', // Will show user's username
-    bio: '', // Bio
-    totalPosts: 0, // Post count
-    followers: 200, // Followers count
-    following: 150, // Following/threads count
-    isFollowing: false, // State for following/unfollowing
-  });
-*/
 function ProfilePage() {
   const [profile, setProfile] = useState({
     username: '',
@@ -26,7 +14,6 @@ function ProfilePage() {
     following: 0, // Dynamically loaded
     isFollowing: false,
   });
-
 
   const [showModel, setShowModel] = useState(false);
   const [userPosts, setUserPosts] = useState([]);
