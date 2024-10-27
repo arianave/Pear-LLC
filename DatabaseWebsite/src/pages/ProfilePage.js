@@ -3,10 +3,11 @@ import './ProfilePage.css';
 import { useNavigate } from 'react-router-dom';
 import { getUserPosts } from '../userData/userPosts';
 import Post from '../components/Post'; 
-import { getUserInfo, getUserFollowers, getUserFollowing } from '../userData/user'; // Update this to fetch followers/following data
+import { getUserInfo, getUserFollowers, getUserFollowing, getUserId} from '../userData/user'; // Update this to fetch followers/following data
 
 function ProfilePage() {
   const [profile, setProfile] = useState({
+    userId: '',
     username: '',
     bio: '',
     totalPosts: 0,
@@ -15,6 +16,7 @@ function ProfilePage() {
     isFollowing: false,
   });
 
+  const [isCurrentUser, setIsCurrentUser] = useState(false);
   const [showModel, setShowModel] = useState(false);
   const [userPosts, setUserPosts] = useState([]);
 
@@ -30,8 +32,11 @@ function ProfilePage() {
     const following = await getUserFollowing(); // Fetch number of following
      // If userInfo is successfully retrieved, update the profile state
     if (userInfo) {
+      const currentUserId = getUserId(); // Get the current logged-in user's ID
+      setIsCurrentUser(userInfo.userId === currentUserId); // Check if the profile belongs to the current user
       setProfile((prevProfile) => ({
         ...prevProfile,
+        userId: userInfo.userId,
         username: userInfo.username || 'No username', // Use the username or a default value
         bio: userInfo.profileBiography || 'No bio available',      // Use the bio or a default value
         totalPosts: num, // Update the post count
@@ -121,10 +126,13 @@ function ProfilePage() {
             </div>
           </div>
 
-          <button className="edit-profile-button" onClick={handleEditProfile}>Edit Profile</button>
-          <button className="follow-button" onClick={handleFollowUnfollow}>
-            {profile.isFollowing ? 'Unfollow' : 'Follow'}
-          </button>
+          {isCurrentUser ? (
+            <button className="edit-profile-button" onClick={handleEditProfile}>Edit Profile</button>
+          ) : (
+            <button className="follow-button" onClick={handleFollowUnfollow}>
+              {profile.isFollowing ? 'Unfollow' : 'Follow'}
+            </button>
+          )}
         </div>
       </div>
 
