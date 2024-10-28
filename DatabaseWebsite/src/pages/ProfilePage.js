@@ -4,7 +4,7 @@ import './ProfilePage.css';
 import { useNavigate } from 'react-router-dom';
 import { getUserPosts } from '../userData/userPosts';
 import Post from '../components/Post'; 
-import { getUserInfo, getUserFollowers, getUserFollowing, getUserId} from '../userData/user'; // Update this to fetch followers/following data
+import { getUserInfo, getUserFollowers, getUserFollowing, getUserId, unfollowUser, followUser} from '../userData/user'; // Update this to fetch followers/following data
 
 function ProfilePage() {
   const { userId } = useParams(); // Get userId from the URL
@@ -36,6 +36,11 @@ function ProfilePage() {
     if (userInfo) {
       const currentUserId = getUserId(); // Get the current logged-in user's ID
       setIsCurrentUser(userId === currentUserId); // Check if the profile belongs to the current user
+      let isFollowingCurrentUser = null;
+      if(!isCurrentUser){
+        isFollowingCurrentUser = followers.some(follower => follower._id === currentUserId);
+        console.log('Is follwing current user: ', isFollowingCurrentUser);
+      }
       setProfile((prevProfile) => ({
         ...prevProfile,
         userId: userInfo.userId,
@@ -44,6 +49,7 @@ function ProfilePage() {
         totalPosts: num, // Update the post count
         followers: followers.length, // Set followers count
         following: following.length, // Set following count
+        isFollowing: isFollowingCurrentUser,
       }));
     }
   };
@@ -70,12 +76,32 @@ function ProfilePage() {
     navigate('/LogInPage');
   };
 
-  const handleFollowUnfollow = () => {
-    // Logic to follow/unfollow user to be implemented
-    setProfile((prevProfile) => ({
-      ...prevProfile,
-      isFollowing: !prevProfile.isFollowing,
-    }));
+  const handleFollowUnfollow = async () => {
+    try {
+      if (profile.isFollowing) {
+        // Unfollow the user if already following
+        const success = await unfollowUser(userId);
+        if (success) {
+          setProfile((prevProfile) => ({
+            ...prevProfile,
+            isFollowing: false,
+            followers: prevProfile.followers - 1,
+          }));
+        }
+      } else {
+        // Follow the user if not following
+        const success = await followUser(userId);
+        if (success) {
+          setProfile((prevProfile) => ({
+            ...prevProfile,
+            isFollowing: true,
+            followers: prevProfile.followers + 1,
+          }));
+        }
+      }
+    } catch (error) {
+      console.error('Error toggling follow state:', error);
+    }
   };
 
   const handleCloseModel = () => {

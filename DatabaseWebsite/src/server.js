@@ -456,6 +456,34 @@ app.post('/api/follow', async (req, res) => {
   }
 });
 
+// Route to add a follower to a user's followers list
+app.post('/api/addFollower', async (req, res) => {
+  const { followUserId, userId } = req.body;
+
+  try {
+    // Find the Follow document for the user being followed
+    const followData = await Follow.findOne({ userID: followUserId });
+
+    if (!followData) {
+      return res.status(404).json({ success: false, message: 'User to follow not found' });
+    }
+
+    // Check if the follower already exists in the followers list
+    if (followData.followers.includes(userId)) {
+      return res.status(400).json({ success: false, message: 'Already a follower' });
+    }
+
+    // Add the follower to the followers list
+    followData.followers.push(userId);
+    await followData.save();
+
+    res.status(200).json({ success: true, message: 'Follower added successfully' });
+  } catch (error) {
+    console.error('Error adding follower:', error);
+    res.status(500).json({ success: false, message: 'Error adding follower', error });
+  }
+});
+
 // Unfollow a user
 app.post('/api/unfollow', async (req, res) => {
   const { userId, unfollowUserId } = req.body;

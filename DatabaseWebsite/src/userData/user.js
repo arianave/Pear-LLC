@@ -122,7 +122,23 @@ export const followUser = async (followUserId) => {
     const result = await response.json();
 
     if (result.success) {
-      return true; // Follow successful
+      // After successful follow, add the user to the followUserId's followers list
+      const addFollowerResponse = await fetch('http://98.80.48.42:3000/api/addFollower', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ followUserId, userId }), // Swap IDs to add user to followers list
+      });
+
+      const addFollowerResult = await addFollowerResponse.json();
+
+      if (addFollowerResult.success) {
+        return true; // Both follow and add follower successful
+      } else {
+        console.error('Error adding to followers:', addFollowerResult.message);
+        throw new Error('Error adding to followers');
+      }
     } else {
       throw new Error('Error following user');
     }
@@ -133,8 +149,7 @@ export const followUser = async (followUserId) => {
 };
 
 // Function to unfollow a specific user
-export const unfollowUser = async (unfollowUserId) => {
-  const userId = getUserId(); // Get the current user's ID
+export const unfollowUser = async (unfollowUserId, isSecondaryCall = false, userId = getUserId()) => {
   try {
     const response = await fetch('http://98.80.48.42:3000/api/unfollow', {
       method: 'POST',
@@ -147,19 +162,25 @@ export const unfollowUser = async (unfollowUserId) => {
     const result = await response.json();
 
     if (result.success) {
+      if (!isSecondaryCall) {
+        await removeUserFromFollowing(userId, true, unfollowUserId); // Set `isSecondaryCall` to true
+      }
       return true; // Unfollow successful
     } else {
       throw new Error('Error unfollowing user');
     }
   } catch (error) {
-    console.error('Error unfollowing user:', error);
-    return false;
+    console.error('Detailed error during unfollow operation:', {
+      message: error.message,
+      stack: error.stack,
+      responseData: error.response?.data,
+  });
+  return { success: false, message: 'Failed to unfollow user', errorDetails: error.message };
   }
 };
 
 // Function to remove a specific user from following
-export const removeUserFromFollowing = async (removeUserId) => {
-  const userId = getUserId(); // Get the current user's ID
+export const removeUserFromFollowing = async (removeUserId, isSecondaryCall = false, userId = getUserId()) => {
   try {
     const response = await fetch('http://98.80.48.42:3000/api/removeFollower', {
       method: 'POST',
@@ -172,6 +193,10 @@ export const removeUserFromFollowing = async (removeUserId) => {
     const result = await response.json();
 
     if (result.success) {
+      // Call `unfollowUser` only if this is the primary call
+      if (!isSecondaryCall) {
+        await unfollowUser(userId, true, removeUserId); // Set `isSecondaryCall` to true
+      }
       return true; // Removal from followers successful
     } else {
       throw new Error('Error removing user from followers');
