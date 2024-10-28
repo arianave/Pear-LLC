@@ -14,8 +14,8 @@ export function storeUserId(userId) {
   }
   
   // Function to get all user information from the database
-  export const getUserInfo = async () => {
-    const userId = getUserId();
+  export const getUserInfo = async (userID) => {
+    const userId = userID;
     try {
       const response = await fetch(`http://98.80.48.42:3000/api/users/${userId}`);
       const result = await response.json();
@@ -51,8 +51,8 @@ export function storeUserId(userId) {
   };
 
  // Function to fetch followers of the current user
-export const getUserFollowers = async () => {
-  const userId = getUserId(); // Get the current user's ID
+export const getUserFollowers = async (userID) => {
+  const userId = userID; // Get the current user's ID
   console.log(`Fetching followers for user ID: ${userId}`);
 
   try {
@@ -79,8 +79,8 @@ export const getUserFollowers = async () => {
 };
 
 // Function to fetch users the current user is following
-export const getUserFollowing = async () => {
-  const userId = getUserId(); // Get the current user's ID
+export const getUserFollowing = async (userID) => {
+  const userId = userID; // Get the current user's ID
   console.log(`Fetching following for user ID: ${userId}`);
 
   try {

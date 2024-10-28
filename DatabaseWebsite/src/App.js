@@ -29,7 +29,7 @@ function AppContent() {
   const location = useLocation(); // Hook to get the current location
 
   // Define the pages where the BottomBar should not appear
-  const hideBottomBarOnPages = ['/CreateAccountPage', '/ResetPassword']; // taking out '/LogInPage' for testing currently
+  const hideBottomBarOnPages = ['/', '/CreateAccountPage', '/ResetPassword', '/LogInPage'];
 
   return (
     <div>
@@ -39,7 +39,7 @@ function AppContent() {
           <Route path="CreateAccountPage" element={<CreateAccountPage />} />
           <Route path="LogInPage" element={<LoginPage />} />
           <Route path="ResetPassword" element={<ResetPassword />} />
-          <Route path="ProfilePage" element={<ProfilePage />} />
+          <Route path="ProfilePage/:userId" element={<ProfilePage />} />
           <Route path="PostCreation" element={<PostCreationPage />} />
           <Route path="Messages" element={<MessagePage />} />
           <Route path="HomeFeed" element={<HomeFeed />} />
@@ -48,8 +48,8 @@ function AppContent() {
           <Route path="FeedColumn" element={<FeedColumn />} />  
           <Route path = "Follow" element = {<Follow /> } />  
 
-          <Route path="usersFollowers" element={<UsersFollowers />} />
-          <Route path="usersFollowing" element={<UsersFollowing />} />
+          <Route path="usersFollowers/:userId" element={<UsersFollowers />} />
+          <Route path="usersFollowing/:userId" element={<UsersFollowing />} />
           
         </Routes>
       </main>

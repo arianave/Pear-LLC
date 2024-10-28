@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './BottomBar.css'; // CSS for the bottom bar
+import { getUserId } from './userData/user';
 
 function BottomBar() {
+  const userId = getUserId();
+
   return (
     <div className="bottom-bar">
         {/* Need to include feed button and message button once implemented */}
@@ -10,9 +13,7 @@ function BottomBar() {
       <Link to="/Feed">Feed</Link>
       <Link to="/PostCreation">Post</Link>
       <Link to="/Messages">Message</Link>  
-      <Link to="/LogInPage">Login</Link>
-      <Link to="/ProfilePage">Profile</Link>
-
+      <Link to={`/ProfilePage/${userId}`}>Profile</Link>
     </div>
   );
 }

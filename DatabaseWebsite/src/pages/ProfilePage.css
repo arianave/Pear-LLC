@@ -213,3 +213,17 @@
   background-color: #fff;
   border-radius: 8px;
 }
+
+/* Style for follower link */
+.follower-link {
+  color: #007bff; /* Makes the link blue */
+  text-decoration: none; /* Removes underline */
+  font-weight: bold; /* Makes the text bold */
+  cursor: pointer;
+  transition: color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.follower-link:hover {
+  color: #0056b3; /* Darker blue on hover */
+  text-decoration: underline; /* Adds underline on hover */
+}

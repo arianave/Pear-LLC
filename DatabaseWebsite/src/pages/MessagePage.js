@@ -237,7 +237,7 @@ function MessagePage({}) {
        {showPopup && (
         <div className="chat-popup">
           <div className="chat-header">
-            <h2>Chat with {selectedUser.username}</h2>
+            <h2>Chat with {selectedUser.username}</h2> {/*TODO: change to link to users profile */}
             <button onClick={handleCloseChat}>Close</button>
           </div>
           <div className="chat-messages" ref={chatMessagesRef}>

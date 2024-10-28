@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import './ProfilePage.css'; 
 import { useNavigate } from 'react-router-dom';
 import { getUserPosts } from '../userData/userPosts';
@@ -6,6 +7,7 @@ import Post from '../components/Post';
 import { getUserInfo, getUserFollowers, getUserFollowing, getUserId} from '../userData/user'; // Update this to fetch followers/following data
 
 function ProfilePage() {
+  const { userId } = useParams(); // Get userId from the URL
   const [profile, setProfile] = useState({
     userId: '',
     username: '',
@@ -25,15 +27,15 @@ function ProfilePage() {
   // Function to fetch and set user information
   const fetchUserInfo = async () => {
     // Fetch the user's posts and count them
-    const posts = await getUserPosts();
+    const posts = await getUserPosts(userId);
     const num = posts.length;
-    const userInfo = await getUserInfo(); // Get the user info from the function
-    const followers = await getUserFollowers(); // Fetch number of followers
-    const following = await getUserFollowing(); // Fetch number of following
+    const userInfo = await getUserInfo(userId); // Get the user info from the function
+    const followers = await getUserFollowers(userId); // Fetch number of followers
+    const following = await getUserFollowing(userId); // Fetch number of following
      // If userInfo is successfully retrieved, update the profile state
     if (userInfo) {
       const currentUserId = getUserId(); // Get the current logged-in user's ID
-      setIsCurrentUser(userInfo.userId === currentUserId); // Check if the profile belongs to the current user
+      setIsCurrentUser(userId === currentUserId); // Check if the profile belongs to the current user
       setProfile((prevProfile) => ({
         ...prevProfile,
         userId: userInfo.userId,
@@ -47,7 +49,7 @@ function ProfilePage() {
   };
   useEffect(() => {
     fetchUserInfo(); // Fetch user info when the component mounts
-  }, []);
+  }, [userId]);
 
   // Fetch user posts when model is opened
   const handleViewPhotosVideos = async () => {
@@ -87,11 +89,11 @@ function ProfilePage() {
 
    // Navigate to the followers or following pages
    const handleViewFollowers = () => {
-    navigate('/usersFollowers');
+    navigate(`/usersFollowers/${userId}`);
   };
 
   const handleViewFollowing = () => {
-    navigate('/usersFollowing');
+    navigate(`/usersFollowing/${userId}`);
   };
 
   return (
