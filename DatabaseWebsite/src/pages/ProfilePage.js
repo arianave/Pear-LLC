@@ -126,12 +126,14 @@ function ProfilePage() {
     <div className="profile-container">
       <div className="profile-header">
         <h1>{profile.username}</h1>
+        {isCurrentUser && (
         <button className="logout-button" onClick={handleLogout}>Logout</button>
+      )}
       </div>
 
       <div className="profile-body">
         <div className="profile-picture">
-          <img src="gray_pfp.png" alt="Anonymous user" className="avatar" />
+          <img src="/gray_pfp.png" alt="Anonymous user" className="avatar" />
         </div>
         <div className="profile-info">
           <p>{profile.bio}</p>
