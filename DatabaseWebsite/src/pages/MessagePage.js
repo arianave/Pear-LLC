@@ -187,9 +187,6 @@ function MessagePage({}) {
     }
   }, [messages]);
   
-  
-  
-
   // Open chat with selected user
   const handleOpenChat = (user) => {
     setSelectedUser(user);
@@ -265,6 +262,12 @@ function MessagePage({}) {
               placeholder="Type a message..." 
               value={newMessage} 
               onChange={(e) => setNewMessage(e.target.value)} // Update newMessage state
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault(); // Prevent default form submission behavior
+                  sendMessage();
+                }
+              }}
             />
             <button onClick={sendMessage}>Send</button> {/* Call sendMessage on click */}
           </div>
