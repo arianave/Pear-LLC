@@ -160,7 +160,7 @@ export const unfollowUser = async (unfollowUserId, isSecondaryCall = false, user
     });
 
     const result = await response.json();
-
+    console.log('success: ', result.success)
     if (result.success) {
       if (!isSecondaryCall) {
         await removeUserFromFollowing(userId, true, unfollowUserId); // Set `isSecondaryCall` to true
@@ -170,12 +170,8 @@ export const unfollowUser = async (unfollowUserId, isSecondaryCall = false, user
       throw new Error('Error unfollowing user');
     }
   } catch (error) {
-    console.error('Detailed error during unfollow operation:', {
-      message: error.message,
-      stack: error.stack,
-      responseData: error.response?.data,
-  });
-  return { success: false, message: 'Failed to unfollow user', errorDetails: error.message };
+    console.error('Error during unfollow operation:', error);
+    return false;
   }
 };
 

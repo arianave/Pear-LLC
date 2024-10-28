@@ -491,7 +491,10 @@ app.post('/api/unfollow', async (req, res) => {
     const followData = await Follow.findOne({ userID: userId });
     followData.following = followData.following.filter(id => id.toString() !== unfollowUserId);
     await followData.save();
-    res.status(200).json({ message: 'Unfollowed successfully.' });
+    res.status(200).json({
+      "success": true,
+      "message": "Unfollowed successfully"
+    });
   } catch (error) {
     res.status(500).json({ message: 'Error unfollowing user', error });
   }
@@ -515,7 +518,10 @@ app.post('/api/removeFollower', async (req, res) => {
     // Save the updated Follow document
     await followData.save();
 
-    res.status(200).json({ message: 'Follower removed successfully.' });
+    res.status(200).json({
+      "success": true,
+      "message": "Follower removed successfully."
+    });
   } catch (error) {
     console.error('Error removing follower:', error);
     res.status(500).json({ message: 'Error removing follower', error });

@@ -60,7 +60,7 @@ function ProfilePage() {
   // Fetch user posts when model is opened
   const handleViewPhotosVideos = async () => {
     console.log('Fetching photos/videos...');
-    const posts = await getUserPosts(); // Fetch user posts
+    const posts = await getUserPosts(userId); // Fetch user posts
     setUserPosts(posts);
     setShowModel(true); // Show model
   };
