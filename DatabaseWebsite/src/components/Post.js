@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Post.css';
-import { getPostComments } from '../userData/postComments'; 
+import { getPostComments } from '../userData/postComments';
 
 function Post({ creator, postDate, postContent, postId }) {
   const [comments, setComments] = useState([]);
@@ -13,16 +13,16 @@ function Post({ creator, postDate, postContent, postId }) {
     };
 
     if (postId) {
-      fetchComments(); // Fetch comments when the postID is available
+      fetchComments();
     }
-  }, [postId]); // Depend on postId to fetch the right comments
+  }, [postId]);
 
   return (
     <div className="post-container">
       {/* Post header */}
       <div className="post-header">
-        <h4>{creator}</h4>
-        <p>{new Date(postDate).toLocaleDateString()}</p>
+        <h4 className="post-creator">{creator}</h4>
+        <p className="post-date">{new Date(postDate).toLocaleDateString()}</p>
       </div>
 
       {/* Post content */}
@@ -36,12 +36,17 @@ function Post({ creator, postDate, postContent, postId }) {
         {comments.length > 0 ? (
           comments.map((comment) => (
             <div key={comment._id} className="comment">
-              <p><strong>{comment.userID}:</strong> {comment.content}</p>
-              <p>{new Date(comment.timestamp).toLocaleDateString()}</p>
+              <p className="comment-user">
+                <strong>{comment.userID}:</strong>
+              </p>
+              <p className="comment-content">{comment.content}</p>
+              <p className="comment-timestamp">
+                {new Date(comment.timestamp).toLocaleDateString()}
+              </p>
             </div>
           ))
         ) : (
-          <p>No comments yet.</p>
+          <p className="no-comments">No comments yet.</p>
         )}
       </div>
     </div>
