@@ -5,6 +5,7 @@ import CreateAccountPage from './pages/CreateAccountPage';
 import LoginPage from './pages/LogInPage'; 
 import ResetPassword from './pages/ResetPassword'; 
 import ProfilePage from './pages/ProfilePage'; 
+import EditProfile from './pages/EditProfile'; // Import the EditProfile page
 import BottomBar from './BottomBar'; 
 import PostCreationPage from './pages/PostCreationPage';
 import MessagePage from './pages/MessagePage';
@@ -29,7 +30,7 @@ function AppContent() {
   const location = useLocation(); // Hook to get the current location
 
   // Define the pages where the BottomBar should not appear
-  const hideBottomBarOnPages = ['/', '/CreateAccountPage', '/ResetPassword', '/LogInPage'];
+  const hideBottomBarOnPages = ['/', '/CreateAccountPage', '/ResetPassword'];//', /LogInPage'
 
   return (
     <div>
@@ -40,17 +41,17 @@ function AppContent() {
           <Route path="LogInPage" element={<LoginPage />} />
           <Route path="ResetPassword" element={<ResetPassword />} />
           <Route path="ProfilePage/:userId" element={<ProfilePage />} />
+          <Route path="EditProfile" element={<EditProfile />} /> {/* New route for EditProfile */}
           <Route path="PostCreation" element={<PostCreationPage />} />
           <Route path="Messages" element={<MessagePage />} />
           <Route path="HomeFeed" element={<HomeFeed />} />
           <Route path="FeedSearch" element={<FeedSearch />} />  
           <Route path="Activity" element={<Activity />} />    
           <Route path="FeedColumn" element={<FeedColumn />} />  
-          <Route path = "Follow" element = {<Follow /> } />  
+          <Route path="Follow" element={<Follow />} />  
 
           <Route path="usersFollowers/:userId" element={<UsersFollowers />} />
           <Route path="usersFollowing/:userId" element={<UsersFollowing />} />
-          
         </Routes>
       </main>
       
