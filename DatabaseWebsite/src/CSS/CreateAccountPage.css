@@ -1,13 +1,11 @@
 /* CreateAccountPage.css */
 
+@import './GlobalStyles.css';
+
 /* Positioning for the logo and title */
 .header {
-    position: fixed; /*top left corner */
     top: 20px; 
     left: 35px; 
-    display: flex; /* Aligns logo and text horizontally */
-    align-items: center; /* Centers items vertically */
-    z-index: 1000; /* Ensures it stays on top of other elements */
 }
 
 /* Styling for the logo */
@@ -22,9 +20,6 @@
 .header h1 {
     font-size: 30px;
     font-family: 'Pacifico', sans-serif; /* Change to Arial */ 
-    margin: 0; /* Removes default margin */
-    letter-spacing: 2px; /* Adjust the value as needed for spacing */
-    color: #1b1a1a; 
 }
 
 
@@ -35,17 +30,12 @@ body {
     background-position: center; /* Centers the image */
     background-attachment: fixed; /* Keeps the background fixed during scrolling */
     background-size: cover; /* Ensures the image covers the entire viewport */
-    margin: 0; /* Remove default margin */
-    height: 100vh; /* Full height for the body */
 }
 
 
 /* Centering the main container */
-.create-account-container { 
-    display: flex;
+.container-c1 { 
     flex-direction: column; /* Stack children vertically */
-    align-items: center;    /* Center items horizontally */
-    justify-content: center; /* Center items vertically */
     height: 90vh;          /* Full viewport height */
     max-width: 400px; /* Set a max width for the box */
     margin: 50px auto 0; /* Add margin at the top to push it down, adjust as needed */
@@ -63,10 +53,7 @@ body {
   }
   
   /* Center the form fields */
-  form {
-    display: flex;
-    flex-direction: column;  
-    align-items: center;     
+  form {   
     width: 100%;              /* Full width */
     max-width: 400px;        /* Optional: Limit form width */
   }
@@ -85,28 +72,6 @@ body {
     border-radius: 4px;      
     box-sizing: border-box;   /* Include padding and border in element's total width */
   }
-  
-  /* copying log in form style */
-  .login-form-button {
-    padding: 10px;
-    width: 100%;
-    background-color: #514caf; /* Button background color */
-    color: white;              /* Button text color */
-    border: none;              
-    border-radius: 5px;      
-    cursor: pointer;           /* Pointer cursor on hover */
-  }
-  
-  /* copy log in form hover style*/
-  .login-form-button:hover {
-    background-color: #a6a3ec; 
-  }
-  
-  /* Centering error messages */
-  .error {
-    color: red;              
-    text-align: center;      
-  }
 
   .login1-link {
     font-size: 14px;
@@ -121,6 +86,22 @@ body {
   
   .bl-link:hover {
     text-decoration: underline;
+  }
+  
+  /* copying log in form style */
+  .button {
+    background-color: #514caf; /* Button background color */
+    color: white;              /* Button text color */             
+  }
+  
+  /* copy log in form hover style*/
+  .button:hover {
+    background-color: #a6a3ec; 
+  }
+  
+  /* Centering error messages */
+  .error {            
+    text-align: center;      
   }
 
   

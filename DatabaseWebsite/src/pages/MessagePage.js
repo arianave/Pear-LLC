@@ -204,7 +204,12 @@ function MessagePage({}) {
   return (
     <div className="messages-page">
       <div className="messages-header">
-        <button className="plus-button" onClick={handleStartChat}>+</button>
+        
+        <button className="pear-button" onClick={handleStartChat}>
+    🍐
+    <span className="plus-sign">+</span> {/* Plus sign on top of the pear */}
+</button>
+
       </div>
 
       {showSearch && (

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './LogInPage.css'; // importing the css 
+import '../CSS/LogInPage.css'; //importing the css
 import { storeUserId } from '../userData/user';
 import { Link, useNavigate } from 'react-router-dom'; // Import Link from react-router-dom
 
@@ -78,8 +78,8 @@ function LogInPage() { //manage state of log in form
  };
 
   return ( //styling and CSS connections 
-    <div className="login-container">  
-      <form onSubmit={handleSubmit} className="login-form">
+    <div className="container">  {/* Use global .container styles */}
+      <form onSubmit={handleSubmit} className="form">
         <h2>Welcome to Pear to Peer</h2> 
         <div>
           <label>Username:</label>
@@ -88,6 +88,7 @@ function LogInPage() { //manage state of log in form
             name="username"
             value={formData.username} // bind to component state between username and entered value 
             onChange={handleChange} //listen to changes 
+            className="input"
             required //form will not submit if either field is empty 
           />
           {errors.username && <p className="error">{errors.username}</p>}
@@ -99,6 +100,7 @@ function LogInPage() { //manage state of log in form
             name="password"
             value={formData.password}
             onChange={handleChange}
+            className="input"
             required
           />
           
@@ -112,13 +114,13 @@ function LogInPage() { //manage state of log in form
 
         {serverError && <p className="error">{serverError}</p>} {/* Display server-side errors */}
 
-        <button type="submit">Login</button> 
+        <button type="submit" className="button">Login</button> 
         <div className="links">
           <p className="login2-link">
-          New to Pear to Peer? <Link to="/CreateAccountPage" className="b-link">Create an account</Link>
+          New to Pear to Peer? <Link to="/CreateAccountPage" className="link">Create an account</Link>
           </p>
           <p className="login3-link">
-          Forgot password? <Link to="/ResetPassword" className="blu-link">Reset your password</Link> 
+          Forgot password? <Link to="/ResetPassword" className="link">Reset your password</Link> 
           </p>
         </div>
       </form>

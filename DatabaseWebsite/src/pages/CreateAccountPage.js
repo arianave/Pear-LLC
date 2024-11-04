@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './CreateAccountPage.css'; // Import the CSS file
+import '../CSS/CreateAccountPage.css'; //importing the css
 
 
 function CreateAccountPage() {
@@ -120,9 +120,15 @@ function CreateAccountPage() {
 
   return (
 
-    <div className="create-account-container">
+    <div className="container-c1">
+      <header className="header">
+        <img src="Designer.png" alt="Logo" className="logo" />
+        <h1>Pear to Peer</h1>
+      </header>
+
       <h2>Create an Account</h2>
       <p>New to Peer to Pear? Fill out the details below to create an account today!</p>
+      
       <form onSubmit={handleSubmit}>
         <div>
           <label>First Name:</label>
@@ -190,11 +196,6 @@ function CreateAccountPage() {
           {errors.password && <p className="error">{errors.password}</p>}
         </div>
 
-        <div className="header">
-         <img src="Designer.png" alt="Logo" className="logo" />
-            <h1>Pear to Peer</h1>
-        </div>
-
         <div>
           <label>Confirm Password:</label>
           <input
@@ -206,8 +207,9 @@ function CreateAccountPage() {
           />
           {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
         </div>
-        <button type="submit" className="login-form-button">Create Account</button>
+        <button type="submit" className="button">Create Account</button>
       </form>
+
       <p className="login1-link">
          Already have an account? <Link to="/LogInPage" className="bl-link">Log in here</Link>
         </p>

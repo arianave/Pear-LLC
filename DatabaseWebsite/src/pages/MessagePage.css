@@ -15,20 +15,45 @@
   padding: 10px 0;
 }
 
-/* Button styles */
+/* Button styles 
 .plus-button, .requests-button {
   font-size: 18px;
   padding: 10px;
   background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 5px;
+  border-radius: 50%;
   cursor: pointer;
+  width: 40px; 
+  height: 40px; 
 }
 
 .plus-button {
-  background-color: #28a745; /* Green for add button */
-}
+  background-color: #74cee7; Green for add button */
+
+  /* Pear-shaped button styles */
+  .pear-button {
+    position: relative; /* Positioning for the leaf and plus sign */
+    border: none; /* No border */
+    cursor: pointer;
+    text-align: center;
+    font-size: 58px; /* Font size for the emoji */
+    line-height: 140px; /* Center emoji vertically */
+    padding: 0; /* Remove any padding */
+    background-color: transparent; /* Ensure the background is transparent */
+    outline: none; /* Remove focus outline */
+  }
+  
+  /* Plus sign styles */
+  .plus-sign {
+    position: absolute; /* Positioning on the button */
+    top: 53%; /* Center vertically */
+    left: 55%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Adjust to center */
+    font-size: 35px; /* Font size for the plus sign */
+    color: white; /* Color of the plus sign */
+  }
+
 
 /* Search bar styles */
 .search-bar {
