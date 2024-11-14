@@ -143,16 +143,18 @@ function ProfilePage() {
               <p>Posts</p>
             </div>
             <div className="stat">
-              <button onClick={handleViewFollowers}>
+              <button className = "view-followers" onClick = {handleViewFollowers}> 
+              {/* Changed into an actual button */}
                 <p>{profile.followers}</p>
                 <p>Followers</p>
-              </button>  
+              </button>
             </div>
             <div className="stat">
-            <button onClick={handleViewFollowing}>
-              <p>{profile.following}</p>
-              <p>Following</p>
-            </button>  
+            <button className = "view-following" onClick = {handleViewFollowing}> 
+              {/* Changed into an actual button */}
+                <p>{profile.following}</p>
+                <p>Following</p>
+              </button>
             </div>
           </div>
 
