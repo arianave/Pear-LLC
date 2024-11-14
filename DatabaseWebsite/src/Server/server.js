@@ -64,7 +64,9 @@ const VoteSchema = new mongoose.Schema({
 voteID: mongoose.Schema.Types.ObjectId,
 postID: mongoose.Schema.Types.ObjectId,
 upvoteCount: Number,
-downvoteCount: Number
+downvoteCount: Number,
+upvotedUsers: { type: [mongoose.Schema.Types.ObjectId], default: [] },
+downvotedUsers: { type: [mongoose.Schema.Types.ObjectId], default: [] }
 });
 
 const Vote = mongoose.model('Vote', VoteSchema);
@@ -278,7 +280,7 @@ app.get('/api/users', async (req, res) => {
       const comments = await Comment.find({ postID: postId }); // Find comments by postID
   
       if (!comments || comments.length === 0) {
-        return res.status(404).json({ success: false, message: 'No comments found for this post' });
+        return res.json({ success: false, message: 'No comments found for this post' });
       }
   
       res.json({ success: true, comments }); // Send the comments in the response
@@ -293,6 +295,165 @@ app.get('/api/users', async (req, res) => {
       res.json(posts);
     } catch (err) {
       res.status(500).json({ message: err.message });
+    }
+  });
+
+  // Add a new comment to a post
+  app.post('/api/addcomments/:postId', async (req, res) => {
+    try {
+      const postId = req.params.postId;
+      const { content, userID } = req.body;
+
+      if (!content || !userID) {
+        return res.status(400).json({ success: false, message: 'Content and userID are required' });
+      }
+
+      // Create a new comment
+      const newComment = new Comment({
+        postID: postId,
+        userID: userID,
+        content,
+        timestamp: new Date(),
+      });
+
+      await newComment.save();
+      res.json({ success: true, comment: newComment });
+    } catch (err) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  });
+
+  // Upvote a post
+  app.post('/api/posts/:postId/upvote/:userId', async (req, res) => {
+    try {
+      const postId = req.params.postId;
+      const userId = req.params.userId;
+
+      // Find the vote document for the post or create one if it doesn't exist
+      let voteDoc = await Vote.findOne({ postID: postId });
+
+      if (!voteDoc) {
+        // If no votes exist for this post, create a new Vote document
+        voteDoc = new Vote({
+          postID: postId,
+          upvoteCount: 1,
+          downvoteCount: 0,
+          upvotedUsers: [userId],
+          downvotedUsers: []
+        });
+      } else {
+        // Check if the user has already upvoted; if so, remove the upvote
+        if (voteDoc.upvotedUsers.includes(userId)) {
+          voteDoc.upvoteCount -= 1;
+          voteDoc.upvotedUsers = voteDoc.upvotedUsers.filter(id => id.toString() !== userId);
+        } else {
+          // Remove any downvote if it exists, and add an upvote
+          if (voteDoc.downvotedUsers.includes(userId)) {
+            voteDoc.downvoteCount -= 1;
+            voteDoc.downvotedUsers = voteDoc.downvotedUsers.filter(id => id.toString() !== userId);
+          }
+          // Add the upvote
+          voteDoc.upvoteCount += 1;
+          voteDoc.upvotedUsers.push(userId);
+        }
+      }
+  
+      await voteDoc.save();
+      res.json({ success: true, upvoteCount: voteDoc.upvoteCount, downvoteCount: voteDoc.downvoteCount });
+    } catch (err) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  });
+
+  // Downvote a post
+  app.post('/api/posts/:postId/downvote/:userId', async (req, res) => {
+    try {
+      const postId = req.params.postId;
+      const userId = req.params.userId;
+
+      // Find the vote document for the post or create one if it doesn't exist
+      let voteDoc = await Vote.findOne({ postID: postId });
+
+      if (!voteDoc) {
+        // If no votes exist for this post, create a new Vote document
+        voteDoc = new Vote({
+          postID: postId,
+          upvoteCount: 0,
+          downvoteCount: 1,
+          upvotedUsers: [],
+          downvotedUsers: [userId]
+        });
+      } else {
+        // Check if the user has already downvoted; if so, remove the downvote
+        if (voteDoc.downvotedUsers.includes(userId)) {
+          voteDoc.downvoteCount -= 1;
+          voteDoc.downvotedUsers = voteDoc.downvotedUsers.filter(id => id.toString() !== userId);
+        } else {
+          // Remove any upvote if it exists, and add a downvote
+          if (voteDoc.upvotedUsers.includes(userId)) {
+            voteDoc.upvoteCount -= 1;
+            voteDoc.upvotedUsers = voteDoc.upvotedUsers.filter(id => id.toString() !== userId);
+          }
+          // Add the downvote
+          voteDoc.downvoteCount += 1;
+          voteDoc.downvotedUsers.push(userId);
+        }
+      }
+  
+      await voteDoc.save();
+      res.json({ success: true, upvoteCount: voteDoc.upvoteCount, downvoteCount: voteDoc.downvoteCount });
+    } catch (err) {
+      res.status(500).json({ success: false, message: err.message });
+    }
+  });
+
+  // Check if a user has already voted on a post
+  app.get('/api/posts/:postId/hasVoted', async (req, res) => {
+    try {
+      const { postId } = req.params;
+      const userId = req.query.userId;
+
+      // Find the Vote document for the given postId
+      const voteRecord = await Vote.findOne({ postID: postId });
+
+      if (!voteRecord) {
+        return res.json({ success: false, message: 'Vote record not found for this post' });
+      }
+
+      let hasVoted = false;
+      let voteType = null;
+
+      // Check if userId is in the upvotedUsers or downvotedUsers array
+      if (voteRecord.upvotedUsers.includes(userId)) {
+        hasVoted = true;
+        voteType = 'upvote';
+      } else if (voteRecord.downvotedUsers.includes(userId)) {
+        hasVoted = true;
+        voteType = 'downvote';
+      }
+
+      // Return whether the user has voted and the type of vote
+      res.json({ success: true, hasVoted, voteType });
+    } catch (error) {
+      console.error('Error checking if user has voted:', error);
+      res.status(500).json({ success: false, message: 'Server error' });
+    }
+});
+
+  // Backend: Get vote count for a post
+  app.get('/api/posts/:postId/voteCount', async (req, res) => {
+    const { postId } = req.params;
+
+    try {
+      const vote = await Vote.findOne({ postID: postId });
+
+      if (!vote) {
+        return res.json({ success: false, message: 'Vote record not found for this post' });
+      }
+
+      res.json({ success: true, upvoteCount: vote.upvoteCount, downvoteCount: vote.downvoteCount });
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
     }
   });
 
@@ -386,14 +547,13 @@ app.get('/api/followers/:userId', async (req, res) => {
       return res.status(404).json({ message: 'No followers found.' });
     }
 
-    console.log(`Follow data retrieved: ${JSON.stringify(followData)}`);
 
     const followers = await User.find({ _id: { $in: followData.followers } });
     
     if (!followers.length) {
       console.warn(`No followers found in User collection for user with ID: ${userId}`);
     } else {
-      console.log(`Followers found: ${JSON.stringify(followers)}`);
+      console.log(`Followers found`);
     }
 
     res.json(followers);
@@ -416,14 +576,13 @@ app.get('/api/following/:userId', async (req, res) => {
       return res.status(404).json({ message: 'No following found.' });
     }
 
-    console.log(`Follow data retrieved: ${JSON.stringify(followData)}`);
 
     const following = await User.find({ _id: { $in: followData.following } });
 
     if (!following.length) {
       console.warn(`No following users found in User collection for user with ID: ${userId}`);
     } else {
-      console.log(`Following users found: ${JSON.stringify(following)}`);
+      console.log(`Users found`);
     }
 
     res.json(following);
