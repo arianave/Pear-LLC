@@ -18,7 +18,7 @@ export const getPostComments = async (postId) => {
     }
   };
   
-  // Function to add a new comment to a post
+// Function to add a new comment to a post
 export const addComment = async (userId, postId, content) => {
   try {
     const response = await fetch(`http://98.80.48.42:3000/api/addcomments/${postId}`, {

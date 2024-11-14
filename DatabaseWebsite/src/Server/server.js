@@ -43,10 +43,10 @@ const Post = mongoose.model('Post', PostSchema);
 
 const CommentSchema = new mongoose.Schema({
   commentID: mongoose.Schema.Types.ObjectId,
-  postID: mongoose.Schema.Types.ObjectId, 
-  userID: mongoose.Schema.Types.ObjectId, 
-  textContent: String,                         
-  creationDate: Date,   
+  postID: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Post' },
+  userID: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
+  textContent: { type: String, required: true },                         
+  creationDate: { type: Date, default: Date.now }
 });
 
 const Comment = mongoose.model('Comment', CommentSchema);
@@ -302,17 +302,17 @@ app.get('/api/users', async (req, res) => {
   app.post('/api/addcomments/:postId', async (req, res) => {
     try {
       const postId = req.params.postId;
-      const { content, userID } = req.body;
+      const { content, userId } = req.body;
 
-      if (!content || !userID) {
+      if (!content || !userId) {
         return res.status(400).json({ success: false, message: 'Content and userID are required' });
       }
 
       // Create a new comment
       const newComment = new Comment({
         postID: postId,
-        userID: userID,
-        content,
+        userID: userId,
+        content: content,
         timestamp: new Date(),
       });
 

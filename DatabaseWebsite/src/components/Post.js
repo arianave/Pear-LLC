@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Post.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { getPostComments, addComment, upvotePost, downvotePost, getPostVoteCount, checkIfUserHasVoted } from '../userData/postComments';
 import { getUserId } from '../userData/user';
 
@@ -23,7 +25,6 @@ function Post({ creator, postDate, postContent, postId }) {
       }
 
     // Check if user has already voted on this post
-    const userId = getUserId();
     const userHasVoted = await checkIfUserHasVoted(postId, userId);
     if (userHasVoted.hasVoted) {
       if (userHasVoted.voteType === 'upvote') {
@@ -45,19 +46,34 @@ function Post({ creator, postDate, postContent, postId }) {
   }, [postId]);
 
   const handleUpvote = async () => {
+    if (hasUpvoted) {
+      // User is removing their upvote
+      setUpvote(false);
+    } else {
+      // User is either switching from downvote or casting an upvote for the first time
+      setUpvote(true);
+      setDownvote(false);
+    }
     const updatedVotes = await upvotePost(postId, userId);
     setVotesCount(updatedVotes);
   };
 
   const handleDownvote = async () => {
+    if (hasDownvoted) {
+      // User is removing their downvote
+      setDownvote(false);
+    } else {
+      // User is either switching from upvote or casting a downvote for the first time
+      setDownvote(true);
+      setUpvote(false);
+    }
     const updatedVotes = await downvotePost(postId, userId);
     setVotesCount(updatedVotes);
   };
 
   const handleAddComment = async () => {
     if (newComment.trim()) {
-      const userID = getUserId();
-      const addedComment = await addComment(userID, postId, newComment);
+      const addedComment = await addComment(userId, postId, newComment);
       setComments((prevComments) => [...prevComments, addedComment]);
       setNewComment(''); // Clear input field after adding comment
     }
@@ -78,9 +94,13 @@ function Post({ creator, postDate, postContent, postId }) {
 
       {/* Voting section */}
       <div className="post-votes">
-        <button onClick={handleUpvote}>Upvote</button>
+        <button onClick={handleUpvote} className={hasUpvoted ? "upvote active" : "upvote"}>
+          <FontAwesomeIcon icon={faArrowUp} />
+        </button>
         <span>{votesCount}</span>
-        <button onClick={handleDownvote}>Downvote</button>
+        <button onClick={handleDownvote} className={hasDownvoted ? "downvote active" : "downvote"}>
+          <FontAwesomeIcon icon={faArrowDown} />
+        </button>
       </div>
 
       {/* Comments section */}
