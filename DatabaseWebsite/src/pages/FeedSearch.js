@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../CSS/FeedSearch.css'; //importing the css // Import CSS for styling
+import '../CSS/FeedSearch.css'; // Importing the css 
 
 function FeedSearch() {
   const [searchTerm, setSearchTerm] = useState(''); // State for search input
