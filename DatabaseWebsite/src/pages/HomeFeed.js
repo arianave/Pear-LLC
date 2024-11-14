@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './HomeFeed.css';
+import '../CSS/HomeFeed.css'; //importing the css
 
 function HomeFeed() {
   const [posts, setPosts] = useState([]); // State for storing posts

@@ -13,8 +13,6 @@ import HomeFeed from './pages/HomeFeed';
 import FeedSearch from './pages/FeedSearch';
 import Activity from './pages/Activity'; 
 import FeedColumn from './pages/FeedColumn';
-import Follow from './pages/Follow';
-
 import UsersFollowers from './pages/usersFollowers';
 import UsersFollowing from './pages/usersFollowing';
 
@@ -48,7 +46,6 @@ function AppContent() {
           <Route path="FeedSearch" element={<FeedSearch />} />  
           <Route path="Activity" element={<Activity />} />    
           <Route path="FeedColumn" element={<FeedColumn />} />  
-          <Route path="Follow" element={<Follow />} />  
 
           <Route path="usersFollowers/:userId" element={<UsersFollowers />} />
           <Route path="usersFollowing/:userId" element={<UsersFollowing />} />

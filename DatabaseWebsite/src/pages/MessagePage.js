@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import './MessagePage.css'; 
+import '../CSS/MessagePage.css'; 
 import { getChats } from '../userData/chats';
 import { getUsername } from '../userData/user';
 import { getUserId } from '../userData/user';

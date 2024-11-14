@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './PostCreationPage.css';
+import '../CSS/PostCreationPage.css';
 import { getUserId } from '../userData/user';
 
 function PostCreationPage() {

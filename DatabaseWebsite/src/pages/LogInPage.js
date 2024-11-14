@@ -47,7 +47,7 @@ function LogInPage() { //manage state of log in form
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(formData),
+          body : JSON.stringify(formData),
         });
 
         const result = await response.json();
@@ -77,55 +77,57 @@ function LogInPage() { //manage state of log in form
     }
  };
 
-  return ( //styling and CSS connections 
-    <div className="container">  {/* Use global .container styles */}
-      <form onSubmit={handleSubmit} className="form">
-        <h2>Welcome to Pear to Peer</h2> 
-        <div>
-          <label>Username:</label>
-          <input
-            type="text"
-            name="username"
-            value={formData.username} // bind to component state between username and entered value 
-            onChange={handleChange} //listen to changes 
-            className="input"
-            required //form will not submit if either field is empty 
-          />
-          {errors.username && <p className="error">{errors.username}</p>}
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="input"
-            required
-          />
-          
-          {errors.password && <p className="error">{errors.password}</p>}
-        </div>
-
-        <div className="header">
-         <img src="Designer.png" alt="Logo" className="logo" />
+  return (
+    <div className="setup"> {/* Apply the .setup class here */}
+      <div className="login-container"> {/* Use global .container styles */}
+        <form onSubmit={handleSubmit} className="form">
+          <h2>Welcome to Pear to Peer</h2>
+          <div>
+            <label>Username:</label>
+            <input
+              type="text"
+              name="username"
+              value={formData.username} // bind to component state between username and entered value 
+              onChange={handleChange} // listen to changes 
+              className="input"
+              required // form will not submit if either field is empty 
+            />
+            {errors.username && <p className="error">{errors.username}</p>}
+          </div>
+          <div>
+            <label>Password:</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="input"
+              required
+            />
+            {errors.password && <p className="error">{errors.password}</p>}
+          </div>
+  
+          <div className="header-login">
+            <img src="Designer.png" alt="Logo" className="logo" />
             <h1>Pear to Peer</h1>
-        </div>
-
-        {serverError && <p className="error">{serverError}</p>} {/* Display server-side errors */}
-
-        <button type="submit" className="button">Login</button> 
-        <div className="links">
-          <p className="login2-link">
-          New to Pear to Peer? <Link to="/CreateAccountPage" className="link">Create an account</Link>
-          </p>
-          <p className="login3-link">
-          Forgot password? <Link to="/ResetPassword" className="link">Reset your password</Link> 
-          </p>
-        </div>
-      </form>
+          </div>
+  
+          {serverError && <p className="error">{serverError}</p>} {/* Display server-side errors */}
+  
+          <button type="submit" className="button">Login</button>
+          <div className="links">
+            <p className="login2-link">
+              New to Pear to Peer? <Link to="/CreateAccountPage" className="link">Create an account</Link>
+            </p>
+            <p className="login3-link">
+              Forgot password? <Link to="/ResetPassword" className="link">Reset your password</Link>
+            </p>
+          </div>
+        </form>
+      </div>
     </div>
   );
+  
 }
 
 export default LogInPage; // make it to be able to import easier and default for other app pages 

@@ -1,14 +1,17 @@
 /* LogInPage.css */
 
-@import './GlobalStyles.css';
-
-/* Positioning for the logo and title */
-.header {
+/* Positioning for the logo and title, but to avoid the global styling we will call it login */ 
+.header-login{
     top: 20px; 
     left: 35px; 
+    position: fixed; /* Positioning can be defined in specific pages */
+    display: flex; 
+    align-items: center; 
+    z-index: 1000; 
+    font-family: 'Pacifico', sans-serif;
 }
 
-/* Styling for the logo */
+/* Styling for the logo, this is fine for global styling since we only use it on three pages, no override needed*/
 .logo {
     width: 60px; 
     height: 60px; 
@@ -16,29 +19,55 @@
     margin-right: 15px; /* Space between the logo and title */
 }
 
-/* styling for title */
+/* styling for title, this is okay and okay to be shared, since global styling */
 .header h1 {
     font-size: 30px;
-    font-family: 'Pacifico', sans-serif; /* Change to Arial */ 
+    font-family: 'Pacifico', sans-serif;
+    margin: 0; 
+    letter-spacing: 2px; 
+    color: #1b1a1a;  
 }
 
 
-/* Set the background image for the entire webpage , eventually make this a shared style component*/
-body {
-    background-image: url('https://i0.wp.com/onaircode.com/wp-content/uploads/2019/09/simple-pattern-css.jpg?resize=1024%2C580&ssl=1'); /* Using image URL */
-    background-repeat: no-repeat; /* Prevents the image from repeating */
-    background-position: center; /* Centers the image */
-    background-attachment: fixed; /* Keeps the background fixed during scrolling */
-    background-size: cover; /* Ensures the image covers the entire viewport */
+/* this used to define the global css style for body and setting up the background image, but it was causing UI styling issues so we are
+commenting it out and using .setup instead
+body setup{
+    background-image: url('https://i0.wp.com/onaircode.com/wp-content/uploads/2019/09/simple-pattern-css.jpg?resize=1024%2C580&ssl=1'); /* Using image URL 
+    background-repeat: no-repeat; /* Prevents the image from repeating 
+    background-position: center; /* Centers the image 
+    background-attachment: fixed; /* Keeps the background fixed during scrolling 
+    background-size: cover; /* Ensures the image covers the entire viewport 
+    margin: 0; /* Remove default margin 
+    height: 100vh;
+}
+*/
+
+/* using the global style of the createAccountPage.css, where we are setting the global styles for the background image only to be shown 
+when user is not logged into the application to avoid styling conflict once logged in*/
+.setup {
+  content: '';
 }
 
-.container {
+/* this container is fine as a global style since other styles will be using other names containers */
+.login-container{
     height: 95vh; /* Full viewport height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   
   .form {
     padding: 60px; /* Adjust the padding specifically for this page */
     width: 400px; /* Set a width for the login form */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px; /* Default padding */
+    border: 1px solid #ccc; /* Default border */
+    border-radius: 10px; /* Default border radius */
+    background-color: #fff; /* Default background color */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Default box shadow */
   }
   
   .login-form div {
@@ -51,7 +80,8 @@ body {
     margin-bottom: 5px;
     font-weight: bold;
   }
-  
+
+  /* left off checking global css styling here */  
   .input {
     width: 100%;
     padding: 10px;
@@ -60,11 +90,18 @@ body {
     border: 1px solid #ccc;
   }
   
+  /* using this as the global styling for the pages user encounters before logging in */
   .button {
+    padding: 10px;
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
     background-color: #514caf;
     color: white;
   }
   
+  /* also using this as global styling for the pages user encounters before logging in */
   .button:hover {
     background-color: #a6a3ec;
   }
@@ -83,8 +120,19 @@ body {
     text-decoration: underline;
   }
   
+  /* global styling for error component  */
   .error {
+    color: red;
     font-size: 0.8em;
+    text-align: center; 
   }
   
+  .link {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
   
