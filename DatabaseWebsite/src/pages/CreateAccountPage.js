@@ -131,9 +131,10 @@ function CreateAccountPage() {
   
         <form onSubmit={handleSubmit}>
           <div>
-            <label>First Name:</label>
+            <label htmlFor="first name">First Name:</label>
             <input
               type="text"
+              id = "first name"
               name="firstName"
               value={formData.firstName}
               onChange={handleChange}
@@ -142,9 +143,10 @@ function CreateAccountPage() {
             {errors.firstName && <p className="error">{errors.firstName}</p>}
           </div>
           <div>
-            <label>Last Name:</label>
+            <label htmlFor="last name">Last Name:</label>
             <input
               type="text"
+              id = "last name"
               name="lastName"
               value={formData.lastName}
               onChange={handleChange}
@@ -153,9 +155,10 @@ function CreateAccountPage() {
             {errors.lastName && <p className="error">{errors.lastName}</p>}
           </div>
           <div>
-            <label>Birth Date:</label>
+            <label htmlFor="birth date">Birth Date:</label>
             <input
               type="date"
+              id = "birth date"
               name="birthDate"
               value={formData.birthDate}
               onChange={handleChange}
@@ -164,9 +167,10 @@ function CreateAccountPage() {
             {errors.birthDate && <p className="error">{errors.birthDate}</p>}
           </div>
           <div>
-            <label>Email:</label>
+            <label htmlFor="email">Email:</label>
             <input
               type="email"
+              id = "email"
               name="email"
               value={formData.email}
               onChange={handleChange}
@@ -175,9 +179,10 @@ function CreateAccountPage() {
             {errors.email && <p className="error">{errors.email}</p>}
           </div>
           <div>
-            <label>Username:</label>
+            <label htmlFor="username">Username:</label>
             <input
               type="text"
+              id ="username"
               name="username"
               value={formData.username}
               onChange={handleChange}
@@ -185,9 +190,10 @@ function CreateAccountPage() {
             />
           </div>
           <div>
-            <label>Password:</label>
+            <label htmlFor="password">Password:</label>
             <input
               type="password"
+              id="password"
               name="password"
               value={formData.password}
               onChange={handleChange}
@@ -196,9 +202,10 @@ function CreateAccountPage() {
             {errors.password && <p className="error">{errors.password}</p>}
           </div>
           <div>
-            <label>Confirm Password:</label>
+            <label htmlFor="confirmPassword">Password Confirmation:</label>
             <input
               type="password"
+              id = "confirmPassword"
               name="confirmPassword"
               value={formData.confirmPassword}
               onChange={handleChange}

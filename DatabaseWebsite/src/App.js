@@ -13,8 +13,8 @@ import HomeFeed from './pages/HomeFeed';
 import FeedSearch from './pages/FeedSearch';
 import Activity from './pages/Activity'; 
 import FeedColumn from './pages/FeedColumn';
-import UsersFollowers from './pages/UsersFollowers';
-import UsersFollowing from './pages/UsersFollowing';
+import UsersFollowers from './pages/usersFollowers';
+import UsersFollowing from './pages/usersFollowing';
 
 function App() {
   return (
