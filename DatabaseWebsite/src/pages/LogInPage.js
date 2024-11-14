@@ -83,9 +83,10 @@ function LogInPage() { //manage state of log in form
         <form onSubmit={handleSubmit} className="form">
           <h2>Welcome to Pear to Peer</h2>
           <div>
-            <label>Username:</label>
+            <label htmlFor="username">Username:</label>
             <input
               type="text"
+              id = "username"
               name="username"
               value={formData.username} // bind to component state between username and entered value 
               onChange={handleChange} // listen to changes 
@@ -95,9 +96,10 @@ function LogInPage() { //manage state of log in form
             {errors.username && <p className="error">{errors.username}</p>}
           </div>
           <div>
-            <label>Password:</label>
+            <label htmlFor="password">Password:</label>
             <input
               type="password"
+              id = "password"
               name="password"
               value={formData.password}
               onChange={handleChange}
