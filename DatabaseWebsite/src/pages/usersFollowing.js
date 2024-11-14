@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { getUserFollowing, unfollowUser } from '../userData/user'; // API functions
-import './ProfilePage.css'; // Reuse profile styles
+import '../CSS/ProfilePage.css';  // Reuse profile styles
 
 function UsersFollowing() {
   const { userId } = useParams();

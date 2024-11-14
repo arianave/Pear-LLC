@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './ResetPassword.css'; // importing the css
+import '../CSS/ResetPassword.css'; // importing the css
 import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 /*
@@ -38,36 +38,39 @@ function ResetPassword() {
   };
 
   return (
-    <div className="reset-password-container">
-      <form onSubmit={handleSubmit} className="reset-password-form">
-        <h2>Forgot your password?</h2>
-        <p>Enter your username to receive an email with a link to a new password.</p>
-        
-        <div>
-          <label>Username:</label>
-          <input
-            type="username"
-            name="username"
-            value={username} // Bind username state
-            onChange={handleChange} // Listen to changes
-            required // Form will not submit if empty
-          />
-          {errors && <p className="error">{errors}</p>}
-        </div>
-
-        <div className="header">
-         <img src="Designer.png" alt="Logo" className="logo" />
+    <div className="setup"> {/* Apply the .setup class here */}
+      <div className="reset-password-container">
+        <form onSubmit={handleSubmit} className="reset-password-form">
+          <h2>Forgot your password?</h2>
+          <p>Enter your username to receive an email with a link to a new password.</p>
+          
+          <div>
+            <label>Username:</label>
+            <input
+              type="username"
+              name="username"
+              value={username} // Bind username state
+              onChange={handleChange} // Listen to changes
+              required // Form will not submit if empty
+            />
+            {errors && <p className="error">{errors}</p>}
+          </div>
+  
+          <div className="header-login">
+            <img src="Designer.png" alt="Logo" className="logo" />
             <h1>Pear to Peer</h1>
-        </div>
-        
-        <button type="submit" className="send-email-button">Send Email</button> 
-        
-        <p className="login-link">
-          Need to log in? <Link to="/LogInPage" className="blue-link">Log in here</Link>
-        </p>
-      </form>
+          </div>
+          
+          <button type="submit" className="button">Send Email</button>
+          
+          <p className="login-link">
+            Need to log in? <Link to="/LogInPage" className="blue-link">Log in here</Link>
+          </p>
+        </form>
+      </div>
     </div>
   );
+  
 }
 
 export default ResetPassword;

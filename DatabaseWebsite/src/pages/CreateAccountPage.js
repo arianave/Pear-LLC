@@ -119,102 +119,103 @@ function CreateAccountPage() {
 
 
   return (
-
-    <div className="container-c1">
-      <header className="header">
-        <img src="Designer.png" alt="Logo" className="logo" />
-        <h1>Pear to Peer</h1>
-      </header>
-
-      <h2>Create an Account</h2>
-      <p>New to Peer to Pear? Fill out the details below to create an account today!</p>
-      
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>First Name:</label>
-          <input
-            type="text"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            required
-          />
-          {errors.firstName && <p className="error">{errors.firstName}</p>}
+    <div className="setup"> {/* Apply the .setup class here */}
+      <div className="container-c1">
+        <div className="header-login">
+          <img src="Designer.png" alt="Logo" className="logo" />
+          <h1>Pear to Peer</h1>
         </div>
-        <div>
-          <label>Last Name:</label>
-          <input
-            type="text"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            required
-          />
-          {errors.lastName && <p className="error">{errors.lastName}</p>}
-        </div>
-        <div>
-          <label>Birth Date:</label>
-          <input
-            type="date"
-            name="birthDate"
-            value={formData.birthDate}
-            onChange={handleChange}
-            required
-          />
-          {errors.birthDate && <p className="error">{errors.birthDate}</p>}
-        </div>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-          />
-          {errors.email && <p className="error">{errors.email}</p>}
-        </div>
-        <div>
-          <label>Username:</label>
-          <input
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
-          {errors.password && <p className="error">{errors.password}</p>}
-        </div>
-
-        <div>
-          <label>Confirm Password:</label>
-          <input
-            type="password"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            required
-          />
-          {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
-        </div>
-        <button type="submit" className="button">Create Account</button>
-      </form>
-
-      <p className="login1-link">
-         Already have an account? <Link to="/LogInPage" className="bl-link">Log in here</Link>
+  
+        <h2>Create an Account</h2>
+        <p>New to Peer to Pear? Fill out the details below to create an account today!</p>
+  
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>First Name:</label>
+            <input
+              type="text"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
+              required
+            />
+            {errors.firstName && <p className="error">{errors.firstName}</p>}
+          </div>
+          <div>
+            <label>Last Name:</label>
+            <input
+              type="text"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+              required
+            />
+            {errors.lastName && <p className="error">{errors.lastName}</p>}
+          </div>
+          <div>
+            <label>Birth Date:</label>
+            <input
+              type="date"
+              name="birthDate"
+              value={formData.birthDate}
+              onChange={handleChange}
+              required
+            />
+            {errors.birthDate && <p className="error">{errors.birthDate}</p>}
+          </div>
+          <div>
+            <label>Email:</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              required
+            />
+            {errors.email && <p className="error">{errors.email}</p>}
+          </div>
+          <div>
+            <label>Username:</label>
+            <input
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div>
+            <label>Password:</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+            {errors.password && <p className="error">{errors.password}</p>}
+          </div>
+          <div>
+            <label>Confirm Password:</label>
+            <input
+              type="password"
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+            />
+            {errors.confirmPassword && <p className="error">{errors.confirmPassword}</p>}
+          </div>
+          <button type="submit" className="button">Create Account</button>
+        </form>
+  
+        <p className="login1-link">
+          Already have an account? <Link to="/LogInPage" className="bl-link">Log in here</Link>
         </p>
-    </div>
+      </div>
+    </div> // Closing tag for .setup div
   );
+  
 }
 
 export default CreateAccountPage;

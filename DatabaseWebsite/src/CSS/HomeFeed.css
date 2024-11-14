@@ -17,7 +17,7 @@
     position: relative; /* Positioning context for absolute children */
 }
 
-.header button {
+.home-feed button {
     margin-left: 5px; /* Space between buttons */
     padding: 10px; /* Button padding */
     background-color: #007bff; /* Button color */

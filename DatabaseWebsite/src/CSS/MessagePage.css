@@ -15,22 +15,6 @@
   padding: 10px 0;
 }
 
-/* Button styles 
-.plus-button, .requests-button {
-  font-size: 18px;
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  width: 40px; 
-  height: 40px; 
-}
-
-.plus-button {
-  background-color: #74cee7; Green for add button */
-
   /* Pear-shaped button styles */
   .pear-button {
     position: relative; /* Positioning for the leaf and plus sign */
