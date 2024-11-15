@@ -24,7 +24,7 @@ function ResetPassword() {
   const handleChange = (e) => {
     setUsername(e.target.value);
   };
-
+  
   // Handle form submission when the user clicks "Send Email"
   const handleSubmit = (e) => {
     e.preventDefault(); //prevent reloading page
@@ -36,6 +36,7 @@ function ResetPassword() {
       setErrors(''); // Reset errors state
     }
   };
+ 
 
   return (
     <div className="setup"> {/* Apply the .setup class here */}
@@ -45,15 +46,16 @@ function ResetPassword() {
           <p>Enter your username to receive an email with a link to a new password.</p>
           
           <div>
-            <label>Username:</label>
+            <label htmlFor="username">Username:</label> {/* Ensure label is linked to input */}
             <input
-              type="username"
+              id="username" // Add id matching label's htmlFor
+              type="text" // Change type to "text" for accessibility
               name="username"
               value={username} // Bind username state
               onChange={handleChange} // Listen to changes
               required // Form will not submit if empty
             />
-            {errors && <p className="error">{errors}</p>}
+           {errors && <p className="error">{errors}</p>} 
           </div>
   
           <div className="header-login">
