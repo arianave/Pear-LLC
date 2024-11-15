@@ -28,10 +28,12 @@ function ProfilePage() {
   const fetchUserInfo = async () => {
     // Fetch the user's posts and count them
     const posts = await getUserPosts(userId);
-    const num = posts.length;
-    const userInfo = await getUserInfo(userId); // Get the user info from the function
-    const followers = await getUserFollowers(userId); // Fetch number of followers
-    const following = await getUserFollowing(userId); // Fetch number of following
+    const num = posts ? posts.length : 0; // Set num to 0 if posts is undefined or null (mod for unit test)
+    const userInfo = await getUserInfo(userId); // Get user info from function
+    const followers = (await getUserFollowers(userId)) || []; // Fetch number of followers/following (cont. next line)
+    const following = (await getUserFollowing(userId)) || []; // & Default to empty array if undefined (modified for unit test)
+
+
      // If userInfo is successfully retrieved, update the profile state
     if (userInfo) {
       const currentUserId = getUserId(); // Get the current logged-in user's ID
