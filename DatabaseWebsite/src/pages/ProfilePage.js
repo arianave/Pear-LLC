@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import { getUserPosts } from '../userData/userPosts';
 import Post from '../components/Post'; 
 import { getUserInfo, getUserFollowers, getUserFollowing, getUserId, unfollowUser, followUser} from '../userData/user'; // Update this to fetch followers/following data
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 function ProfilePage() {
   const { userId } = useParams(); // Get userId from the URL
@@ -181,7 +183,7 @@ function ProfilePage() {
       {showModel && (
         <div className="model-overlay" onClick={handleCloseModel}>
           <div className="model-content" onClick={(e) => e.stopPropagation()}>
-            <button className="close-model" onClick={handleCloseModel}>X</button>
+            <button className="close-model" onClick={handleCloseModel}><FontAwesomeIcon icon={faTimes} /></button>
             <div className="posts-scrollable">
             {userPosts.length > 0 ? (
           userPosts.map((post) => (
