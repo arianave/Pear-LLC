@@ -3,7 +3,7 @@ import './Post.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
 import { getPostComments, addComment, upvotePost, downvotePost, getPostVoteCount, checkIfUserHasVoted } from '../userData/postComments';
-import { getUserId } from '../userData/user';
+import { getUserId, getUsername } from '../userData/user';
 
 function Post({ creator, postDate, postContent, postId }) {
   const [comments, setComments] = useState([]);
@@ -17,7 +17,16 @@ function Post({ creator, postDate, postContent, postId }) {
   useEffect(() => {
     const fetchCommentsAndVotes = async () => {
       const postComments = await getPostComments(postId);
-      setComments(postComments);
+
+      // Fetch usernames for each comment
+    const commentsWithUsernames = await Promise.all(
+      postComments.map(async (comment) => {
+        const username = await getUsername(comment.userID); // Retrieve username for userID
+        return { ...comment, username }; // Add username to comment data
+      })
+    );
+
+    setComments(commentsWithUsernames);
 
       const initialVoteCount = await getPostVoteCount(postId);
       if (initialVoteCount !== null) {
@@ -110,7 +119,7 @@ function Post({ creator, postDate, postContent, postId }) {
           comments.map((comment) => (
             <div key={comment._id} className="comment">
               <p className="comment-user">
-                <strong>{comment.userID}:</strong>
+                <strong>{comment.username}:</strong>
               </p>
               <p className="comment-content">{comment.content}</p>
               <p className="comment-timestamp">

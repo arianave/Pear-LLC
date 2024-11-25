@@ -45,8 +45,8 @@ const CommentSchema = new mongoose.Schema({
   commentID: mongoose.Schema.Types.ObjectId,
   postID: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'Post' },
   userID: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },
-  textContent: { type: String, required: true },                         
-  creationDate: { type: Date, default: Date.now }
+  content: { type: String, required: true },                         
+  timestamp: { type: Date, default: Date.now }
 });
 
 const Comment = mongoose.model('Comment', CommentSchema);
