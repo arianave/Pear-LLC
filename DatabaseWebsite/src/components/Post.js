@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Post.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUp, faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUp, faArrowDown, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { getPostComments, addComment, upvotePost, downvotePost, getPostVoteCount, checkIfUserHasVoted } from '../userData/postComments';
 import { getUserId, getUsername } from '../userData/user';
 
@@ -11,48 +11,48 @@ function Post({ creator, postDate, postContent, postId }) {
   const [newComment, setNewComment] = useState('');
   const [hasUpvoted, setUpvote] = useState(false);
   const [hasDownvoted, setDownvote] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const userId = getUserId();
 
   // Fetch comments and initial vote count when the component mounts
   useEffect(() => {
-    const fetchCommentsAndVotes = async () => {
-      const postComments = await getPostComments(postId);
+    if (postId && isExpanded) {
+      const fetchCommentsAndVotes = async () => {
+        const postComments = await getPostComments(postId);
 
-      // Fetch usernames for each comment
-    const commentsWithUsernames = await Promise.all(
-      postComments.map(async (comment) => {
-        const username = await getUsername(comment.userID); // Retrieve username for userID
-        return { ...comment, username }; // Add username to comment data
-      })
-    );
+        // Fetch usernames for each comment
+      const commentsWithUsernames = await Promise.all(
+        postComments.map(async (comment) => {
+          const username = await getUsername(comment.userID); // Retrieve username for userID
+          return { ...comment, username }; // Add username to comment data
+        })
+      );
 
-    setComments(commentsWithUsernames);
+      setComments(commentsWithUsernames);
 
-      const initialVoteCount = await getPostVoteCount(postId);
-      if (initialVoteCount !== null) {
-        setVotesCount(initialVoteCount);
-      }
+        const initialVoteCount = await getPostVoteCount(postId);
+        if (initialVoteCount !== null) {
+          setVotesCount(initialVoteCount);
+        }
 
-    // Check if user has already voted on this post
-    const userHasVoted = await checkIfUserHasVoted(postId, userId);
-    if (userHasVoted.hasVoted) {
-      if (userHasVoted.voteType === 'upvote') {
-        setUpvote(true);
-        setDownvote(false);
+      // Check if user has already voted on this post
+      const userHasVoted = await checkIfUserHasVoted(postId, userId);
+      if (userHasVoted.hasVoted) {
+        if (userHasVoted.voteType === 'upvote') {
+          setUpvote(true);
+          setDownvote(false);
+        } else {
+          setDownvote(true);
+          setUpvote(false);
+        }
       } else {
-        setDownvote(true);
         setUpvote(false);
+        setDownvote(false);
       }
-    } else {
-      setUpvote(false);
-      setDownvote(false);
-    }
-  };
-
-    if (postId) {
+    };
       fetchCommentsAndVotes();
     }
-  }, [postId]);
+  }, [postId, isExpanded]);
 
   const handleUpvote = async () => {
     if (hasUpvoted) {
@@ -82,66 +82,113 @@ function Post({ creator, postDate, postContent, postId }) {
 
   const handleAddComment = async () => {
     if (newComment.trim()) {
+      try {
       const addedComment = await addComment(userId, postId, newComment);
-      setComments((prevComments) => [...prevComments, addedComment]);
+      const username = await getUsername(userId);
+      const commentWithUsername = {
+        ...addedComment,
+        username: username,
+      };
+      setComments((prevComments) => [...prevComments, commentWithUsername]);
       setNewComment(''); // Clear input field after adding comment
+    } catch (error){
+      console.error("Error adding comment:", error);
     }
+  }
   };
 
   return (
-    <div className="post-container">
-      {/* Post header */}
-      <div className="post-header">
-        <h4 className="post-creator">{creator}</h4>
-        <p className="post-date">{new Date(postDate).toLocaleDateString()}</p>
+    <>
+      {/* Compact View */}
+      <div className="post-compact" onClick={() => setIsExpanded(true)}>
+        <div className="post-header">
+          <h4 className="post-creator">{creator}</h4>
+          <p className="post-date">{new Date(postDate).toLocaleDateString()}</p>
+        </div>
+        <div className="post-content">
+          {postContent ? <p>{postContent}</p> : <p>No content available</p>}
+        </div>
+        <div className="post-votes">
+        <button
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent click from enlarging the post
+                    handleUpvote();
+                  }}
+                  className={hasUpvoted ? "upvote active" : "upvote"}
+                >
+            <FontAwesomeIcon icon={faArrowUp} />
+          </button>
+          <span>{votesCount}</span>
+          <button
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent click from enlarging the post
+                    handleDownvote();
+                  }}
+                  className={hasDownvoted ? "downvote active" : "downvote"}
+                >
+            <FontAwesomeIcon icon={faArrowDown} />
+          </button>
+        </div>
       </div>
 
-      {/* Post content */}
-      <div className="post-content">
-        {postContent ? <p>{postContent}</p> : <p>No content available</p>}
-      </div>
-
-      {/* Voting section */}
-      <div className="post-votes">
-        <button onClick={handleUpvote} className={hasUpvoted ? "upvote active" : "upvote"}>
-          <FontAwesomeIcon icon={faArrowUp} />
-        </button>
-        <span>{votesCount}</span>
-        <button onClick={handleDownvote} className={hasDownvoted ? "downvote active" : "downvote"}>
-          <FontAwesomeIcon icon={faArrowDown} />
-        </button>
-      </div>
-
-      {/* Comments section */}
-      <div className="post-comments">
-        <h5>Comments:</h5>
-        {comments.length > 0 ? (
-          comments.map((comment) => (
-            <div key={comment._id} className="comment">
-              <p className="comment-user">
-                <strong>{comment.username}:</strong>
-              </p>
-              <p className="comment-content">{comment.content}</p>
-              <p className="comment-timestamp">
-                {new Date(comment.timestamp).toLocaleDateString()}
-              </p>
+      {/* Expanded Popout */}
+      {isExpanded && (
+        <div className="post-popout">
+          <div className="popout-overlay" onClick={() => setIsExpanded(false)}></div>
+          <div className="popout-content">
+            <button className="close-btn" onClick={() => setIsExpanded(false)}>
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
+            <div className="post-left-panel">
+              <div className="post-header">
+                <h4 className="post-creator">{creator}</h4>
+                <p className="post-date">{new Date(postDate).toLocaleDateString()}</p>
+              </div>
+              <div className="post-content">
+                {postContent ? <p>{postContent}</p> : <p>No content available</p>}
+              </div>
+              <div className="post-votes">
+              <button onClick={handleUpvote} className={hasUpvoted ? "upvote active" : "upvote"}>
+                <FontAwesomeIcon icon={faArrowUp} />
+              </button>
+              <span>{votesCount}</span>
+              <button onClick={handleDownvote} className={hasDownvoted ? "downvote active" : "downvote"}>
+                <FontAwesomeIcon icon={faArrowDown} />
+              </button>
             </div>
-          ))
-        ) : (
-          <p className="no-comments">No comments yet.</p>
-        )}
-      </div>
-
-      {/* New comment input */}
-      <div className="add-comment">
-        <textarea
-          placeholder="Write a comment..."
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-        ></textarea>
-        <button onClick={handleAddComment}>Add Comment</button>
-      </div>
-    </div>
+            </div>
+            <div className="post-right-panel">
+              <div className="post-comments">
+                <h5>Comments:</h5>
+                {comments.length > 0 ? (
+                  comments.map((comment) => (
+                    <div key={comment._id} className="comment">
+                      <p className="comment-user">
+                        <strong>{comment.username}:</strong>
+                      </p>
+                      <p className="comment-content">{comment.content}</p>
+                      <p className="comment-timestamp">
+                        {new Date(comment.timestamp).toLocaleDateString()}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="no-comments">No comments yet.</p>
+                )}
+              </div>
+              <div className="add-comment">
+                <textarea
+                  placeholder="Write a comment..."
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                ></textarea>
+                <button onClick={handleAddComment}>Add Comment</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
