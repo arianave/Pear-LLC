@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import '../CSS/ProfilePage.css'; 
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { getUserPosts } from '../userData/userPosts';
 import Post from '../components/Post'; 
 import { getUserInfo, getUserFollowers, getUserFollowing, getUserId, unfollowUser, followUser} from '../userData/user'; // Update this to fetch followers/following data
@@ -117,15 +118,6 @@ function ProfilePage() {
     console.log('Viewing threads...');
   };
 
-   // Navigate to the followers or following pages
-   const handleViewFollowers = () => {
-    navigate(`/usersFollowers/${userId}`);
-  };
-
-  const handleViewFollowing = () => {
-    navigate(`/usersFollowing/${userId}`);
-  };
-
   return (
     <div className="profile-container">
       <div className="profile-header">
@@ -147,18 +139,20 @@ function ProfilePage() {
               <p>Posts</p>
             </div>
             <div className="stat">
-              <button className = "view-followers" onClick = {handleViewFollowers}> 
-              {/* Changed into an actual button */}
-                <p>{profile.followers}</p>
+              <div className="view-followers">
+                <Link to={`/usersFollowers/${userId}`} className="number-link">
+                  {profile.followers}
+                </Link>
                 <p>Followers</p>
-              </button>
+              </div>
             </div>
             <div className="stat">
-            <button className = "view-following" onClick = {handleViewFollowing}> 
-              {/* Changed into an actual button */}
-                <p>{profile.following}</p>
+              <div className="view-following">
+                <Link to={`/usersFollowers/${userId}`} className="number-link">
+                  {profile.following}
+                  </Link>
                 <p>Following</p>
-              </button>
+              </div>
             </div>
           </div>
 

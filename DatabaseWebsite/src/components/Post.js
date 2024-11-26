@@ -14,27 +14,14 @@ function Post({ creator, postDate, postContent, postId }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const userId = getUserId();
 
-  // Fetch comments and initial vote count when the component mounts
   useEffect(() => {
-    if (postId && isExpanded) {
-      const fetchCommentsAndVotes = async () => {
-        const postComments = await getPostComments(postId);
-
-        // Fetch usernames for each comment
-      const commentsWithUsernames = await Promise.all(
-        postComments.map(async (comment) => {
-          const username = await getUsername(comment.userID); // Retrieve username for userID
-          return { ...comment, username }; // Add username to comment data
-        })
-      );
-
-      setComments(commentsWithUsernames);
-
-        const initialVoteCount = await getPostVoteCount(postId);
-        if (initialVoteCount !== null) {
-          setVotesCount(initialVoteCount);
-        }
-
+    // Function to fetch votes
+    const fetchVotes = async () => {
+      const initialVoteCount = await getPostVoteCount(postId);
+      if (initialVoteCount !== null) {
+        setVotesCount(initialVoteCount);
+      }
+  
       // Check if user has already voted on this post
       const userHasVoted = await checkIfUserHasVoted(postId, userId);
       if (userHasVoted.hasVoted) {
@@ -50,7 +37,28 @@ function Post({ creator, postDate, postContent, postId }) {
         setDownvote(false);
       }
     };
-      fetchCommentsAndVotes();
+  
+    // Function to fetch comments and their usernames
+    const fetchComments = async () => {
+      const postComments = await getPostComments(postId);
+  
+      // Fetch usernames for each comment
+      const commentsWithUsernames = await Promise.all(
+        postComments.map(async (comment) => {
+          const username = await getUsername(comment.userID); // Retrieve username for userID
+          return { ...comment, username }; // Add username to comment data
+        })
+      );
+  
+      setComments(commentsWithUsernames);
+    };
+  
+    if (postId) {
+      fetchVotes(); // Always fetch votes when postId changes
+  
+      if (isExpanded) {
+        fetchComments(); // Fetch comments only if the post is expanded
+      }
     }
   }, [postId, isExpanded]);
 
