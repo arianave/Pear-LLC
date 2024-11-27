@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { getUserFollowing, unfollowUser } from '../userData/user'; // API functions
-import '../CSS/ProfilePage.css';  // Reuse profile styles
+import '../CSS/ProfilePage.css'; // Reuse profile styles
+import '../CSS/FollowersPage.css'; // Reuse styles for followers layout
 
 function UsersFollowing() {
   const { userId } = useParams();
@@ -15,26 +16,38 @@ function UsersFollowing() {
     };
 
     fetchFollowing();
-  }, []);
+  }, [userId]);
 
-  const handleUnfollow = async (userId) => {
-    await unfollowUser(userId);
-    setFollowing(following.filter(follow => follow._id !== userId)); // Remove from list
+  const handleUnfollow = async (followId) => {
+    await unfollowUser(followId);
+    setFollowing(following.filter(follow => follow._id !== followId)); // Remove from the list
   };
 
   return (
-    <div className="profile-container">
+    <div className="followers-page">
       <h1>Following</h1>
-      <ul>
-        {following.map((follow) => (
-          <li key={follow._id}>
-          <Link to={`/ProfilePage/${follow._id}`} className="follower-link">
-            {follow.username}
-          </Link>
-          <button onClick={() => handleUnfollow(follow._id)}>Unfollow</button>
-        </li>
-        ))}
-      </ul>
+      {following.length === 0 ? (
+        <p className="no-data-message">Not Following Anyone</p>
+      ) : (
+        <div className="followers-panel">
+          {following.map((follow) => (
+            <div className="follower-card" key={follow._id}>
+              <div className="follower-info">
+                <Link to={`/ProfilePage/${follow._id}`} className="follower-link">
+                  <p className="follower-username">{follow.username}</p>
+                  <p className="follower-name">{follow.name || 'Unknown Name'}</p>
+                </Link>
+              </div>
+              <button
+                className="unfollow-button"
+                onClick={() => handleUnfollow(follow._id)}
+              >
+                Unfollow
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

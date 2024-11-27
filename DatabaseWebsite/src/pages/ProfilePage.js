@@ -33,8 +33,14 @@ function ProfilePage() {
     const posts = await getUserPosts(userId);
     const num = posts ? posts.length : 0; // Set num to 0 if posts is undefined or null (mod for unit test)
     const userInfo = await getUserInfo(userId); // Get user info from function
-    const followers = (await getUserFollowers(userId)) || []; // Fetch number of followers/following (cont. next line)
-    const following = (await getUserFollowing(userId)) || []; // & Default to empty array if undefined (modified for unit test)
+    const followers = await getUserFollowers(userId).catch((err) => {
+      console.error('Failed to fetch followers:', err);
+      return [];
+    });
+    const following = await getUserFollowing(userId).catch((err) => {
+      console.error('Failed to fetch following:', err);
+      return [];
+    });
 
 
      // If userInfo is successfully retrieved, update the profile state
@@ -148,7 +154,7 @@ function ProfilePage() {
             </div>
             <div className="stat">
               <div className="view-following">
-                <Link to={`/usersFollowers/${userId}`} className="number-link">
+                <Link to={`/usersFollowing/${userId}`} className="number-link">
                   {profile.following}
                   </Link>
                 <p>Following</p>

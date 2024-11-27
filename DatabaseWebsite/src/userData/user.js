@@ -31,23 +31,41 @@ export function storeUserId(userId) {
     }
   };
 
+  export const getName = async (userID) => {
+    const userId = userID;
+    if(userID){
+      try{
+        const response = await fetch(`http://98.80.48.42:3000/api/name/${userId}`);
+        const result = await response.json();
+
+        if (result.success){
+          return result.user.name;
+        } else {
+          throw new Error ('Error retieving name');
+        }
+      } catch (error) {
+        console.error('Error fetching username:', error);
+      }
+    }
+  };
+
   export const getUsername = async (userID) => {
     const userId = userID;
     if(userID){
-    try {
-      const response = await fetch(`http://98.80.48.42:3000/api/username/${userId}`);
-      const result = await response.json();
-  
-      if (result.success) {
-        return result.user.username; // Returns just the username string
-      } else {
-        throw new Error('Error retrieving username');
+      try {
+        const response = await fetch(`http://98.80.48.42:3000/api/username/${userId}`);
+        const result = await response.json();
+    
+        if (result.success) {
+          return result.user.username; // Returns just the username string
+        } else {
+          throw new Error('Error retrieving username');
+        }
+      } catch (error) {
+        console.error('Error fetching username:', error);
+        return null;
       }
-    } catch (error) {
-      console.error('Error fetching username:', error);
-      return null;
     }
-  }
   };
 
  // Function to fetch followers of the current user
@@ -65,16 +83,19 @@ export const getUserFollowers = async (userID) => {
     const result = await response.json();
     console.log('Response body:', result);
 
-    if (!result.success) {
+    if (response.ok && result.success) {
+      // Followers successfully retrieved (including empty lists)
       console.log('Followers successfully retrieved:', result.followers);
-      return result; // Return the list of followers
+      return result.followers; // Return the list of followers
     } else {
-      console.error('Error: Followers retrieval failed with message:', result.message);
-      throw new Error(`Error retrieving followers: ${result.message}`);
+      // Handle unsuccessful retrieval or no followers found
+      console.log('Error: Followers retrieval failed with message:', result.message);
+      return []; // Return empty array for no followers or error case
     }
   } catch (error) {
+    // General error handling
     console.error('Error fetching followers:', error);
-    return [];
+    return []; // Return empty array on network failure or unexpected error
   }
 };
 
@@ -93,16 +114,19 @@ export const getUserFollowing = async (userID) => {
     const result = await response.json();
     console.log('Response body:', result);
 
-    if (!result.success) {
+    if (response.ok && result.success) {
+      // Successfully retrieved following list
       console.log('Following list successfully retrieved:', result.following);
-      return result; // Return the list of users the current user is following
+      return result.following; // Return the list of users the current user is following
     } else {
-      console.error('Error: Following retrieval failed with message:', result.message);
-      throw new Error(`Error retrieving following: ${result.message}`);
+      // Handle unsuccessful retrieval or no following found
+      console.log('Error: Following retrieval failed with message:', result.message);
+      return []; // Return an empty array for no data or errors
     }
   } catch (error) {
+    // General error handling
     console.error('Error fetching following:', error);
-    return [];
+    return []; // Return an empty array for network failure or unexpected error
   }
 };
 

@@ -254,6 +254,23 @@ app.get('/api/users', async (req, res) => {
     }
   });
 
+  app.get('/api/name/:userId', async (req, res) => {
+    const { userId } = req.params;
+
+    try {
+      const user = await User.findById(userId);
+
+      if (!user) {
+        return res.status(404).json({ success: false, message: 'User not found' });
+      }
+
+      res.json({ success: true, user: { name: `${user.firstName} ${user.lastName}` } });
+    } catch (error) {
+      console.error('Error retrieving name:', error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+    }
+  });
+
   app.get('/api/username/:userId', async (req, res) => {
     const { userId } = req.params; // Extract userId from request parameters
   
@@ -543,23 +560,23 @@ app.get('/api/followers/:userId', async (req, res) => {
     const followData = await Follow.findOne({ userID: userId });
     
     if (!followData) {
-      console.error(`No follow data found for user with ID: ${userId}`);
-      return res.status(404).json({ message: 'No followers found.' });
+      console.log(`No follow data found for user with ID: ${userId}`);
+      return res.status(200).json({ success: false, message: 'No followers found.' });
     }
 
 
     const followers = await User.find({ _id: { $in: followData.followers } });
     
-    if (!followers.length) {
+    if (followers.length === 0) {
       console.warn(`No followers found in User collection for user with ID: ${userId}`);
-    } else {
-      console.log(`Followers found`);
+      return res.status(200).json({ success: true, followers: [], message: 'No followers found.' });
     }
 
-    res.json(followers);
+    console.log(`Successfully retrieved ${followers.length} followers for user ID: ${userId}`);
+    res.status(200).json({ success: true, followers });
   } catch (error) {
     console.error('Error fetching followers:', error);
-    res.status(500).json({ message: 'Server error', error });
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 });
 
@@ -572,23 +589,23 @@ app.get('/api/following/:userId', async (req, res) => {
     const followData = await Follow.findOne({ userID: userId });
 
     if (!followData) {
-      console.error(`No follow data found for user with ID: ${userId}`);
-      return res.status(404).json({ message: 'No following found.' });
+      console.log(`No follow data found for user with ID: ${userId}`);
+      return res.status(200).json({ success: false, message: 'No following found.' });
     }
 
 
     const following = await User.find({ _id: { $in: followData.following } });
 
-    if (!following.length) {
+    if (following.length === 0) {
       console.warn(`No following users found in User collection for user with ID: ${userId}`);
-    } else {
-      console.log(`Users found`);
+      return res.status(200).json({ success: true, following: [], message: 'No following found.' });
     }
 
-    res.json(following);
+    console.log(`Successfully retrieved ${following.length} following users for user ID: ${userId}`);
+    res.status(200).json({ success: true, following });
   } catch (error) {
     console.error('Error fetching following users:', error);
-    res.status(500).json({ message: 'Server error', error });
+    res.status(500).json({ success: false, message: 'Internal server error' });
   }
 });
 
