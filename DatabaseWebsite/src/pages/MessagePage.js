@@ -19,9 +19,17 @@ function MessagePage({}) {
   const [newChats, setNewChats] = useState([]); // To track manually created chats
   const chatMessagesRef = useRef(null);
 
+  const [count, setCount] = useState(0); // Count state for toggling search bar
+
   // Function to handle starting a chat (simple search for now)
   const handleStartChat = () => {
-    setShowSearch(true);
+    if (count === 0) {
+      setShowSearch(true);
+      setCount(1);
+    } else {
+      setShowSearch(false);
+      setCount(0);
+    }
   };
 
   const handleSearchChange = (e) => {
@@ -201,7 +209,7 @@ function MessagePage({}) {
     setMessages([]);
   };
 
-  return (
+  return ( 
     <div className="messages-page">
       <div className="messages-header">
         

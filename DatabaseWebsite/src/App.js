@@ -6,6 +6,7 @@ import LoginPage from './pages/LogInPage';
 import ResetPassword from './pages/ResetPassword'; 
 import ProfilePage from './pages/ProfilePage'; 
 import EditProfile from './pages/EditProfile'; // Import the EditProfile page
+import DeleteAccount from './pages/DeleteAccount';
 import BottomBar from './BottomBar'; 
 import PostCreationPage from './pages/PostCreationPage';
 import MessagePage from './pages/MessagePage';
@@ -40,6 +41,7 @@ function AppContent() {
           <Route path="ResetPassword" element={<ResetPassword />} />
           <Route path="ProfilePage/:userId" element={<ProfilePage />} />
           <Route path="EditProfile" element={<EditProfile />} /> {/* New route for EditProfile */}
+          <Route path="DeleteAccount" element={<EditProfile />} />
           <Route path="PostCreation" element={<PostCreationPage />} />
           <Route path="Messages" element={<MessagePage />} />
           <Route path="HomeFeed" element={<HomeFeed />} />

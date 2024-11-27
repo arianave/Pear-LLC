@@ -162,13 +162,13 @@ function ProfilePage() {
             </div>
           </div>
 
-          {isCurrentUser ? (
+          
             <button className="edit-profile-button" onClick={handleEditProfile}>Edit Profile</button>
-          ) : (
+      
             <button className="follow-button" onClick={handleFollowUnfollow}>
               {profile.isFollowing ? 'Unfollow' : 'Follow'}
             </button>
-          )}
+          
         </div>
       </div>
 
@@ -207,3 +207,23 @@ function ProfilePage() {
 }
 
 export default ProfilePage;
+
+/*  <div className="stat">
+            <button className = "view-following" onClick = {handleViewFollowing}> 
+              {/* Changed into an actual button }
+              <p>{profile.following}</p>
+              <p>Following</p>
+            </button>
+          </div>
+        </div>
+
+        {isCurrentUser ? (
+          <button className="edit-profile-button" onClick={handleEditProfile}>Edit Profile</button>
+        ) : (
+          <button className="follow-button" onClick={handleFollowUnfollow}>
+            {profile.isFollowing ? 'Unfollow' : 'Follow'}
+          </button>
+        )}
+      </div>
+    </div>
+*/
