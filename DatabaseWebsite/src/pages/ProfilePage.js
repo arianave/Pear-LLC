@@ -145,20 +145,20 @@ function ProfilePage() {
               <p>Posts</p>
             </div>
             <div className="stat">
-              <div className="view-followers">
+              <p>
                 <Link to={`/usersFollowers/${userId}`} className="number-link">
                   {profile.followers}
                 </Link>
-                <p>Followers</p>
-              </div>
+              </p>
+              <p>Followers</p>
             </div>
             <div className="stat">
-              <div className="view-following">
+              <p>
                 <Link to={`/usersFollowing/${userId}`} className="number-link">
                   {profile.following}
-                  </Link>
-                <p>Following</p>
-              </div>
+                </Link>
+              </p>
+              <p>Following</p>
             </div>
           </div>
 
