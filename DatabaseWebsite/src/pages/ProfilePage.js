@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import '../CSS/ProfilePage.css'; 
 import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 import { getUserPosts } from '../userData/userPosts';
 import Post from '../components/Post'; 
 import { getUserInfo, getUserFollowers, getUserFollowing, getUserId, unfollowUser, followUser} from '../userData/user'; // Update this to fetch followers/following data
@@ -33,14 +32,8 @@ function ProfilePage() {
     const posts = await getUserPosts(userId);
     const num = posts ? posts.length : 0; // Set num to 0 if posts is undefined or null (mod for unit test)
     const userInfo = await getUserInfo(userId); // Get user info from function
-    const followers = await getUserFollowers(userId).catch((err) => {
-      console.error('Failed to fetch followers:', err);
-      return [];
-    });
-    const following = await getUserFollowing(userId).catch((err) => {
-      console.error('Failed to fetch following:', err);
-      return [];
-    });
+    const followers = (await getUserFollowers(userId)) || []; // Fetch number of followers/following (cont. next line)
+    const following = (await getUserFollowing(userId)) || []; // & Default to empty array if undefined (modified for unit test)
 
 
      // If userInfo is successfully retrieved, update the profile state
@@ -124,6 +117,15 @@ function ProfilePage() {
     console.log('Viewing threads...');
   };
 
+   // Navigate to the followers or following pages
+   const handleViewFollowers = () => {
+    navigate(`/usersFollowers/${userId}`);
+  };
+
+  const handleViewFollowing = () => {
+    navigate(`/usersFollowing/${userId}`);
+  };
+
   return (
     <div className="profile-container">
       <div className="profile-header">
@@ -145,30 +147,30 @@ function ProfilePage() {
               <p>Posts</p>
             </div>
             <div className="stat">
-              <div className="view-followers">
-                <Link to={`/usersFollowers/${userId}`} className="number-link">
-                  {profile.followers}
-                </Link>
+              <button className = "view-followers" onClick = {handleViewFollowers}> 
+              {/* Changed into an actual button */}
+                <p>{profile.followers}</p>
                 <p>Followers</p>
-              </div>
+              </button>
             </div>
             <div className="stat">
-              <div className="view-following">
-                <Link to={`/usersFollowing/${userId}`} className="number-link">
-                  {profile.following}
-                  </Link>
+            <button className = "view-following" onClick = {handleViewFollowing}> 
+              {/* Changed into an actual button */}
+                <p>{profile.following}</p>
                 <p>Following</p>
-              </div>
+              </button>
             </div>
           </div>
 
-          
-            <button className="edit-profile-button" onClick={handleEditProfile}>Edit Profile</button>
-      
-            <button className="follow-button" onClick={handleFollowUnfollow}>
-              {profile.isFollowing ? 'Unfollow' : 'Follow'}
-            </button>
-          
+
+            {isCurrentUser ? (
+          <button className="edit-profile-button" onClick={handleEditProfile}>Edit Profile</button>
+        ) : (
+          <button className="follow-button" onClick={handleFollowUnfollow}>
+            {profile.isFollowing ? 'Unfollow' : 'Follow'}
+          </button>
+        )}
+
         </div>
       </div>
 
@@ -208,22 +210,3 @@ function ProfilePage() {
 
 export default ProfilePage;
 
-/*  <div className="stat">
-            <button className = "view-following" onClick = {handleViewFollowing}> 
-              {/* Changed into an actual button }
-              <p>{profile.following}</p>
-              <p>Following</p>
-            </button>
-          </div>
-        </div>
-
-        {isCurrentUser ? (
-          <button className="edit-profile-button" onClick={handleEditProfile}>Edit Profile</button>
-        ) : (
-          <button className="follow-button" onClick={handleFollowUnfollow}>
-            {profile.isFollowing ? 'Unfollow' : 'Follow'}
-          </button>
-        )}
-      </div>
-    </div>
-*/
