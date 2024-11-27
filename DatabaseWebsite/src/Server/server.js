@@ -557,13 +557,22 @@ app.get('/api/followers/:userId', async (req, res) => {
   console.log(`Received request for followers of user with ID: ${userId}`);
 
   try {
-    const followData = await Follow.findOne({ userID: userId });
+    let followData = await Follow.findOne({ userID: userId });
     
     if (!followData) {
-      console.log(`No follow data found for user with ID: ${userId}`);
-      return res.status(200).json({ success: false, message: 'No followers found.' });
-    }
+      console.log(`No follow data found for user with ID: ${userId}. Creating new entry...`);
 
+      // Create a new entry with the provided userId
+      followData = new Follow({
+        userID: userId,
+        requestStatus: 'active', // Set a default status; adjust as needed
+        followers: [],
+        following: []
+      });
+
+      await followData.save();
+      console.log(`New Follow entry created for user with ID: ${userId}`);
+    }
 
     const followers = await User.find({ _id: { $in: followData.followers } });
     
@@ -614,7 +623,7 @@ app.post('/api/follow', async (req, res) => {
   const { userId, followUserId } = req.body;
 
   try {
-    const followData = await Follow.findOne({ userID: userId });
+    let followData = await Follow.findOne({ userID: userId });
 
     // Check if the user is already being followed
     if (followData.following.includes(followUserId)) {

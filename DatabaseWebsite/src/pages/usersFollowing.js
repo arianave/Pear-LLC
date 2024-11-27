@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { getUserFollowing, unfollowUser } from '../userData/user'; // API functions
+import { getUserFollowing, unfollowUser, getName } from '../userData/user'; // API functions
 import '../CSS/ProfilePage.css'; // Reuse profile styles
 import '../CSS/FollowersPage.css'; // Reuse styles for followers layout
 
@@ -12,7 +12,15 @@ function UsersFollowing() {
   useEffect(() => {
     const fetchFollowing = async () => {
       const userFollowing = await getUserFollowing(userId);
-      setFollowing(userFollowing);
+      
+      const followingWithNames = await Promise.all(
+        userFollowing.map(async (following) => {
+          const fullName = await getName(following._id);
+          return { ...following, fullName };
+        })
+      );
+
+      setFollowing(followingWithNames);
     };
 
     fetchFollowing();
@@ -35,7 +43,7 @@ function UsersFollowing() {
               <div className="follower-info">
                 <Link to={`/ProfilePage/${follow._id}`} className="follower-link">
                   <p className="follower-username">{follow.username}</p>
-                  <p className="follower-name">{follow.name || 'Unknown Name'}</p>
+                  <p className="follower-name">{follow.fullName || 'Unknown Name'}</p>
                 </Link>
               </div>
               <button

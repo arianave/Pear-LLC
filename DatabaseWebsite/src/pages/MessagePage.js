@@ -4,6 +4,7 @@ import { getChats } from '../userData/chats';
 import { getUsername } from '../userData/user';
 import { getUserId } from '../userData/user';
 import { useLayoutEffect } from 'react'; // Ensure you import useLayoutEffect
+import { Link } from 'react-router-dom';
 
 function MessagePage({}) {
   const [chats, setChats] = useState([]); // State for storing existing chats
@@ -247,7 +248,11 @@ function MessagePage({}) {
        {showPopup && (
         <div className="chat-popup">
           <div className="chat-header">
-            <h2>Chat with {selectedUser.username}</h2> {/*TODO: change to link to users profile */}
+          <h2>
+              Chat with <Link to={`/ProfilePage/${selectedUser.userId}`} className="username-link">
+                {selectedUser.username}
+              </Link>
+            </h2> {/*TODO: change to link to users profile */}
             <button onClick={handleCloseChat}>Close</button>
           </div>
           <div className="chat-messages" ref={chatMessagesRef}>
