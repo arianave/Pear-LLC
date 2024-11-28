@@ -1,17 +1,34 @@
 // EditProfile.js
 
 import '../CSS/EditProfile.css'; //importing the css
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from 'react-router-dom'; // Import Link from react-router-dom
-import { getUserId } from '../userData/user';
+import { getUserId, getUserInfo, setProfileInfo } from '../userData/user';
 
-const EditProfile = ({ username }) => {
+const EditProfile = () => {
   const [profilePicture, setProfilePicture] = useState(null);
   const [isPrivate, setIsPrivate] = useState(false);
   const [biography, setBiography] = useState("");
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const userId = getUserId();
   const navigate = useNavigate();
+
+  // Fetch user info when the component loads
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const userInfo = await getUserInfo(userId);
+        setProfilePicture(userInfo.profilePicture || "/gray_pfp.png"); // Default if no profile picture
+        setBiography(userInfo.profileBiography || ""); // Default to empty string
+        setIsPrivate(userInfo.isPrivate || false); // Default to false
+      } catch (error) {
+        console.error("Failed to fetch user info:", error);
+        alert("Could not load profile information.");
+      }
+    };
+
+    fetchUserInfo();
+  }, [userId]);
 
   const handleProfilePictureChange = (e) => {
     const file = e.target.files[0];
@@ -21,8 +38,8 @@ const EditProfile = ({ username }) => {
   };
 
   const handleSaveChanges = () => {
-    // Save changes logic here (e.g., API call to update profile)
     console.log("Profile changes saved:", { profilePicture, isPrivate, biography });
+    setProfileInfo(biography, profilePicture, isPrivate);
     alert("Profile updated successfully!");
   };
 
@@ -54,7 +71,7 @@ const EditProfile = ({ username }) => {
       <h2>Edit Profile</h2>
       <div className="profile-picture-container">
         <img
-          src={profilePicture || "/default-profile.png"}
+          src={profilePicture || "/gray_pfp.png"}
           alt="Profile"
           className="profile-picture"
           onClick={() => document.getElementById("file-input").click()}
@@ -69,12 +86,17 @@ const EditProfile = ({ username }) => {
       </div>
 
       <div className="private-account-container">
-         <span className="toggle-label">Private Account?</span>
-         <label className="switch">
-          <input type="checkbox" className="switch-input" />
+        <span className="toggle-label">Private Account?</span>
+        <label className="switch">
+          <input
+            type="checkbox"
+            className="switch-input"
+            checked={isPrivate} // Bind to the state
+            onChange={(e) => setIsPrivate(e.target.checked)} // Update the state on change
+          />
           <span className="slider"></span>
-         </label>
-        </div>
+        </label>
+      </div>
 
       <div className="biography-section">
         <label>

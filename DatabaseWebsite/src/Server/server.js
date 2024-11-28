@@ -26,7 +26,7 @@ const UserSchema = new mongoose.Schema({
     creationDate: Date,
     profilePicture: String,
     profileBiography: String,
-    accountPrivacy: String
+    isPrivate: Boolean
  });
 
 const User = mongoose.model('User', UserSchema);
@@ -127,7 +127,10 @@ app.post('/api/users', async (req, res) => {
       username,
       password,
       birthDate,
-      creationDate: new Date() // Automatically set creation date
+      creationDate: new Date(),
+      profileBiography: '',
+      isPrivate: false, 
+      profilePicture: ''
     });
     await newUser.save(); // Save to the database
     res.status(201).json({ message: 'User created successfully', user: newUser });
@@ -162,6 +165,32 @@ app.post('/api/login', async (req, res) => {
     } catch (error) {
       console.error('Error during login:', error);
       res.status(500).json({ message: 'Server error', error });
+    }
+  });
+
+  app.post('/api/users/:userId/profile', async (req, res) => {
+    const { userId } = req.params;
+    const { biography, profilePicture, isPrivate } = req.body;
+  
+    try {
+      const updatedUser = await User.findByIdAndUpdate(
+        userId,
+        {
+          profileBiography: biography,
+          profilePicture: profilePicture,
+          isPrivate: isPrivate,
+        },
+        { new: true } // Return the updated document
+      );
+  
+      if (!updatedUser) {
+        return res.status(404).json({ message: 'User not found.' });
+      }
+  
+      res.json({ message: 'Profile updated successfully.', user: updatedUser });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'An error occurred while updating the profile.' });
     }
   });
 

@@ -68,6 +68,36 @@ export function storeUserId(userId) {
     }
   };
 
+  export const setProfileInfo = async (bio, picture, isPrivate) => { 
+    const userId = getUserId();
+  
+    try {
+      const response = await fetch(`http://98.80.48.42:3000/api/users/${userId}/profile`, {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          biography: bio,
+          profilePicture: picture,
+          isPrivate: isPrivate,
+        }),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to update profile information.');
+      }
+  
+      const result = await response.json();
+      console.log('Profile updated successfully:', result);
+      return result; // Return the result for further use if needed
+    } catch (error) {
+      console.error('Error updating profile:', error.message);
+      throw error; // Rethrow the error to handle it in the calling code
+    }
+  };
+
  // Function to fetch followers of the current user
 export const getUserFollowers = async (userID) => {
   const userId = userID; // Get the current user's ID

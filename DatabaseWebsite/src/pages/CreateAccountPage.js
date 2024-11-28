@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../CSS/CreateAccountPage.css'; //importing the css
+import { useNavigate } from 'react-router-dom';
+import { storeUserId } from '../userData/user';
 
 
 function CreateAccountPage() {
@@ -15,6 +17,8 @@ function CreateAccountPage() {
   });
 
   const [errors, setErrors] = useState({});
+
+  const navigate = useNavigate();
 
   // Validation functions
   const validateName = (name) => /^[A-Za-z]+$/.test(name);
@@ -95,6 +99,7 @@ function CreateAccountPage() {
 
         if (response.ok) {
           console.log('Account created:', result);
+          storeUserId(result.user._id);
           // Reset form
           setFormData({
             firstName: '',
@@ -106,6 +111,8 @@ function CreateAccountPage() {
             confirmPassword: '',
           });
           setErrors({});
+          navigate('/HomeFeed');
+
         } else {
           console.error('Failed to create account:', result.message);
           setErrors({ apiError: result.message });

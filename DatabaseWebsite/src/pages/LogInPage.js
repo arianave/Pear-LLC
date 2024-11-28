@@ -65,7 +65,7 @@ function LogInPage() { //manage state of log in form
           setServerError(''); // reset server error state
 
           // Redirect to profile page
-          navigate(`/ProfilePage/${userId}`); // Navigate to the dashboard page
+          navigate('/HomeFeed'); // Navigate to the dashboard page
         } else {
           // Display error if login fails
           setServerError('Invalid username or password. Please try again.');

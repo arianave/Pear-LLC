@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { getUserPosts } from '../userData/userPosts';
 import Post from '../components/Post'; 
-import { getUserInfo, getUserFollowers, getUserFollowing, getUserId, unfollowUser, followUser} from '../userData/user'; // Update this to fetch followers/following data
+import { getUserInfo, getUserFollowers, getUserFollowing, getUserId, unfollowUser, followUser, removeUserId} from '../userData/user'; // Update this to fetch followers/following data
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
@@ -56,7 +56,7 @@ function ProfilePage() {
         ...prevProfile,
         userId: userInfo.userId,
         username: userInfo.username || 'No username', // Use the username or a default value
-        bio: userInfo.profileBiography || 'No bio available',      // Use the bio or a default value
+        bio: userInfo.profileBiography || 'No bio yet',      // Use the bio or a default value
         totalPosts: num, // Update the post count
         followers: followers.length, // Set followers count
         following: following.length, // Set following count
@@ -78,12 +78,12 @@ function ProfilePage() {
 
   const handleEditProfile = () => {
     console.log('Edit profile clicked');
-    navigate('/EditProfile'); //Edit profile page doesnt yet exist
+    navigate('/EditProfile');
   };
 
   const handleLogout = () => {
     console.log('Logging out');
-    // Logic for logging out the user to be implemented 
+    removeUserId();
     navigate('/LogInPage');
   };
 
