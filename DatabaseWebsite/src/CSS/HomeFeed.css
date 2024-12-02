@@ -40,3 +40,15 @@
     border-radius: 5px; /* Rounded corners */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Shadow effect */
 }
+.card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 7.4px 0;
+    border: 1.7px solid var(--border);
+    border-radius: 7px;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+    background-color: white;
+    overflow: hidden;
+}
