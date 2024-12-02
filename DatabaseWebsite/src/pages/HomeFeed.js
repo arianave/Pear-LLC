@@ -9,7 +9,7 @@ import { url } from "../baseUrl";
 import { api } from "../../../Interceptor/apiCall";
 import defaultImg from '../../public/dafault.png'
 import ReactTimeAgo from 'react-time-ago'
-import { AuthContext } from '../../../context/Auth'
+import { AuthContext } from './Auth'
 import { useContext } from "react";
 import { Post } from "../../dialog/Post";
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material'
