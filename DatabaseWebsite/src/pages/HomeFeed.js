@@ -5,7 +5,7 @@ import '../CSS/HomeFeed.css'; //importing the css
 import { useEffect } from "react";
 import { useRef } from "react";
 import { moreIcons, commentIcon, emojiIcon, likeOutline, shareIcon, afterLike, saveHome, saveIconOutline } from "../../../assets/svgIcons";
-import { url } from "../../../baseUrl";
+import { url } from "../baseUrl";
 import { api } from "../../../Interceptor/apiCall";
 import defaultImg from '../../public/dafault.png'
 import ReactTimeAgo from 'react-time-ago'
