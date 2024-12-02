@@ -2,6 +2,19 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../CSS/HomeFeed.css'; //importing the css
 
+import { useEffect } from "react";
+import { useRef } from "react";
+import { moreIcons, commentIcon, emojiIcon, likeOutline, shareIcon, afterLike, saveHome, saveIconOutline } from "../../../assets/svgIcons";
+import { url } from "../../../baseUrl";
+import { api } from "../../../Interceptor/apiCall";
+import defaultImg from '../../../assets/dafault.png'
+import ReactTimeAgo from 'react-time-ago'
+import { AuthContext } from '../../../context/Auth'
+import { useContext } from "react";
+import { Post } from "../../dialog/Post";
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material'
+import Emoji from "../../emoji/Emoji";
+
 function HomeFeed() {
   const [posts, setPosts] = useState([]); // State for storing posts
 
