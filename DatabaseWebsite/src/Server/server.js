@@ -33,7 +33,7 @@ const User = mongoose.model('User', UserSchema);
 
 const PostSchema = new mongoose.Schema({
   postID:mongoose.Schema.Types.ObjectId,
-  userID: mongoose.Schema.Types.ObjectId,  
+  userID: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },  
   textContent: String,                         
   mediaContent: String,                        
   creationDate: Date,                               
