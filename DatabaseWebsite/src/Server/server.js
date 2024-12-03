@@ -514,10 +514,19 @@ app.get('/api/users', async (req, res) => {
             return res.status(200).json({ success: true, posts: [] });
         }
 
-        // Retrieve posts by followed users
-        const posts = await Post.find({ userID: { $in: followData.following } }).sort({ creationDate: -1 });
+        // Retrieve posts by followed users and populate their usernames
+        const posts = await Post.find({ userID: { $in: followData.following } })
+            .sort({ creationDate: -1 })
+            .populate('userID', 'username'); // Populate the username field
 
-        res.status(200).json({ success: true, posts });
+        const formattedPosts = posts.map(post => ({
+            _id: post._id,
+            username: post.userID.username, // Extract the populated username
+            textContent: post.textContent,
+            creationDate: post.creationDate,
+        }));
+
+        res.status(200).json({ success: true, posts: formattedPosts });
     } catch (error) {
         console.error('Error fetching followed posts:', error);
         res.status(500).json({ success: false, message: 'Internal server error' });
