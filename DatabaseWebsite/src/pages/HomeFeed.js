@@ -4,25 +4,25 @@ import '../CSS/HomeFeed.css'; //importing the css
 
 import { useEffect } from "react";
 import { useRef } from "react";
-import { moreIcons, commentIcon, emojiIcon, likeOutline, shareIcon, afterLike, saveHome, saveIconOutline } from "../../../assets/svgIcons";
+import { moreIcons, commentIcon, emojiIcon, likeOutline, shareIcon, afterLike, saveHome, saveIconOutline } from "./svgIcons";
 import { url } from "../baseUrl";
-import { api } from "../../../Interceptor/apiCall";
-import defaultImg from '../../public/dafault.png'
+import { api } from "./apiCall";
+import defaultImg from '../images/defaultPFP.png'
 import ReactTimeAgo from 'react-time-ago'
 import { AuthContext } from './Auth'
 import { useContext } from "react";
-import { Post } from "../../dialog/Post";
+import { Post } from "./dialog/Post";
 import { Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material'
-import Emoji from "../../emoji/Emoji";
+import Emoji from "./Emoji";
 
-export default function Card({ img, likes, caption, time, comments, userId, id, saved, filterPosts, filterUserPosts }) {
+export default function HomeFeed({ img, likes, caption, time, comments, userId, id, saved, filterPosts, filterUserPosts }) {
   const context = useContext(AuthContext)
   const [comment, setComment] = useState('')
-  const [commnetsCount, setCommentsCount] = useState(comments.length)
-  const [likesCount, setLikesCount] = useState(likes.length)
-  const [iLiked, setIliked] = useState(likes.includes(context.auth._id))
-  const [user, setUser] = useState()
-  const [iSaved, setIsaved] = useState(saved.includes(context.auth._id))
+  const [commnetsCount, setCommentsCount] = useState(comments.length || 0)
+  const [likesCount, setLikesCount] = useState(likes.length || 0)
+  const [iLiked, setIliked] = useState(likes.includes(context.auth._id || false))
+  const [user, setUser] = useState(null)
+  const [iSaved, setIsaved] = useState(saved.includes(context.auth._id || false))
 
   const [captionText, setCaptionText] = useState(caption)
   const [captionShow, setCaptionShow] = useState(caption)
