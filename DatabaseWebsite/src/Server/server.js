@@ -508,28 +508,19 @@ app.get('/api/users', async (req, res) => {
     const userId = req.params.userId;
 
     try {
-        const followsCollection = db.collection('follows');
-        const postsCollection = db.collection('posts');
-
-        // Step 1: Get the list of users that the current user follows, using userID instead of _id
-        const followData = await followsCollection.findOne({ userID: ObjectId(userId) });
-
-        if (!followData) {
-            return res.status(404).json({ message: 'User not found or not following anyone.' });
+        // Get the list of followed users
+        const followData = await Follow.findOne({ userID: userId });
+        if (!followData || !followData.following.length) {
+            return res.status(200).json({ success: true, posts: [] });
         }
 
-        const following = followData.following; // Array of userIDs that this user follows
+        // Retrieve posts by followed users
+        const posts = await Post.find({ userID: { $in: followData.following } }).sort({ creationDate: -1 });
 
-        // Step 2: Get posts from the users the current user is following
-        const posts = await postsCollection
-            .find({ userID: { $in: following.map(id => ObjectId(id)) } }) // Find posts by followed user IDs
-            .sort({ createdAt: -1 }) // Sort posts by creation date, newest first
-            .toArray();
-
-        res.json({ posts });
+        res.status(200).json({ success: true, posts });
     } catch (error) {
         console.error('Error fetching followed posts:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        res.status(500).json({ success: false, message: 'Internal server error' });
     }
 });
 
