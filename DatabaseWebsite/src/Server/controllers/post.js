@@ -1,8 +1,11 @@
 const Post = require("../schema/Post");
-const User = require("../models/User");
+//const User = require("../models/User");
+import { getUserId } from '../../userData/user';
 const { all } = require("../routes/post");
 
-exports.getPost = async (req, res) => {
+const userID = getUserId();
+
+exports.getPost = async (res) => {
   try {
     const post = await Post.findOne({ _id: req.params.postId });
     if (!post)
@@ -19,12 +22,12 @@ exports.getPost = async (req, res) => {
   }
 };
 
-exports.createPost = async (req, res) => {
+exports.createPost = async (res) => {
   try {
-    const post = new Post({ ...req.body, owner: req.user._id });
+    const post = new Post({ ...req.body, owner: userID });
     const saved = await post.save();
     await User.updateOne(
-      { _id: req.user._id },
+      { _id: userID },
       { $push: { posts: saved._id } }
     );
     res.send(saved);
@@ -36,17 +39,17 @@ exports.createPost = async (req, res) => {
   }
 };
 
-exports.deletePost = async (req, res) => {
+exports.deletePost = async (res) => {
   try {
     const post = await Post.findOne({ _id: req.params.postId });
-    if (post.owner.toString() !== req.user._id.toString())
+    if (post.owner.toString() !== userID.toString())
       return res.status(401).send({
         success: false,
         message: "forbidden",
       });
     await Post.deleteOne({ _id: req.params.postId });
     await User.updateOne(
-      { _id: req.user._id },
+      { _id: userID },
       { $pull: { posts: req.params.postId } }
     );
     res.status(200).send({
@@ -61,7 +64,7 @@ exports.deletePost = async (req, res) => {
   }
 };
 
-exports.updatePost = async (req, res) => {
+exports.updatePost = async (res) => {
   try {
     const { caption } = req.body;
     if (!caption)
@@ -85,9 +88,9 @@ exports.updatePost = async (req, res) => {
   }
 };
 
-exports.likesHandle = async (req, res) => {
+exports.likesHandle = async (res) => {
   try {
-    const user = req.user._id;
+    const user = userID;
     const post = await Post.findOne({ _id: req.params.postId });
     if (!post)
       return res.send({
@@ -131,7 +134,7 @@ exports.likesHandle = async (req, res) => {
   }
 };
 
-exports.addComment = async (req, res) => {
+exports.addComment = async (res) => {
   try {
     const post = await Post.findOne({ _id: req.params.postId });
     if (!req.body.comment)
@@ -146,15 +149,15 @@ exports.addComment = async (req, res) => {
       });
     const comment = await Post.updateOne(
       { _id: req.params.postId },
-      { $push: { comments: { user: req.user._id, comment: req.body.comment } } }
+      { $push: { comments: { user: userID, comment: req.body.comment } } }
     );
-    if (post.owner != req.user._id)
+    if (post.owner != userID)
       await User.updateOne(
         { _id: post.owner.toString() },
         {
           $push: {
             notifications: {
-              user: req.user._id,
+              user: userID,
               content: `commented : ${req.body.comment} `,
               NotificationType: 2,
               postId: req.params.postId,
@@ -171,7 +174,7 @@ exports.addComment = async (req, res) => {
   }
 };
 
-exports.updateComment = async (req, res) => {
+exports.updateComment = async (res) => {
   try {
     const comment = await Post.updateOne(
       { _id: req.params.postId, "comments._id": req.query.commentId },
@@ -186,7 +189,7 @@ exports.updateComment = async (req, res) => {
   }
 };
 
-exports.deleteComment = async (req, res) => {
+exports.deleteComment = async (res) => {
   try {
     const post = await Post.findOne({ _id: req.params.postId });
     const commentId = req.query.commentId;
@@ -208,30 +211,30 @@ exports.deleteComment = async (req, res) => {
   }
 };
 
-exports.save = async (req, res) => {
+exports.save = async (res) => {
   try {
-    const userFind = await User.findOne({ _id: req.user._id });
+    const userFind = await User.findOne({ _id: userID });
     const savedArr = userFind.saved;
     if (savedArr.includes(req.params.postId)) {
       await User.updateOne(
-        { _id: req.user._id },
+        { _id: userID },
         { $pull: { saved: req.params.postId } }
       );
       await Post.updateOne(
         { _id: req.params.postId },
-        { $pull: { saved: req.user._id } }
+        { $pull: { saved: userID } }
       );
       res.send({
         success: true,
       });
     } else {
       await User.updateOne(
-        { _id: req.user._id },
+        { _id: userID },
         { $push: { saved: req.params.postId } }
       );
       await Post.updateOne(
         { _id: req.params.postId },
-        { $push: { saved: req.user._id } }
+        { $push: { saved: userID } }
       );
       res.send({
         success: true,
@@ -246,7 +249,7 @@ exports.save = async (req, res) => {
 };
 
 // users post
-exports.userPosts = async (req, res) => {
+exports.userPosts = async (res) => {
   try {
     const { userId } = req.params;
     const posts = await Post.find({ owner: userId }).sort({ createdAt: -1 });
@@ -260,9 +263,9 @@ exports.userPosts = async (req, res) => {
 };
 
 // explore post
-exports.explore = async (req, res) => {
+exports.explore = async (res) => {
   try {
-    const posts = await Post.find({ owner: { $ne: req.user._id } }).sort({
+    const posts = await Post.find({ owner: { $ne: userID } }).sort({
       createdAt: -1,
     });
     res.send(posts);
@@ -275,9 +278,9 @@ exports.explore = async (req, res) => {
 };
 
 // saved posts
-exports.savedPosts = async (req, res) => {
+exports.savedPosts = async (res) => {
   try {
-    const findUser = await User.findOne({ _id: req.user._id });
+    const findUser = await User.findOne({ _id: userID });
     let savedPost = [];
     Promise.all(
       findUser.saved.map(async (item) => {
@@ -295,9 +298,9 @@ exports.savedPosts = async (req, res) => {
 };
 
 // followings + my posts (home)
-exports.homePosts = async (req, res) => {
+exports.homePosts = async (res) => {
   try {
-    const userId = req.user._id;
+    const userId = userID;
     const posts = await Post.find({ owner: userId });
     const user = await User.findOne({ _id: userId });
     Promise.all(
