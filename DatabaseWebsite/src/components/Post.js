@@ -155,6 +155,17 @@ function Post({ creator, postDate, postContent, postId }) {
               <div className="post-content">
                 {postContent ? <p>{postContent}</p> : <p>No content available</p>}
               </div>
+              {mediaType && mediaUrl && (
+                <div className="post-media">
+                  {mediaType === 'image' && <img src={mediaUrl} alt="Post media" />}
+                  {mediaType === 'video' && (
+                    <video controls>
+                      <source src={mediaUrl} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  )}
+                </div>
+              )}
               <div className="post-votes">
               <button onClick={handleUpvote} className={hasUpvoted ? "upvote active" : "upvote"}>
                 <FontAwesomeIcon icon={faArrowUp} />

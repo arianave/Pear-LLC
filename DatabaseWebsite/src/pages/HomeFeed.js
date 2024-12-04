@@ -67,8 +67,11 @@ function HomeFeed() {
               creator={post.username}
               postDate={post.creationDate}
               postContent={post.textContent || 'No content available'}
+              mediaUrl={post.mediaUrl || null}
+              mediaType={post.mediaType || null}
               postId={post._id}
             />
+
           ))
         )}
       </div>
