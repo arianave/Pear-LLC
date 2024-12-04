@@ -4,12 +4,12 @@ const cors = require('cors');
 const app = express();
 process.env.PORT = 3000;
 const port = process.env.PORT || 5000;
-import multer from 'multer';
-import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import dotenv from 'dotenv';
-import crypto from 'crypto';
-import sharp from 'sharp';
+const multer = require('multer');
+const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
+const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
+const dotenv = require('dotenv');
+const crypto = require('crypto');
+const sharp = require('sharp');
 
 dotenv.config();
 
@@ -238,10 +238,19 @@ app.post('/api/login', async (req, res) => {
 
   app.post('/api/post', upload.single('mediaContent'), async (req, res) => {
     try {
+        console.log('Request body:', req.body); // Log form fields
+        console.log('Uploaded file:', req.file); // Log uploaded file details
+
         const { userID, textContent, postType } = req.body;
 
-        // Process media content (if provided)
+        // Check for missing fields
+        if (!postType || !userID) {
+            return res.status(400).json({ success: false, message: 'Post type and user ID are required' });
+        }
+
         let imageName = null;
+
+        // Process media content
         if (req.file) {
             const buffer = await sharp(req.file.buffer)
                 .resize({ height: 1080, width: 1080, fit: "contain" })
@@ -259,19 +268,17 @@ app.post('/api/login', async (req, res) => {
             await s3.send(command);
         }
 
-        // Create the new post object
         const newPost = new Post({
             userID,
             textContent,
-            mediaContent: imageName, // Store the file name/key only
+            mediaContent: imageName,
             creationDate: new Date(),
         });
 
-        // Save the new post to the database
         await newPost.save();
         res.status(201).json({ success: true, post: newPost });
     } catch (error) {
-        console.error('Error creating post:', error);
+        console.error('Error creating post:', error); // Log error details
         res.status(500).json({ success: false, message: 'Error creating post', error });
     }
 });
