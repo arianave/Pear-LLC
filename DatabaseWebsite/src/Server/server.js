@@ -645,6 +645,8 @@ app.get('/api/users', async (req, res) => {
             username: post.userID.username, // Extract the populated username
             textContent: post.textContent,
             creationDate: post.creationDate,
+            mediaUrl: post.mediaUrl,
+            mediaType: post.mediaType,
         }));
 
         res.status(200).json({ success: true, posts: formattedPosts });

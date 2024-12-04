@@ -1,14 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import './Post.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowUp, faArrowDown, faTimes } from '@fortawesome/free-solid-svg-icons';
-import { getPostComments, addComment, upvotePost, downvotePost, getPostVoteCount, checkIfUserHasVoted } from '../userData/postComments';
-import { getUserId, getUsername } from '../userData/user';
+import React, { useState, useEffect } from "react";
+import "./Post.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowUp,
+  faArrowDown,
+  faTimes,
+} from "@fortawesome/free-solid-svg-icons";
+import {
+  getPostComments,
+  addComment,
+  upvotePost,
+  downvotePost,
+  getPostVoteCount,
+  checkIfUserHasVoted,
+} from "../userData/postComments";
+import { getUserId, getUsername } from "../userData/user";
 
 function Post({ creator, postDate, postContent, postId, mediaType, mediaUrl }) {
   const [comments, setComments] = useState([]);
   const [votesCount, setVotesCount] = useState(0);
-  const [newComment, setNewComment] = useState('');
+  const [newComment, setNewComment] = useState("");
   const [hasUpvoted, setUpvote] = useState(false);
   const [hasDownvoted, setDownvote] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -21,11 +32,11 @@ function Post({ creator, postDate, postContent, postId, mediaType, mediaUrl }) {
       if (initialVoteCount !== null) {
         setVotesCount(initialVoteCount);
       }
-  
+
       // Check if user has already voted on this post
       const userHasVoted = await checkIfUserHasVoted(postId, userId);
       if (userHasVoted.hasVoted) {
-        if (userHasVoted.voteType === 'upvote') {
+        if (userHasVoted.voteType === "upvote") {
           setUpvote(true);
           setDownvote(false);
         } else {
@@ -37,11 +48,11 @@ function Post({ creator, postDate, postContent, postId, mediaType, mediaUrl }) {
         setDownvote(false);
       }
     };
-  
+
     // Function to fetch comments and their usernames
     const fetchComments = async () => {
       const postComments = await getPostComments(postId);
-  
+
       // Fetch usernames for each comment
       const commentsWithUsernames = await Promise.all(
         postComments.map(async (comment) => {
@@ -49,13 +60,13 @@ function Post({ creator, postDate, postContent, postId, mediaType, mediaUrl }) {
           return { ...comment, username }; // Add username to comment data
         })
       );
-  
+
       setComments(commentsWithUsernames);
     };
-  
+
     if (postId) {
       fetchVotes(); // Always fetch votes when postId changes
-  
+
       if (isExpanded) {
         fetchComments(); // Fetch comments only if the post is expanded
       }
@@ -91,58 +102,72 @@ function Post({ creator, postDate, postContent, postId, mediaType, mediaUrl }) {
   const handleAddComment = async () => {
     if (newComment.trim()) {
       try {
-      const addedComment = await addComment(userId, postId, newComment);
-      const username = await getUsername(userId);
-      const commentWithUsername = {
-        ...addedComment,
-        username: username,
-      };
-      setComments((prevComments) => [...prevComments, commentWithUsername]);
-      setNewComment(''); // Clear input field after adding comment
-    } catch (error){
-      console.error("Error adding comment:", error);
+        const addedComment = await addComment(userId, postId, newComment);
+        const username = await getUsername(userId);
+        const commentWithUsername = {
+          ...addedComment,
+          username: username,
+        };
+        setComments((prevComments) => [...prevComments, commentWithUsername]);
+        setNewComment(""); // Clear input field after adding comment
+      } catch (error) {
+        console.error("Error adding comment:", error);
+      }
     }
-  }
   };
 
   return (
     <>
       {/* Compact View */}
       <div className="post-compact" onClick={() => setIsExpanded(true)}>
-          <div className="post-header">
-              <h4 className="post-creator">{creator}</h4> {/* Username */}
-              <p className="post-date">{new Date(postDate).toLocaleDateString()}</p>
+        <div className="post-header">
+          <h4 className="post-creator">{creator}</h4>
+          <p className="post-date">{new Date(postDate).toLocaleDateString()}</p>
+        </div>
+        <div className="post-content-layout">
+          <p className="post-content">{postContent}</p>
+        </div>
+        {mediaType && mediaUrl && (
+          <div className="post-media">
+            {mediaType === "image" && <img src={mediaUrl} alt="Post media" />}
+            {mediaType === "video" && (
+              <video controls>
+                <source src={mediaUrl} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            )}
           </div>
-          <div className="post-content-layout">
-              <p className="post-content">{postContent}</p> {/* Post content */}
-          </div>
-          <div className="post-votes">
-              <button
-                  onClick={(e) => {
-                      e.stopPropagation();
-                      handleUpvote();
-                  }}
-                  className={hasUpvoted ? "upvote active" : "upvote"}
-              >
-                  <FontAwesomeIcon icon={faArrowUp} />
-              </button>
-              <span>{votesCount}</span>
-              <button
-                  onClick={(e) => {
-                      e.stopPropagation();
-                      handleDownvote();
-                  }}
-                  className={hasDownvoted ? "downvote active" : "downvote"}
-              >
-                  <FontAwesomeIcon icon={faArrowDown} />
-              </button>
-          </div>
+        )}
+        <div className="post-votes">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleUpvote();
+            }}
+            className={hasUpvoted ? "upvote active" : "upvote"}
+          >
+            <FontAwesomeIcon icon={faArrowUp} />
+          </button>
+          <span>{votesCount}</span>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDownvote();
+            }}
+            className={hasDownvoted ? "downvote active" : "downvote"}
+          >
+            <FontAwesomeIcon icon={faArrowDown} />
+          </button>
+        </div>
       </div>
 
       {/* Expanded Popout */}
       {isExpanded && (
         <div className="post-popout">
-          <div className="popout-overlay" onClick={() => setIsExpanded(false)}></div>
+          <div
+            className="popout-overlay"
+            onClick={() => setIsExpanded(false)}
+          ></div>
           <div className="popout-content">
             <button className="close-btn" onClick={() => setIsExpanded(false)}>
               <FontAwesomeIcon icon={faTimes} />
@@ -150,15 +175,23 @@ function Post({ creator, postDate, postContent, postId, mediaType, mediaUrl }) {
             <div className="post-left-panel">
               <div className="post-header">
                 <h4 className="post-creator">{creator}</h4>
-                <p className="post-date">{new Date(postDate).toLocaleDateString()}</p>
+                <p className="post-date">
+                  {new Date(postDate).toLocaleDateString()}
+                </p>
               </div>
               <div className="post-content">
-                {postContent ? <p>{postContent}</p> : <p>No content available</p>}
+                {postContent ? (
+                  <p>{postContent}</p>
+                ) : (
+                  <p>No content available</p>
+                )}
               </div>
               {mediaType && mediaUrl && (
                 <div className="post-media">
-                  {mediaType === 'image' && <img src={mediaUrl} alt="Post media" />}
-                  {mediaType === 'video' && (
+                  {mediaType === "image" && (
+                    <img src={mediaUrl} alt="Post media" />
+                  )}
+                  {mediaType === "video" && (
                     <video controls>
                       <source src={mediaUrl} type="video/mp4" />
                       Your browser does not support the video tag.
@@ -167,14 +200,20 @@ function Post({ creator, postDate, postContent, postId, mediaType, mediaUrl }) {
                 </div>
               )}
               <div className="post-votes">
-              <button onClick={handleUpvote} className={hasUpvoted ? "upvote active" : "upvote"}>
-                <FontAwesomeIcon icon={faArrowUp} />
-              </button>
-              <span>{votesCount}</span>
-              <button onClick={handleDownvote} className={hasDownvoted ? "downvote active" : "downvote"}>
-                <FontAwesomeIcon icon={faArrowDown} />
-              </button>
-            </div>
+                <button
+                  onClick={handleUpvote}
+                  className={hasUpvoted ? "upvote active" : "upvote"}
+                >
+                  <FontAwesomeIcon icon={faArrowUp} />
+                </button>
+                <span>{votesCount}</span>
+                <button
+                  onClick={handleDownvote}
+                  className={hasDownvoted ? "downvote active" : "downvote"}
+                >
+                  <FontAwesomeIcon icon={faArrowDown} />
+                </button>
+              </div>
             </div>
             <div className="post-right-panel">
               <div className="post-comments">
