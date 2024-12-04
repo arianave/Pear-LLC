@@ -109,34 +109,34 @@ function Post({ creator, postDate, postContent, postId }) {
     <>
       {/* Compact View */}
       <div className="post-compact" onClick={() => setIsExpanded(true)}>
-        <div className="post-header">
-          <h4 className="post-creator">{creator}</h4>
-          <p className="post-date">{new Date(postDate).toLocaleDateString()}</p>
-        </div>
-        <div className="post-content">
-          {postContent ? <p>{postContent}</p> : <p>No content available</p>}
-        </div>
-        <div className="post-votes">
-        <button
+          <div className="post-header">
+              <h4 className="post-creator">{creator}</h4> {/* Username */}
+              <p className="post-date">{new Date(postDate).toLocaleDateString()}</p>
+          </div>
+          <div className="post-content-layout">
+              <p className="post-content">{postContent}</p> {/* Post content */}
+          </div>
+          <div className="post-votes">
+              <button
                   onClick={(e) => {
-                    e.stopPropagation(); // Prevent click from enlarging the post
-                    handleUpvote();
+                      e.stopPropagation();
+                      handleUpvote();
                   }}
                   className={hasUpvoted ? "upvote active" : "upvote"}
-                >
-            <FontAwesomeIcon icon={faArrowUp} />
-          </button>
-          <span>{votesCount}</span>
-          <button
+              >
+                  <FontAwesomeIcon icon={faArrowUp} />
+              </button>
+              <span>{votesCount}</span>
+              <button
                   onClick={(e) => {
-                    e.stopPropagation(); // Prevent click from enlarging the post
-                    handleDownvote();
+                      e.stopPropagation();
+                      handleDownvote();
                   }}
                   className={hasDownvoted ? "downvote active" : "downvote"}
-                >
-            <FontAwesomeIcon icon={faArrowDown} />
-          </button>
-        </div>
+              >
+                  <FontAwesomeIcon icon={faArrowDown} />
+              </button>
+          </div>
       </div>
 
       {/* Expanded Popout */}
