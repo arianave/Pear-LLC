@@ -6,7 +6,7 @@
     flex-direction: column; /* Stack content vertically */
     height: 100vh; /* Full viewport height */
     padding: 20px;
-    background-color: #f9f9f9; /* Background color for the home feed */
+    background-color: none; /* Background color for the home feed */
     box-sizing: border-box; /* Include padding in height calculation */
 }
 

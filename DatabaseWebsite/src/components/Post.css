@@ -19,11 +19,11 @@
 /* Post header for creator name and date */
 .post-header {
   display: flex;
+  align-items: center; /* Align username and date vertically */
   justify-content: space-between;
-  align-items: center;
   border-bottom: 1px solid #ddd;
   padding-bottom: 10px;
-  margin-bottom: 16px;
+  margin-bottom: 10px;
 }
 
 .post-creator {
@@ -35,6 +35,20 @@
 .post-date {
   font-size: 14px;
   color: #95a5a6;
+}
+
+.post-content-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 10px; /* Add some space from the left */
+}
+
+.post-creator {
+  font-size: 18px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-right: 10px; /* Add space between username and text */
 }
 
 /* Content area styling */
