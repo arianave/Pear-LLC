@@ -63,7 +63,8 @@ const PostSchema = new mongoose.Schema({
   textContent: String,                         
   mediaContent: String,                        
   creationDate: Date, 
-  mediaUrl: String,                              
+  mediaUrl: String,
+  mediaType: String,                              
 });
 
 const Post = mongoose.model('Post', PostSchema);
@@ -219,21 +220,19 @@ app.post('/api/login', async (req, res) => {
     }
   });
 
-  app.get('/api/post', async (req, res) => {
-    const posts = await Post.find(); // Fetch all posts
-  
-    for (const post of posts) {
-      const GetObjectParams = {
-        Bucket: bucketName,
-        Key: post.imageName, // Assumes media content key is stored in the `imageName` field
-      };
-  
+  app.get('/api/post/:mediaKey', async (req, res) => {
+    const { mediaKey } = req.params;
+    console.log(`Fetching media for key: ${mediaKey}`);
+    try {
+      const params = { Bucket: bucketName, Key: mediaKey };
       const command = new GetObjectCommand(GetObjectParams);
-      const url = await getSignedUrl(s3, command, { expiresIn: 60 });
-      post.mediaUrl = url; // Assign the signed URL to the post object
+      const mediaUrl = await getSignedUrl(s3, command, { expiresIn: 60 });
+      console.log(`Generated signed URL: ${mediaUrl}`);
+      res.status(200).json({ mediaUrl });
+    } catch (error) {
+      console.error(`Error fetching media URL for key: ${mediaKey}`, error);
+      res.status(500).json({ success: false, message: "Error fetching media URL" });
     }
-  
-    res.send(posts);
   });  
 
   app.post('/api/post', upload.single('mediaContent'), async (req, res) => {
@@ -248,6 +247,8 @@ app.post('/api/login', async (req, res) => {
         }
 
         let mediaKey = null;
+        let type = 'threads';
+        let mediaUrl = null;
 
         // Process media content based on type
         if (req.file) {
@@ -255,7 +256,7 @@ app.post('/api/login', async (req, res) => {
             const isVideo = req.file.mimetype.startsWith('video/');
 
             if (isImage) {
-                // Handle image processing
+                type = 'image';
                 const buffer = await sharp(req.file.buffer)
                     .resize({ height: 1080, width: 1080, fit: 'contain' })
                     .toBuffer();
@@ -270,18 +271,19 @@ app.post('/api/login', async (req, res) => {
 
                 const command = new PutObjectCommand(params);
                 await s3.send(command);
+
+                // Construct public URL
+                mediaUrl = `https://${bucketName}.s3.${bucketRegion}.amazonaws.com/${mediaKey}`;
             } else if (isVideo) {
-                // Handle video padding with FFmpeg
+                type = 'video';
                 const inputPath = path.join(__dirname, 'uploads', req.file.originalname);
                 const outputPath = path.join(__dirname, 'uploads', `processed-${req.file.originalname}`);
 
-                // Save the uploaded video temporarily to the server
                 fs.writeFileSync(inputPath, req.file.buffer);
 
-                // Add padding to fit canvas dimensions (1080x1080)
                 await new Promise((resolve, reject) => {
                     ffmpeg(inputPath)
-                    .outputOptions('-vf', 'scale=1080:1080:force_original_aspect_ratio=decrease')
+                        .outputOptions('-vf', 'scale=1080:1080:force_original_aspect_ratio=decrease')
                         .on('end', () => {
                             console.log('Video processing complete');
                             resolve();
@@ -293,7 +295,6 @@ app.post('/api/login', async (req, res) => {
                         .save(outputPath);
                 });
 
-                // Upload the padded video to S3
                 const videoBuffer = fs.readFileSync(outputPath);
                 mediaKey = randomImageName();
                 const params = {
@@ -306,7 +307,9 @@ app.post('/api/login', async (req, res) => {
                 const command = new PutObjectCommand(params);
                 await s3.send(command);
 
-                // Clean up temporary files
+                // Construct public URL
+                mediaUrl = `https://${bucketName}.s3.${bucketRegion}.amazonaws.com/${mediaKey}`;
+
                 fs.unlinkSync(inputPath);
                 fs.unlinkSync(outputPath);
             } else {
@@ -319,8 +322,10 @@ app.post('/api/login', async (req, res) => {
         const newPost = new Post({
             userID,
             textContent,
-            mediaContent: mediaKey, // Save the key, not a URL
+            mediaContent: mediaKey,
+            mediaUrl: mediaUrl, // Save public URL
             creationDate: new Date(),
+            mediaType: type,
         });
 
         await newPost.save();
