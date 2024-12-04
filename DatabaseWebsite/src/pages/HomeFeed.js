@@ -1,41 +1,47 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../CSS/HomeFeed.css'; //importing the css
+import Post from '../components/Post'; // Import the Post component
+import { useEffect } from 'react';
+import { getUserId } from '../userData/user';
+
 
 function HomeFeed() {
   const [posts, setPosts] = useState([]); // State for storing posts
 
-  // Sample posts for demonstration (replace with actual data fetching)
-  const samplePosts = [
-    {
-      id: 1,
-      username: 'user1',
-      profilePicture: 'https://via.placeholder.com/40',
-      timestamp: '2 hours ago',
-      content: 'This is a sample post.',
-    },
-    {
-      id: 2,
-      username: 'user2',
-      profilePicture: 'https://via.placeholder.com/40',
-      timestamp: '1 hour ago',
-      content: 'Another sample post here!',
-    },
-  ];
+  useEffect(() => {
+    const fetchPosts = async () => {
+        const userId = getUserId();
+        try {
+            const response = await fetch(`http://98.80.48.42:3000/getFollowedPosts/${userId}`);
+            const data = await response.json();
+            if (data.success) {
+                console.log('Fetched posts:', data.posts); // Debug log
+                setPosts(data.posts);
+            } else {
+                console.error('Failed to fetch followed posts:', data.message);
+            }
+        } catch (error) {
+            console.error('Error fetching followed posts:', error);
+        }
+    };
+
+    fetchPosts();
+}, []);
 
   // Navigate to the activity page
-  const handleActivityClick = () => {
+  //const handleActivityClick = () => {
     // You can use navigate here if you have a route for activity
     // navigate('/Activity');
-    console.log('Navigating to Activity'); // Placeholder action
-  };
+    //console.log('Navigating to Activity'); // Placeholder action
+  //};
 
   // Navigate to the column page
-  const handleColumnClick = () => {
+  //const handleColumnClick = () => {
     // You can use navigate here if you have a route for column
     // navigate('/Column');
-    console.log('Navigating to Column'); // Placeholder action
-  };
+    //console.log('Navigating to Column'); // Placeholder action
+  //};
 
   return (
     <div className="home-feed">
@@ -56,21 +62,13 @@ function HomeFeed() {
           <p className="empty-feed">Feed is currently empty. Follow some other users to fill this page up!</p>
         ) : (
           posts.map((post) => (
-            <div key={post.id} className="post-item">
-              <div className="post-header">
-                <img src={post.profilePicture} alt="Profile" className="profile-picture" />
-                <div className="post-user-info">
-                  <p className="username">{post.username}</p>
-                  <p className="timestamp">{post.timestamp}</p>
-                </div>
-              </div>
-              <p className="post-content">{post.content}</p>
-              <div className="post-actions">
-                <button className="upvote-button">👍</button>
-                <button className="downvote-button">👎</button>
-                <button className="comment-button">💬</button>
-              </div>
-            </div>
+            <Post
+              key={post._id}
+              creator={post.username}
+              postDate={post.creationDate}
+              postContent={post.textContent || 'No content available'}
+              postId={post._id}
+            />
           ))
         )}
       </div>
