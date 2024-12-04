@@ -21,11 +21,11 @@ const accessKey = process.env.ACCESS_KEY;
 const secretAccessKey = process.env.SECRET_ACCESS_KEY;
 
 const s3 = new S3Client({
+  region: bucketRegion,
   credentials:{
     accessKeyId: accessKey,
     secretAccessKey: secretAccessKey,
   },
-  region: bucketRegion
 
 });
 
@@ -131,8 +131,6 @@ joinDate: Date
 });
 
 const Join = mongoose.model('Join', JoinSchema);
-
-const multer = require('multer');
 const path = require('path');
 
 // Set up Multer for file storage
@@ -238,47 +236,95 @@ app.post('/api/login', async (req, res) => {
 
   app.post('/api/post', upload.single('mediaContent'), async (req, res) => {
     try {
-        console.log('Request body:', req.body); // Log form fields
-        console.log('Uploaded file:', req.file); // Log uploaded file details
+        console.log('Request body:', req.body);
+        console.log('Uploaded file:', req.file);
 
         const { userID, textContent, postType } = req.body;
 
-        // Check for missing fields
         if (!postType || !userID) {
             return res.status(400).json({ success: false, message: 'Post type and user ID are required' });
         }
 
-        let imageName = null;
+        let mediaKey = null;
 
-        // Process media content
+        // Process media content based on type
         if (req.file) {
-            const buffer = await sharp(req.file.buffer)
-                .resize({ height: 1080, width: 1080, fit: "contain" })
-                .toBuffer();
+            const isImage = req.file.mimetype.startsWith('image/');
+            const isVideo = req.file.mimetype.startsWith('video/');
 
-            imageName = randomImageName();
-            const params = {
-                Bucket: bucketName,
-                Key: imageName,
-                Body: buffer,
-                ContentType: req.file.mimetype,
-            };
+            if (isImage) {
+                // Handle image processing
+                const buffer = await sharp(req.file.buffer)
+                    .resize({ height: 1080, width: 1080, fit: 'contain' })
+                    .toBuffer();
 
-            const command = new PutObjectCommand(params);
-            await s3.send(command);
+                mediaKey = randomImageName();
+                const params = {
+                    Bucket: bucketName,
+                    Key: mediaKey,
+                    Body: buffer,
+                    ContentType: req.file.mimetype,
+                };
+
+                const command = new PutObjectCommand(params);
+                await s3.send(command);
+            } else if (isVideo) {
+                // Handle video padding with FFmpeg
+                const inputPath = path.join(__dirname, 'uploads', req.file.originalname);
+                const outputPath = path.join(__dirname, 'uploads', `processed-${req.file.originalname}`);
+
+                // Save the uploaded video temporarily to the server
+                fs.writeFileSync(inputPath, req.file.buffer);
+
+                // Add padding to fit canvas dimensions (1080x1080)
+                await new Promise((resolve, reject) => {
+                    ffmpeg(inputPath)
+                        .outputOptions('-vf', 'pad=1080:1080:(1080-iw)/2:(1080-ih)/2') // Pad to 1080x1080
+                        .on('end', () => {
+                            console.log('Video processing complete');
+                            resolve();
+                        })
+                        .on('error', (err) => {
+                            console.error('Error processing video:', err);
+                            reject(err);
+                        })
+                        .save(outputPath);
+                });
+
+                // Upload the padded video to S3
+                const videoBuffer = fs.readFileSync(outputPath);
+                mediaKey = randomImageName();
+                const params = {
+                    Bucket: bucketName,
+                    Key: mediaKey,
+                    Body: videoBuffer,
+                    ContentType: req.file.mimetype,
+                };
+
+                const command = new PutObjectCommand(params);
+                await s3.send(command);
+
+                // Clean up temporary files
+                fs.unlinkSync(inputPath);
+                fs.unlinkSync(outputPath);
+            } else {
+                return res.status(400).json({ success: false, message: 'Unsupported file type' });
+            }
+        } else if (postType === 'picture' || postType === 'video') {
+            return res.status(400).json({ success: false, message: 'Media content is required for picture or video posts' });
         }
 
         const newPost = new Post({
             userID,
             textContent,
-            mediaContent: imageName,
+            mediaContent: mediaKey, // Save the key, not a URL
             creationDate: new Date(),
         });
 
         await newPost.save();
         res.status(201).json({ success: true, post: newPost });
     } catch (error) {
-        console.error('Error creating post:', error); // Log error details
+        console.error('Error creating post:', error);
         res.status(500).json({ success: false, message: 'Error creating post', error });
     }
 });
