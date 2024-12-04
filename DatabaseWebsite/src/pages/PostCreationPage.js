@@ -38,47 +38,54 @@ function PostCreationPage() {
 
   // Handle post submission
   const handleSubmit = async () => {
+    console.log('Post type:', postType);
+    console.log('Text content:', textContent);
+    console.log('Media content:', mediaContent);
+    console.log('Caption:', caption);
+
     if (postType === 'text' && textContent.trim() === '') {
-      setError('Text post content is required.');
+        setError('Text post content is required.');
+        return;
     } else if ((postType === 'picture' || postType === 'video') && (!mediaContent || caption.trim() === '')) {
-      setError('Both media content and caption are required.');
-    } else {
-      try {
+        setError('Both media content and caption are required.');
+        return;
+    }
+
+    try {
         const formData = new FormData();
         formData.append('postType', postType);
-
-        if (postType === 'text') {
-          formData.append('textContent', textContent); // Send text content for text posts
-        } else {
-          formData.append('mediaContent', mediaContent); // Send media content (picture or video)
-          formData.append('caption', caption); // Send caption for media posts
-        }
-
         formData.append('userID', userID);
 
+        if (postType === 'text') {
+            formData.append('textContent', textContent);
+        } else {
+            formData.append('mediaContent', mediaContent);
+            formData.append('textContent', caption);
+        }
+
         const response = await fetch('http://98.80.48.42:3000/api/post', {
-          method: 'POST',
-          body: formData,
+            method: 'POST',
+            body: formData,
         });
 
         const result = await response.json();
 
         if (result.success) {
-          console.log('Post created successfully:', result);
-
-          // Reset form after submission
-          setPostType('');
-          setTextContent('');
-          setMediaContent(null);
-          setCaption('');
+            console.log('Post created successfully:', result);
+            setPostType('');
+            setTextContent('');
+            setMediaContent(null);
+            setCaption('');
+            setError('');
         } else {
-          console.error('Error creating post:', result.error);
+            console.error('Error creating post:', result.message);
+            setError(result.message);
         }
-      } catch (error) {
+    } catch (error) {
         console.error('Error during post creation:', error);
-      }
+        setError('An unexpected error occurred.');
     }
-  };
+};
 
   return (
     <div className="post-creation-container">

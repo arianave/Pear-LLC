@@ -10,6 +10,8 @@ const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const dotenv = require('dotenv');
 const crypto = require('crypto');
 const sharp = require('sharp');
+const ffmpeg = require('fluent-ffmpeg');
+const fs = require('fs');
 
 dotenv.config();
 
@@ -279,7 +281,7 @@ app.post('/api/login', async (req, res) => {
                 // Add padding to fit canvas dimensions (1080x1080)
                 await new Promise((resolve, reject) => {
                     ffmpeg(inputPath)
-                        .outputOptions('-vf', 'pad=1080:1080:(1080-iw)/2:(1080-ih)/2') // Pad to 1080x1080
+                    .outputOptions('-vf', 'scale=1080:1080:force_original_aspect_ratio=decrease')
                         .on('end', () => {
                             console.log('Video processing complete');
                             resolve();
