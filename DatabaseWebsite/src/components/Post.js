@@ -5,7 +5,7 @@ import { faArrowUp, faArrowDown, faTimes } from '@fortawesome/free-solid-svg-ico
 import { getPostComments, addComment, upvotePost, downvotePost, getPostVoteCount, checkIfUserHasVoted } from '../userData/postComments';
 import { getUserId, getUsername } from '../userData/user';
 
-function Post({ creator, postDate, postContent, postId }) {
+function Post({ creator, postDate, postContent, postId, mediaType, mediaUrl }) {
   const [comments, setComments] = useState([]);
   const [votesCount, setVotesCount] = useState(0);
   const [newComment, setNewComment] = useState('');
