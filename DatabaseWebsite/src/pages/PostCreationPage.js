@@ -5,7 +5,7 @@ import { getUserId } from '../userData/user';
 function PostCreationPage() {
   const [postType, setPostType] = useState(''); // Manages post type (text, picture, video, thread)
   const [textContent, setTextContent] = useState(''); // Manages text post content
-  const [mediaContent, setMediaContent] = useState(null); // Manages media content (picture or video)
+  const [mediaContent, setMediaContent] = useState(); // Manages media content (picture or video)
   const [caption, setCaption] = useState(''); // Manages caption for media posts
   const userID = getUserId(); // Retrieves the user's ID
   const [error, setError] = useState(''); // Handles validation errors

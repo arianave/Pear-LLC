@@ -4,6 +4,30 @@ const cors = require('cors');
 const app = express();
 process.env.PORT = 3000;
 const port = process.env.PORT || 5000;
+import multer from 'multer';
+import { S3Client, PutObjectAclCommand, GetObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import dotenv from 'dotenv';
+import crypto from 'crypto';
+import sharp from 'sharp';
+
+dotenv.config();
+
+const randomImageName = (bytes = 32) => crypto.randomBytes(bytes).toString('hex');
+
+const bucketName = process.env.BUCKET_NAME;
+const bucketRegion = process.env.BUCKET_REGION;
+const accessKey = process.env.ACCESS_KEY;
+const secretAccessKey = process.env.SECRET_ACCESS_KEY;
+
+const s3 = new S3Client({
+  credentials:{
+    accessKeyId: accessKey,
+    secretAccessKey: secretAccessKey,
+  },
+  region: bucketRegion
+
+});
 
 // Middleware
 app.use(cors());
@@ -36,7 +60,8 @@ const PostSchema = new mongoose.Schema({
   userID: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'User' },  
   textContent: String,                         
   mediaContent: String,                        
-  creationDate: Date,                               
+  creationDate: Date, 
+  mediaUrl: String,                              
 });
 
 const Post = mongoose.model('Post', PostSchema);
@@ -111,10 +136,10 @@ const multer = require('multer');
 const path = require('path');
 
 // Set up Multer for file storage
-
-
+const storage = multer.memoryStorage();
+const upload = multer ({ storage: storage});
 // Initialize the multer upload middleware
-const upload = multer({ dest: './uploads' });
+//const upload = multer({ dest: './uploads' });
 
 app.post('/api/users', async (req, res) => {
   const { firstName, lastName, email, username, password, birthDate } = req.body;
@@ -194,12 +219,42 @@ app.post('/api/login', async (req, res) => {
     }
   });
 
+  app.get('/api/post', async(req, res) =>{
+    const post = await Post.findMany({orderBy: [{ created: 'desc'}]});
+
+    for(const post of Post){
+      const GetObjectParams = {
+        Bucket: bucketName,
+        Key: post.imageName,
+      }
+  
+      const command = new GetObjectCommand(GetObjectParams);
+      const url = await getSignedUrl(s3, command, { expiresIn: 60});
+      post.imageUrl = url;
+    }
+    res.send(post);
+  });
+
   app.post('/api/post', upload.single('mediaContent'), async (req, res) => {
     try {
       const { userID, textContent, postType } = req.body;
-      const mediaContent = req.file ? req.file.path : null; // Handle file upload (if any)
+      //const mediaContent = req.file ? req.file.buffer : null; // Handle file upload (if any)
   
       let newPost;
+
+      //resize the image/video
+      const buffer = await sharp(req.file.buffer).resize({height: 1080, width: 1080, fit: "contain"}).toBuffer();
+
+      const imageName = randomImageName();
+      const params = {
+        Bucket: bucketName,
+        Key: imageName,
+        Body: buffer,
+        ContentType: req.file.mimetype,
+      }
+
+      const command = new PutObjectCommand(params);
+      await s3.send(command);
 
       // Handle text posts (no media)
     if (postType === 'text') {
@@ -217,7 +272,7 @@ app.post('/api/login', async (req, res) => {
       newPost = new Post({
         userID,
         textContent, // Save caption for picture posts
-        photoContent: mediaContent, // Save media in the correct field
+        photoContent: imageName, // Save media in the correct field
         creationDate: new Date(),
       });
     } 
@@ -229,7 +284,7 @@ app.post('/api/login', async (req, res) => {
       newPost = new Post({
         userID,
         textContent, // Save caption for video posts
-        videoContent: mediaContent, // Save media in the correct field
+        videoContent: imageName, // Save media in the correct field
         creationDate: new Date(),
       });
     } 
@@ -244,6 +299,38 @@ app.post('/api/login', async (req, res) => {
 
   } catch (error) {
     res.status(500).json({ success: false, message: 'Error creating post', error });
+  }
+});
+
+app.delete('/api/post/:id', async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    // Find the post by ID
+    const post = await Post.findById(id);
+    if (!post) {
+      res.status(404).send({ message: "Post Not Found" });
+      return;
+    }
+
+    // Delete the file from the S3 bucket
+    if (post.imageName) {
+      const params = {
+        Bucket: bucketName,
+        Key: post.imageName, // Ensure imageName is correctly stored in your Post model
+      };
+      const command = new DeleteObjectCommand(params);
+      await s3.send(command);
+    }
+
+    // Delete the post from the database
+    await Post.findByIdAndDelete(id);
+
+    // Send success response
+    res.status(200).send({ message: "Post deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    res.status(500).send({ message: "An error occurred while deleting the post" });
   }
 });
 
