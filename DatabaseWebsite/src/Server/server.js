@@ -219,87 +219,61 @@ app.post('/api/login', async (req, res) => {
     }
   });
 
-  app.get('/api/post', async(req, res) =>{
-    const post = await Post.findMany({orderBy: [{ created: 'desc'}]});
-
-    for(const post of Post){
+  app.get('/api/post', async (req, res) => {
+    const posts = await Post.find(); // Fetch all posts
+  
+    for (const post of posts) {
       const GetObjectParams = {
         Bucket: bucketName,
-        Key: post.imageName,
-      }
+        Key: post.imageName, // Assumes media content key is stored in the `imageName` field
+      };
   
       const command = new GetObjectCommand(GetObjectParams);
-      const url = await getSignedUrl(s3, command, { expiresIn: 60});
-      post.imageUrl = url;
+      const url = await getSignedUrl(s3, command, { expiresIn: 60 });
+      post.mediaUrl = url; // Assign the signed URL to the post object
     }
-    res.send(post);
-  });
+  
+    res.send(posts);
+  });  
 
   app.post('/api/post', upload.single('mediaContent'), async (req, res) => {
     try {
-      const { userID, textContent, postType } = req.body;
-      //const mediaContent = req.file ? req.file.buffer : null; // Handle file upload (if any)
-  
-      let newPost;
+        const { userID, textContent, postType } = req.body;
 
-      //resize the image/video
-      const buffer = await sharp(req.file.buffer).resize({height: 1080, width: 1080, fit: "contain"}).toBuffer();
+        // Process media content (if provided)
+        let imageName = null;
+        if (req.file) {
+            const buffer = await sharp(req.file.buffer)
+                .resize({ height: 1080, width: 1080, fit: "contain" })
+                .toBuffer();
 
-      const imageName = randomImageName();
-      const params = {
-        Bucket: bucketName,
-        Key: imageName,
-        Body: buffer,
-        ContentType: req.file.mimetype,
-      }
+            imageName = randomImageName();
+            const params = {
+                Bucket: bucketName,
+                Key: imageName,
+                Body: buffer,
+                ContentType: req.file.mimetype,
+            };
 
-      const command = new PutObjectCommand(params);
-      await s3.send(command);
+            const command = new PutObjectCommand(params);
+            await s3.send(command);
+        }
 
-      // Handle text posts (no media)
-    if (postType === 'text') {
-      newPost = new Post({
-        userID,
-        textContent, // Save text content for text posts
-        creationDate: new Date(),
-      });
-    } 
-    // Handle picture posts
-    else if (postType === 'picture') {
-      if (!mediaContent) {
-        return res.status(400).json({ success: false, message: 'Picture file is required' });
-      }
-      newPost = new Post({
-        userID,
-        textContent, // Save caption for picture posts
-        photoContent: imageName, // Save media in the correct field
-        creationDate: new Date(),
-      });
-    } 
-    // Handle video posts
-    else if (postType === 'video') {
-      if (!mediaContent) {
-        return res.status(400).json({ success: false, message: 'Video file is required' });
-      }
-      newPost = new Post({
-        userID,
-        textContent, // Save caption for video posts
-        videoContent: imageName, // Save media in the correct field
-        creationDate: new Date(),
-      });
-    } 
-    // Handle invalid post types
-    else {
-      return res.status(400).json({ success: false, message: 'Invalid post type' });
+        // Create the new post object
+        const newPost = new Post({
+            userID,
+            textContent,
+            mediaContent: imageName, // Store the file name/key only
+            creationDate: new Date(),
+        });
+
+        // Save the new post to the database
+        await newPost.save();
+        res.status(201).json({ success: true, post: newPost });
+    } catch (error) {
+        console.error('Error creating post:', error);
+        res.status(500).json({ success: false, message: 'Error creating post', error });
     }
-
-    // Save the new post to the database
-    await newPost.save();
-    res.status(201).json({ success: true, post: newPost });
-
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Error creating post', error });
-  }
 });
 
 app.delete('/api/post/:id', async (req, res) => {
