@@ -258,7 +258,7 @@ app.post('/api/login', async (req, res) => {
             if (isImage) {
                 type = 'image';
                 const buffer = await sharp(req.file.buffer)
-                    .resize({ height: 1080, width: 1080, fit: 'contain' })
+                    .resize({ height: 1080, width: 1080, fit: 'cover', position: 'center', })
                     .toBuffer();
 
                 mediaKey = randomImageName();
@@ -283,7 +283,7 @@ app.post('/api/login', async (req, res) => {
 
                 await new Promise((resolve, reject) => {
                     ffmpeg(inputPath)
-                        .outputOptions('-vf', 'scale=1080:1080:force_original_aspect_ratio=decrease')
+                        .outputOptions(['-vf', 'scale=1080:1080:force_original_aspect_ratio=decrease,pad=1080:1080:(ow-iw)/2:(oh-ih)/2', '-c:a copy',])
                         .on('end', () => {
                             console.log('Video processing complete');
                             resolve();

@@ -124,9 +124,6 @@ function Post({ creator, postDate, postContent, postId, mediaType, mediaUrl }) {
           <h4 className="post-creator">{creator}</h4>
           <p className="post-date">{new Date(postDate).toLocaleDateString()}</p>
         </div>
-        <div className="post-content-layout">
-          <p className="post-content">{postContent}</p>
-        </div>
         {mediaType && mediaUrl && (
           <div className="post-media">
             {mediaType === "image" && <img src={mediaUrl} alt="Post media" />}
@@ -138,6 +135,10 @@ function Post({ creator, postDate, postContent, postId, mediaType, mediaUrl }) {
             )}
           </div>
         )}
+        <hr />
+        <div className="post-content-layout">
+          <p className="post-content">{postContent}</p>
+        </div>
         <div className="post-votes">
           <button
             onClick={(e) => {
