@@ -258,3 +258,29 @@ export const removeUserFromFollowing = async (removeUserId, isSecondaryCall = fa
     return false;
   }
 };
+
+export const changeRequest = async (followUserId) => {
+  const userId = getUserId(); // Fetch the current user's ID
+  try {
+    const response = await fetch(`${getServerURL()}/api/changeRequest`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId, followUserId }), // Send both userId and followUserId
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      console.error('Failed to change request:', error.error);
+      return false;
+    }
+
+    const data = await response.json();
+    console.log(data.message); // Log success message
+    return true;
+  } catch (error) {
+    console.error('Error during request change:', error);
+    return false;
+  }
+};

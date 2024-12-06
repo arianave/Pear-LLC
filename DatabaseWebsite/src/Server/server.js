@@ -52,7 +52,8 @@ const UserSchema = new mongoose.Schema({
     creationDate: Date,
     profilePicture: String,
     profileBiography: String,
-    isPrivate: Boolean
+    isPrivate: Boolean,
+    requests: { type: [mongoose.Schema.Types.ObjectId], default: [] }
  });
 
 const User = mongoose.model('User', UserSchema);
@@ -156,7 +157,8 @@ app.post('/api/users', async (req, res) => {
       creationDate: new Date(),
       profileBiography: '',
       isPrivate: false, 
-      profilePicture: ''
+      profilePicture: '',
+      requests: []
     });
     await newUser.save(); // Save to the database
     res.status(201).json({ message: 'User created successfully', user: newUser });
@@ -862,6 +864,45 @@ app.post('/api/removeFollower', async (req, res) => {
   } catch (error) {
     console.error('Error removing follower:', error);
     res.status(500).json({ message: 'Error removing follower', error });
+  }
+});
+
+app.post('/api/changeRequest', async (req, res) => {
+  const { userId, followUserId } = req.body; // Extract IDs from the request body
+
+  if (!userId || !followUserId) {
+    return res.status(400).json({ error: 'Missing userId or followUserId' });
+  }
+
+  try {
+    // Find the user whose requests array needs to be updated
+    const user = await User.findOne({ userID: followUserId });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Check if the userId is already in the requests array
+    const alreadyRequested = user.requests.includes(userId);
+
+    if (alreadyRequested) {
+      // If already in the array, remove it
+      user.requests = user.requests.filter((id) => id.toString() !== userId);
+    } else {
+      // Otherwise, add it to the array
+      user.requests.push(userId);
+    }
+
+    // Save the updated user document
+    await user.save();
+
+    return res.status(200).json({
+      message: alreadyRequested ? 'Request removed' : 'Request added',
+      requests: user.requests,
+    });
+  } catch (error) {
+    console.error('Error updating requests array:', error);
+    return res.status(500).json({ error: 'Internal server error' });
   }
 });
 

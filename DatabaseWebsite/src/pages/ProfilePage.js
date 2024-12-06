@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { getUserPosts } from '../userData/userPosts';
 import Post from '../components/Post'; 
-import { getUserInfo, getUserFollowers, getUserFollowing, getUserId, unfollowUser, followUser, removeUserId} from '../userData/user'; // Update this to fetch followers/following data
+import { getUserInfo, getUserFollowers, getUserFollowing, getUserId, unfollowUser, followUser, removeUserId, changeRequest } from '../userData/user'; // Update this to fetch followers/following data
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
@@ -19,6 +19,9 @@ function ProfilePage() {
     followers: 0, // Dynamically loaded
     following: 0, // Dynamically loaded
     isFollowing: false,
+    isPrivate: false,
+    requests: [],
+    hasRequested: false,
   });
 
   const [isCurrentUser, setIsCurrentUser] = useState(false);
@@ -52,6 +55,8 @@ function ProfilePage() {
         isFollowingCurrentUser = followers.some(follower => follower._id === currentUserId);
         console.log('Is follwing current user: ', isFollowingCurrentUser);
       }
+      let hasRequestedFollow = userInfo.requests?.some(request => request === currentUserId);
+
       setProfile((prevProfile) => ({
         ...prevProfile,
         userId: userInfo.userId,
@@ -61,6 +66,9 @@ function ProfilePage() {
         followers: followers.length, // Set followers count
         following: following.length, // Set following count
         isFollowing: isFollowingCurrentUser,
+        isPrivate: userInfo.isPrivate,
+        requests: userInfo.requests,
+        hasRequested: hasRequestedFollow,
       }));
     }
   };
@@ -99,6 +107,8 @@ function ProfilePage() {
             followers: prevProfile.followers - 1,
           }));
         }
+      } else if (profile.isPrivate) {
+        handleRequest();
       } else {
         // Follow the user if not following
         const success = await followUser(userId);
@@ -124,6 +134,27 @@ function ProfilePage() {
     console.log('Viewing threads...');
   };
 
+  const handleRequest = async () => {
+    try {
+      const success = await changeRequest(userId); // Call the backend function to add a request
+      if (success) {
+        if (!profile.hasRequested) {
+          setProfile((prevProfile) => ({
+            ...prevProfile,
+            hasRequested: true, // Mark the request as sent
+          }));
+        } else {
+          setProfile((prevProfile) => ({
+            ...prevProfile,
+            hasRequested: false, // Mark the request as sent
+          }));
+        }
+      }
+    } catch (error) {
+      console.error('Error sending follow request:', error);
+    }
+  };
+
   return (
     <div className="profile-container">
       <div className="profile-header">
@@ -139,65 +170,79 @@ function ProfilePage() {
         </div>
         <div className="profile-info">
           <p>{profile.bio}</p>
-          <div className="profile-stats">
-            <div className="stat">
-              <p>{profile.totalPosts}</p>
-              <p>Posts</p>
-            </div>
-            <div className="stat">
-              <p>
-                <Link to={`/usersFollowers/${userId}`} className="number-link">
-                  {profile.followers}
-                </Link>
-              </p>
-              <p>Followers</p>
-            </div>
-            <div className="stat">
-              <p>
-                <Link to={`/usersFollowing/${userId}`} className="number-link">
-                  {profile.following}
-                </Link>
-              </p>
-              <p>Following</p>
-            </div>
-          </div>
+          {!profile.isPrivate || profile.isFollowing || isCurrentUser ? (
+            <>
+              <div className="profile-stats">
+                <div className="stat">
+                  <p>{profile.totalPosts}</p>
+                  <p>Posts</p>
+                </div>
+                <div className="stat">
+                  <p>
+                    <Link to={`/usersFollowers/${userId}`} className="number-link">
+                      {profile.followers}
+                    </Link>
+                  </p>
+                  <p>Followers</p>
+                </div>
+                <div className="stat">
+                  <p>
+                    <Link to={`/usersFollowing/${userId}`} className="number-link">
+                      {profile.following}
+                    </Link>
+                  </p>
+                  <p>Following</p>
+                </div>
+              </div>
 
-          {isCurrentUser ? (
-            <button className="edit-profile-button" onClick={handleEditProfile}>Edit Profile</button>
+              {isCurrentUser ? (
+                <button className="edit-profile-button" onClick={handleEditProfile}>Edit Profile</button>
+              ) : (
+                <button className="follow-button" onClick={handleFollowUnfollow}>
+                  {profile.isFollowing ? 'Unfollow' : 'Follow'}
+                </button>
+              )}
+            </>
           ) : (
-            <button className="follow-button" onClick={handleFollowUnfollow}>
-              {profile.isFollowing ? 'Unfollow' : 'Follow'}
-            </button>
+            !isCurrentUser && (
+              <button className="follow-button" onClick={handleFollowUnfollow}>
+                {profile.hasRequested ? 'Requested' : 'Follow'}
+              </button>
+            )
           )}
         </div>
       </div>
 
-      <div className="profile-uploads-section">
-        <hr />
-        <div className="upload-buttons">
-          <button onClick={handleViewPhotosVideos}>Photos/Videos</button>
-          <button onClick={handleViewThreads}>Threads</button>
+      {!profile.isPrivate || profile.isFollowing || isCurrentUser ? (
+        <div className="profile-uploads-section">
+          <hr />
+          <div className="upload-buttons">
+            <button onClick={handleViewPhotosVideos}>Photos/Videos</button>
+            <button onClick={handleViewThreads}>Threads</button>
+          </div>
         </div>
-      </div>
-      {/* model popout for displaying user posts */}
+      ) : null}
+
       {showModel && (
         <div className="model-overlay" onClick={handleCloseModel}>
           <div className="model-content" onClick={(e) => e.stopPropagation()}>
-            <button className="close-model" onClick={handleCloseModel}><FontAwesomeIcon icon={faTimes} /></button>
+            <button className="close-model" onClick={handleCloseModel}>
+              <FontAwesomeIcon icon={faTimes} />
+            </button>
             <div className="posts-scrollable">
-            {userPosts.length > 0 ? (
-          [...userPosts] // Create a shallow copy to avoid modifying the original array
-            .sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate)) // Sort by descending date
-            .map((post) => (
-              <Post
-              key={post._id}
-              creator={profile.username} 
-              postDate={post.creationDate}
-              postContent={post.textContent || 'No content available'}  // Only showing textContent for now
-              postId={post._id}       // Passing the postID to the Post component
-            />
-          ))
-        ) : (
+              {userPosts.length > 0 ? (
+                [...userPosts]
+                  .sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate))
+                  .map((post) => (
+                    <Post
+                      key={post._id}
+                      creator={profile.username}
+                      postDate={post.creationDate}
+                      postContent={post.textContent || 'No content available'}
+                      postId={post._id}
+                    />
+                  ))
+              ) : (
                 <p>No posts available.</p>
               )}
             </div>
