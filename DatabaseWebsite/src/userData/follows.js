@@ -1,9 +1,10 @@
 import { getUserId } from "./user";
+import getServerURL from './serverURL';
 
 export const getFollowers = async () => {
     const userId = getUserId();
     try {
-        const response = await fetch('http://98.80.48.42:3000/api/followers/${userId}')
+        const response = await fetch(`${getServerURL()}/api/followers/${userId}`)
         const result = await response.json();
 
         if (result.success) {
@@ -20,7 +21,7 @@ export const getFollowers = async () => {
 export const getFollowing = async () => {
     const userId = getUserId();
     try {
-        const response = await fetch('http://98.80.48.42:3000/api/following/${userId}')
+        const response = await fetch(`${getServerURL()}/api/following/${userId}`)
         const result = await response.json();
 
         if (result.success) {

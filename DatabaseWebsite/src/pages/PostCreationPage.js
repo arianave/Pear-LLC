@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../CSS/PostCreationPage.css';
 import { getUserId } from '../userData/user';
+import getServerURL from './serverURL';
 
 function PostCreationPage() {
   const [postType, setPostType] = useState(''); // Manages post type (text, picture, video, thread)
@@ -63,7 +64,7 @@ function PostCreationPage() {
             formData.append('textContent', caption);
         }
 
-        const response = await fetch('http://98.80.48.42:3000/api/post', {
+        const response = await fetch(`${getServerURL()}/api/post`, {
             method: 'POST',
             body: formData,
         });
