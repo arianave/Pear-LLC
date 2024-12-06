@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import '../CSS/CreateAccountPage.css'; //importing the css
 import { useNavigate } from 'react-router-dom';
 import { storeUserId } from '../userData/user';
+import getServerURL from './serverURL';
 
 
 function CreateAccountPage() {
@@ -87,7 +88,7 @@ function CreateAccountPage() {
     } else {
       try {
         // Submit the form data to the backend
-        const response = await fetch('http://98.80.48.42:3000/api/users', {
+        const response = await fetch(`${getServerURL()}/api/users`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
