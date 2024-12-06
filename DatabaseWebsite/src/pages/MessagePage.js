@@ -5,6 +5,7 @@ import { getUsername } from '../userData/user';
 import { getUserId } from '../userData/user';
 import { useLayoutEffect } from 'react'; // Ensure you import useLayoutEffect
 import { Link } from 'react-router-dom';
+import getServerURL from './serverURL';
 
 function MessagePage({}) {
   const [chats, setChats] = useState([]); // State for storing existing chats
@@ -43,7 +44,7 @@ function MessagePage({}) {
     
     try {
       // Make a request to your backend API to search for users
-      const response = await fetch(`http://98.80.48.42:3000/api/searchUsers/${searchTerm}`);
+      const response = await fetch(`${getServerURL()}/api/searchUsers/${searchTerm}`);
       const result = await response.json();
       
       if (result.success) {
@@ -122,7 +123,7 @@ function MessagePage({}) {
     if (newMessage.trim() === '') return; // Prevent empty messages
 
     try {
-      const response = await fetch(`http://98.80.48.42:3000/api/messages`, {
+      const response = await fetch(`${getServerURL()}/api/messages`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
