@@ -1,7 +1,9 @@
+import getServerURL from '../pages/serverURL';
+
 // Function to fetch comments based on the post ID
 export const getPostComments = async (postId) => {
     try {
-      const response = await fetch(`http://98.80.48.42:3000/api/comments/${postId}`);
+      const response = await fetch(`${getServerURL()}/api/comments/${postId}`);
       const result = await response.json();
   
       if (result.success) {
@@ -21,7 +23,7 @@ export const getPostComments = async (postId) => {
 // Function to add a new comment to a post
 export const addComment = async (userId, postId, content) => {
   try {
-    const response = await fetch(`http://98.80.48.42:3000/api/addcomments/${postId}`, {
+    const response = await fetch(`${getServerURL()}/api/addcomments/${postId}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -44,7 +46,7 @@ export const addComment = async (userId, postId, content) => {
 // Function to upvote a post
 export const upvotePost = async (postId, userId) => {
   try {
-    const response = await fetch(`http://98.80.48.42:3000/api/posts/${postId}/upvote/${userId}`, {
+    const response = await fetch(`${getServerURL()}/api/posts/${postId}/upvote/${userId}`, {
       method: 'POST',
     });
     const result = await response.json();
@@ -64,7 +66,7 @@ export const upvotePost = async (postId, userId) => {
 // Function to downvote a post
 export const downvotePost = async (postId, userId) => {
   try {
-    const response = await fetch(`http://98.80.48.42:3000/api/posts/${postId}/downvote/${userId}`, {
+    const response = await fetch(`${getServerURL()}/api/posts/${postId}/downvote/${userId}`, {
       method: 'POST',
     });
     const result = await response.json();
@@ -84,7 +86,7 @@ export const downvotePost = async (postId, userId) => {
 // Function to check if a user has already voted on a post
 export const checkIfUserHasVoted = async (postId, userId) => {
   try {
-    const response = await fetch(`http://98.80.48.42:3000/api/posts/${postId}/hasVoted?userId=${userId}`, {
+    const response = await fetch(`${getServerURL()}/api/posts/${postId}/hasVoted?userId=${userId}`, {
       method: 'GET',
     });
     const result = await response.json();
@@ -105,7 +107,7 @@ export const checkIfUserHasVoted = async (postId, userId) => {
 // Frontend: Function to get the vote count for a post
 export const getPostVoteCount = async (postId) => {
   try {
-    const response = await fetch(`http://98.80.48.42:3000/api/posts/${postId}/voteCount`);
+    const response = await fetch(`${getServerURL()}/api/posts/${postId}/voteCount`);
     const result = await response.json();
 
     if (result.success) {

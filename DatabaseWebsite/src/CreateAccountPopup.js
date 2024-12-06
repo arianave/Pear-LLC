@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Popup.css'; 
+import getServerURL from './pages/serverURL';
 
 function CreateAccountPopup({ isOpen, onClose }) {
   // State to hold form values
@@ -26,7 +27,7 @@ function CreateAccountPopup({ isOpen, onClose }) {
     e.preventDefault();
     try {
       // Send form data to the backend
-      const response = await fetch('http://98.80.48.42:3000/api/users', {
+      const response = await fetch(`${getServerURL()}/api/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

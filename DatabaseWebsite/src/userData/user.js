@@ -1,3 +1,5 @@
+import getServerURL from '../pages/serverURL';
+
 // Function to store user ID in localStorage
 export function storeUserId(userId) {
     localStorage.setItem('userId', userId);
@@ -17,7 +19,7 @@ export function storeUserId(userId) {
   export const getUserInfo = async (userID) => {
     const userId = userID;
     try {
-      const response = await fetch(`http://98.80.48.42:3000/api/users/${userId}`);
+      const response = await fetch(`${getServerURL()}/api/users/${userId}`);
       const result = await response.json();
 
       if (result.success) {
@@ -35,7 +37,7 @@ export function storeUserId(userId) {
     const userId = userID;
     if(userID){
       try{
-        const response = await fetch(`http://98.80.48.42:3000/api/name/${userId}`);
+        const response = await fetch(`${getServerURL()}/api/name/${userId}`);
         const result = await response.json();
 
         if (result.success){
@@ -53,7 +55,7 @@ export function storeUserId(userId) {
     const userId = userID;
     if(userID){
       try {
-        const response = await fetch(`http://98.80.48.42:3000/api/username/${userId}`);
+        const response = await fetch(`${getServerURL()}/api/username/${userId}`);
         const result = await response.json();
     
         if (result.success) {
@@ -72,7 +74,7 @@ export function storeUserId(userId) {
     const userId = getUserId();
   
     try {
-      const response = await fetch(`http://98.80.48.42:3000/api/users/${userId}/profile`, {
+      const response = await fetch(`${getServerURL()}/api/users/${userId}/profile`, {
         method: 'POST', 
         headers: {
           'Content-Type': 'application/json',
@@ -104,7 +106,7 @@ export const getUserFollowers = async (userID) => {
   console.log(`Fetching followers for user ID: ${userId}`);
 
   try {
-    const url = `http://98.80.48.42:3000/api/followers/${userId}`;
+    const url = `${getServerURL()}/api/followers/${userId}`;
     console.log(`Requesting followers from URL: ${url}`);
     
     const response = await fetch(url);
@@ -135,7 +137,7 @@ export const getUserFollowing = async (userID) => {
   console.log(`Fetching following for user ID: ${userId}`);
 
   try {
-    const url = `http://98.80.48.42:3000/api/following/${userId}`;
+    const url = `${getServerURL()}/api/following/${userId}`;
     console.log(`Requesting following from URL: ${url}`);
     
     const response = await fetch(url);
@@ -165,7 +167,7 @@ export const followUser = async (followUserId) => {
   const userId = getUserId(); // Get the current user's ID
 
   try {
-    const response = await fetch('http://98.80.48.42:3000/api/follow', {
+    const response = await fetch(`${getServerURL()}/api/follow`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -177,7 +179,7 @@ export const followUser = async (followUserId) => {
 
     if (result.success) {
       // After successful follow, add the user to the followUserId's followers list
-      const addFollowerResponse = await fetch('http://98.80.48.42:3000/api/addFollower', {
+      const addFollowerResponse = await fetch(`${getServerURL()}/api/addFollower`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -205,7 +207,7 @@ export const followUser = async (followUserId) => {
 // Function to unfollow a specific user
 export const unfollowUser = async (unfollowUserId, isSecondaryCall = false, userId = getUserId()) => {
   try {
-    const response = await fetch('http://98.80.48.42:3000/api/unfollow', {
+    const response = await fetch(`${getServerURL()}/api/unfollow`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -232,7 +234,7 @@ export const unfollowUser = async (unfollowUserId, isSecondaryCall = false, user
 // Function to remove a specific user from following
 export const removeUserFromFollowing = async (removeUserId, isSecondaryCall = false, userId = getUserId()) => {
   try {
-    const response = await fetch('http://98.80.48.42:3000/api/removeFollower', {
+    const response = await fetch(`${getServerURL()}/api/removeFollower`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -1,8 +1,10 @@
+import getServerURL from '../pages/serverURL';
+
 // Function to fetch posts created by the user
 async function getUserPosts(userId) {
   const userID = userId; // Retrieve the current user's ID
   try {
-    const response = await fetch('http://98.80.48.42:3000/api/posts'); // Fetch all posts from the backend
+    const response = await fetch(`${getServerURL()}/api/posts`); // Fetch all posts from the backend
     const allPosts = await response.json();
 
     // Filter the posts by user ID
