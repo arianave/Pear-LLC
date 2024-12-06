@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import '../CSS/LogInPage.css'; //importing the css
 import { storeUserId } from '../userData/user';
 import { Link, useNavigate } from 'react-router-dom'; // Import Link from react-router-dom
+import getServerURL from './serverURL';
 
 
 function LogInPage() { //manage state of log in form
@@ -42,7 +43,7 @@ function LogInPage() { //manage state of log in form
       setErrors(newErrors);
     } else { // if no errors found from if, proceed with submission
       try {
-        const response = await fetch('http://98.80.48.42:3000/api/login', {
+        const response = await fetch(`${getServerURL()}/api/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
