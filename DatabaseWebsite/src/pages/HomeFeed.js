@@ -4,6 +4,7 @@ import '../CSS/HomeFeed.css'; //importing the css
 import Post from '../components/Post'; // Import the Post component
 import { useEffect } from 'react';
 import { getUserId } from '../userData/user';
+import getServerURL from './serverURL';
 
 
 function HomeFeed() {
@@ -13,7 +14,7 @@ function HomeFeed() {
     const fetchPosts = async () => {
         const userId = getUserId();
         try {
-            const response = await fetch(`http://98.80.48.42:3000/getFollowedPosts/${userId}`);
+            const response = await fetch(`${getServerURL()}/getFollowedPosts/${userId}`);
             const data = await response.json();
             if (data.success) {
                 console.log('Fetched posts:', data.posts); // Debug log
