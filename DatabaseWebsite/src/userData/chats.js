@@ -1,5 +1,5 @@
 import { getUserId } from "./user";
-import getServerURL from './serverURL';
+import getServerURL from '../pages/serverURL';
 
 export const getChats = async () => {
     const userId = getUserId();
