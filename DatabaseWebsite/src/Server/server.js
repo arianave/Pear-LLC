@@ -196,18 +196,49 @@ app.post('/api/login', async (req, res) => {
     }
   });
 
-  app.post('/api/users/:userId/profile', async (req, res) => {
+  app.post('/api/users/:userId/profile', upload.single('profilePicture'), async (req, res) => {
     const { userId } = req.params;
-    const { biography, profilePicture, isPrivate } = req.body;
+    const { biography, isPrivate } = req.body;
   
     try {
+      let profilePictureUrl = null;
+  
+      // If a profile picture file is uploaded, process and upload it to S3
+      if (req.file) {
+        const buffer = await sharp(req.file.buffer)
+          .resize({ width: 1080, height: 1080, fit: 'cover', position: 'center' }) // Resize to 1080x1080
+          .toBuffer();
+  
+        const mediaKey = randomImageName();
+  
+        const params = {
+          Bucket: bucketName, // Replace with your bucket name
+          Key: mediaKey,
+          Body: buffer,
+          ContentType: req.file.mimetype,
+        };
+  
+        // Upload to S3
+        const command = new PutObjectCommand(params);
+        await s3.send(command);
+  
+        profilePictureUrl = `https://${bucketName}.s3.${bucketRegion}.amazonaws.com/${mediaKey}`;
+      }
+  
+      // Update the user profile in the database
+      const updatedFields = {
+        profileBiography: biography,
+        isPrivate: isPrivate,
+      };
+  
+      // Include the new profile picture URL if it exists
+      if (profilePictureUrl) {
+        updatedFields.profilePicture = profilePictureUrl;
+      }
+  
       const updatedUser = await User.findByIdAndUpdate(
         userId,
-        {
-          profileBiography: biography,
-          profilePicture: profilePicture,
-          isPrivate: isPrivate,
-        },
+        updatedFields,
         { new: true } // Return the updated document
       );
   
@@ -215,12 +246,16 @@ app.post('/api/login', async (req, res) => {
         return res.status(404).json({ message: 'User not found.' });
       }
   
-      res.json({ message: 'Profile updated successfully.', user: updatedUser });
+      res.json({
+        message: 'Profile updated successfully.',
+        user: updatedUser,
+        profilePicture: profilePictureUrl || updatedUser.profilePicture,
+      });
     } catch (error) {
-      console.error(error);
+      console.error('Error updating profile:', error);
       res.status(500).json({ message: 'An error occurred while updating the profile.' });
     }
-  });
+  });  
 
   app.get('/api/post/:mediaKey', async (req, res) => {
     const { mediaKey } = req.params;
