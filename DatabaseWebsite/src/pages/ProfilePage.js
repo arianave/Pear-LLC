@@ -240,6 +240,8 @@ function ProfilePage() {
                       postDate={post.creationDate}
                       postContent={post.textContent || 'No content available'}
                       postId={post._id}
+                      mediaType={post.mediaType} // Pass media type
+                      mediaUrl={post.mediaUrl}
                     />
                   ))
               ) : (
