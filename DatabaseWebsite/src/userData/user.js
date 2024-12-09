@@ -327,6 +327,7 @@ export const acceptRequest = async (userId) => {
       const addFollowerResult = await addFollowerResponse.json();
 
       if (addFollowerResult.success) {
+        denyRequest(userId);
         return true; // Both follow and add follower successful
       } else {
         console.error('Error adding to followers:', addFollowerResult.message);
