@@ -205,9 +205,12 @@ function ProfilePage() {
             </>
           ) : (
             !isCurrentUser && (
+              <>
+              <p className="private-account-text">This Account Is Private</p>
               <button className="follow-button" onClick={handleFollowUnfollow}>
                 {profile.hasRequested ? 'Requested' : 'Follow'}
               </button>
+            </>
             )
           )}
         </div>

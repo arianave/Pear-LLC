@@ -69,6 +69,7 @@ body {
   /*margin-right: 0;*/
   flex-shrink: 0; /* Preventing profile pic shrinkage */
   overflow: visible;
+  cursor: default;
 }
 
 .avatar {
@@ -79,6 +80,7 @@ body {
   background-color: #ccc;
   border: 2px solid #ddd; /* Add border to the profile picture */
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  cursor: default;
 }
 
 .profile-info {
@@ -249,3 +251,10 @@ color: #0056b3; /* Darker blue on hover */
 text-decoration: underline; /* Adds underline on hover */
 }
 
+
+.private-account-text {
+  font-size: 16px;
+  color: #666;
+  margin-bottom: 10px;
+  text-align: center;
+}
