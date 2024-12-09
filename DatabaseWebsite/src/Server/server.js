@@ -910,22 +910,26 @@ app.post('/api/changeRequest', async (req, res) => {
   }
 
   try {
+    const followUserObjectId = new mongoose.Types.ObjectId(followUserId); 
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+
     // Find the user whose requests array needs to be updated
-    const user = await User.findOne({ userID: followUserId });
+    const user = await User.findById( followUserObjectId );
 
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
 
     // Check if the userId is already in the requests array
-    const alreadyRequested = user.requests.includes(userId);
+    const alreadyRequested = user.requests.includes(userObjectId);
+    console.log("Already Requested", alreadyRequested);
 
     if (alreadyRequested) {
       // If already in the array, remove it
-      user.requests = user.requests.filter((id) => id.toString() !== userId);
+      user.requests = user.requests.filter((id) => id.toString() !== userObjectId.toString());
     } else {
       // Otherwise, add it to the array
-      user.requests.push(userId);
+      user.requests.push(userObjectId);
     }
 
     // Save the updated user document
@@ -941,6 +945,51 @@ app.post('/api/changeRequest', async (req, res) => {
   }
 });
 
+app.get('/api/followerRequests/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+    const user = await User.findById( userObjectId );
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.json(user.requests);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching requests', error });
+  }
+});
+
+app.post('/api/denyRequest', async (req, res) => {
+  const { userId, requestId } = req.body;
+
+  if (!userId || !requestId) {
+    return res.status(400).json({ error: 'Missing userId or requestId' });
+  }
+
+
+  try {
+    const userObjectId = new mongoose.Types.ObjectId(userId); 
+    const requestObjectId = new mongoose.Types.ObjectId(requestId); 
+
+    const user = await User.findOneAndUpdate(
+      { _id: userObjectId },
+      { $pull: { requests: requestObjectId } },  // Remove requestId from requests array
+      { new: true }
+    );
+
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ message: 'Request denied successfully', requests: user.requests });
+  } catch (error) {
+    console.error('Error denying request:', error);  // Log the error for debugging
+    res.status(500).json({ message: 'Error denying request', error });
+  }
+});
 
   // Start the server
   app.listen(port, () => {

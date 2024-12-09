@@ -284,3 +284,83 @@ export const changeRequest = async (followUserId) => {
     return false;
   }
 };
+
+export const getFollowerRequests = async () => {
+  const userId = getUserId();
+  try {
+    const response = await fetch(`${getServerURL()}/api/followerRequests/${userId}`);
+    if (!response.ok) {
+      throw new Error(`Error fetching requests: ${response.statusText}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Failed to fetch follower requests:', error);
+    return [];
+  }
+};
+
+export const acceptRequest = async (userId) => {
+  const followUserId = getUserId(); // Get the current user's ID
+
+  try {
+    const response = await fetch(`${getServerURL()}/api/follow`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ userId, followUserId }), // Send both userId and followUserId
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      // After successful follow, add the user to the followUserId's followers list
+      const addFollowerResponse = await fetch(`${getServerURL()}/api/addFollower`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ followUserId, userId }), // Swap IDs to add user to followers list
+      });
+
+      const addFollowerResult = await addFollowerResponse.json();
+
+      if (addFollowerResult.success) {
+        return true; // Both follow and add follower successful
+      } else {
+        console.error('Error adding to followers:', addFollowerResult.message);
+        throw new Error('Error adding to followers');
+      }
+    } else {
+      throw new Error('Error following user');
+    }
+  } catch (error) {
+    console.error('Error following user:', error);
+    return false;
+  }
+};
+
+export const denyRequest = async (requestId) => {
+  const userId = getUserId();
+  try {
+    const response = await fetch(`${getServerURL()}/api/denyRequest`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userId, requestId }),
+      });
+
+      const result = await response.json();
+
+      if (result.ok) {
+        return true;
+      } else {
+        throw new Error('Error denying request');
+      }
+    } catch (error) {
+      console.error('Error denying request:', error);
+      return false;
+    }
+  };
