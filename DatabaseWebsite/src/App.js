@@ -16,6 +16,7 @@ import Activity from './pages/Activity';
 import FeedColumn from './pages/FeedColumn';
 import UsersFollowers from './pages/usersFollowers';
 import UsersFollowing from './pages/usersFollowing';
+import CommunityPage from './pages/CommunityPage';
 
 function App() {
   return (
@@ -48,7 +49,7 @@ function AppContent() {
           <Route path="FeedSearch" element={<FeedSearch />} />  
           <Route path="Activity" element={<Activity />} />    
           <Route path="FeedColumn" element={<FeedColumn />} />  
-
+          <Route path="CommunityPage/:communityId" element={<CommunityPage />} />  
           <Route path="usersFollowers/:userId" element={<UsersFollowers />} />
           <Route path="usersFollowing/:userId" element={<UsersFollowing />} />
         </Routes>

@@ -125,6 +125,7 @@ function Post({ creator, postDate, postContent, postId, mediaType, mediaUrl }) {
           <p className="post-date">{new Date(postDate).toLocaleDateString()}</p>
         </div>
         {mediaType && mediaUrl && (
+          <>
           <div className="post-media">
             {mediaType === "image" && <img src={mediaUrl} alt="Post media" />}
             {mediaType === "video" && (
@@ -134,8 +135,9 @@ function Post({ creator, postDate, postContent, postId, mediaType, mediaUrl }) {
               </video>
             )}
           </div>
+          <hr />
+          </>
         )}
-        <hr />
         <div className="post-content-layout">
           <p className="post-content">{postContent}</p>
         </div>

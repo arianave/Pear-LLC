@@ -6,6 +6,8 @@ import getServerURL from './serverURL';
 function PostCreationPage() {
   const [postType, setPostType] = useState(''); // Manages post type (text, picture, video, thread)
   const [textContent, setTextContent] = useState(''); // Manages text post content
+  const [communityName, setCommunityName] = useState(''); // Manages community name
+  const [description, setDescription] = useState(''); // Manages community description 
   const [mediaContent, setMediaContent] = useState(); // Manages media content (picture or video)
   const [caption, setCaption] = useState(''); // Manages caption for media posts
   const userID = getUserId(); // Retrieves the user's ID
@@ -13,12 +15,24 @@ function PostCreationPage() {
 
   // Handle post type selection (text, picture, video, thread)
   const handlePostTypeSelection = (type) => {
-    setPostType(type);
+    if (postType === type){
+      setPostType('');
+    } else {
+      setPostType(type);
+    }
   };
 
   // Handle text post input
   const handleTextChange = (e) => {
     setTextContent(e.target.value);
+  };
+
+  const handleCommunityNameChange = (e) => {
+    setCommunityName(e.target.value);
+  };
+
+  const handleDescriptionChange = (e) => {
+    setDescription(e.target.value);
   };
 
   // Handle media (picture or video) input
@@ -59,6 +73,9 @@ function PostCreationPage() {
 
         if (postType === 'text') {
             formData.append('textContent', textContent);
+        } else if (postType === 'community'){
+            formData.append('communityName', communityName);
+            formData.append('description', description);
         } else {
             formData.append('mediaContent', mediaContent);
             formData.append('textContent', caption);
@@ -75,6 +92,8 @@ function PostCreationPage() {
             console.log('Post created successfully:', result);
             setPostType('');
             setTextContent('');
+            setCommunityName('');
+            setDescription('');
             setMediaContent(null);
             setCaption('');
             setError('');
@@ -97,7 +116,7 @@ function PostCreationPage() {
         <button onClick={() => handlePostTypeSelection('text')}>Text</button>
         <button onClick={() => handlePostTypeSelection('picture')}>Picture</button>
         <button onClick={() => handlePostTypeSelection('video')}>Video</button>
-        <button onClick={() => handlePostTypeSelection('thread')}>Thread</button>
+        <button onClick={() => handlePostTypeSelection('community')}>Community</button>
       </div>
 
       {/* Conditionally render input fields based on post type */}
@@ -121,6 +140,23 @@ function PostCreationPage() {
             placeholder="Add a caption (max 250 characters)..."
             value={caption}
             onChange={handleCaptionChange}
+          />
+        </>
+      )}
+      {postType === 'community' && (
+        <>
+          <input
+            type="text"
+            placeholder="Community Name (max 25 characters)..."
+            value={communityName}
+            onChange={handleCommunityNameChange}
+            maxLength={25} // Character limit for community name
+          />
+          <textarea
+            placeholder="Description (max 250 characters)..."
+            value={description}
+            onChange={handleDescriptionChange}
+            maxLength={250} // Character limit for description
           />
         </>
       )}

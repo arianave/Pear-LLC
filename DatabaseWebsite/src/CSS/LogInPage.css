@@ -83,7 +83,7 @@ when user is not logged into the application to avoid styling conflict once logg
 
   /* left off checking global css styling here */  
   .input {
-    width: 100%;
+    width: 100% !important;
     padding: 10px;
     box-sizing: border-box;
     border-radius: 5px;

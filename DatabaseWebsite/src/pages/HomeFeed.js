@@ -50,7 +50,7 @@ function HomeFeed() {
         <Link to="/Activity">
           <button className="activity-button">Activity</button>
         </Link>
-        <Link to="/Column">
+        <Link to="/FeedColumn">
           <button className="column-button">Column</button>
         </Link>
         <Link to="/FeedSearch">

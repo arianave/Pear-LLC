@@ -83,7 +83,10 @@ const Comment = mongoose.model('Comment', CommentSchema);
 const ThreadSchema = new mongoose.Schema({
 threadID: mongoose.Schema.Types.ObjectId,
 userID: mongoose.Schema.Types.ObjectId,
-threadName: String,                         
+communityName: String,
+description: String,
+joins: { type: [mongoose.Schema.Types.ObjectId], default: [] },
+threads: { type: [mongoose.Schema.Types.ObjectId], default: [] },
 creationDate: Date,
 });
 
@@ -277,14 +280,14 @@ app.post('/api/login', async (req, res) => {
         console.log('Request body:', req.body);
         console.log('Uploaded file:', req.file);
 
-        const { userID, textContent, postType } = req.body;
+        const { userID, postType, textContent, communityName, description } = req.body;
 
         if (!postType || !userID) {
             return res.status(400).json({ success: false, message: 'Post type and user ID are required' });
         }
 
         let mediaKey = null;
-        let type = 'threads';
+        let type = postType;
         let mediaUrl = null;
 
         // Process media content based on type
@@ -356,6 +359,7 @@ app.post('/api/login', async (req, res) => {
             return res.status(400).json({ success: false, message: 'Media content is required for picture or video posts' });
         }
 
+        if (type !== "community") {
         const newPost = new Post({
             userID,
             textContent,
@@ -364,9 +368,18 @@ app.post('/api/login', async (req, res) => {
             creationDate: new Date(),
             mediaType: type,
         });
-
         await newPost.save();
         res.status(201).json({ success: true, post: newPost });
+      } else {
+        const newThread = new Thread({
+          userID,
+          communityName,
+          description,
+          creationDate: new Date(),
+        });
+        await newThread.save();
+        res.status(201).json({ success: true });
+      }
     } catch (error) {
         console.error('Error creating post:', error);
         res.status(500).json({ success: false, message: 'Error creating post', error });
@@ -691,6 +704,26 @@ app.get('/api/users', async (req, res) => {
         console.error('Error fetching followed posts:', error);
         res.status(500).json({ success: false, message: 'Internal server error' });
     }
+});
+
+app.get('/api/threads', async (req, res) => {
+  try {
+    const threads = await Thread.find();
+    res.json(threads);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+app.get('/api/community/:communityId', async (req, res) => {
+  const { communityId } = req.params;
+  try {
+    const threads = await Thread.find();
+    const community = threads.filter(thread => thread._id.toString() === communityId);
+    res.json(community);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
   app.get('/api/chats/:userId', async (req, res) => {

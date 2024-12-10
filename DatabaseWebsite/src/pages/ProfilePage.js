@@ -8,6 +8,7 @@ import Post from '../components/Post';
 import { getUserInfo, getUserFollowers, getUserFollowing, getUserId, unfollowUser, followUser, removeUserId, changeRequest } from '../userData/user'; // Update this to fetch followers/following data
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { getUserCommunities } from '../userData/userThreads.js';
 
 function ProfilePage() {
   const { userId } = useParams(); // Get userId from the URL
@@ -34,7 +35,8 @@ function ProfilePage() {
   const fetchUserInfo = async () => {
     // Fetch the user's posts and count them
     const posts = await getUserPosts(userId);
-    const num = posts ? posts.length : 0; // Set num to 0 if posts is undefined or null (mod for unit test)
+    const communities = await getUserCommunities(userId);
+    const num = (posts ? posts.length : 0) + (communities ? communities.length : 0); // Calculate the total number of posts and communities
     const userInfo = await getUserInfo(userId); // Get user info from function
     const followers = await getUserFollowers(userId).catch((err) => {
       console.error('Failed to fetch followers:', err);
@@ -80,7 +82,10 @@ function ProfilePage() {
   const handleViewPhotosVideos = async () => {
     console.log('Fetching photos/videos...');
     const posts = await getUserPosts(userId); // Fetch user posts
-    setUserPosts(posts);
+    const filteredPosts = posts.filter(post => 
+      post.mediaType === 'image' || post.mediaType === 'video'
+  );
+    setUserPosts(filteredPosts);
     setShowModel(true); // Show model
   };
 
@@ -127,11 +132,18 @@ function ProfilePage() {
 
   const handleCloseModel = () => {
     setShowModel(false); // Close model
+    setUserPosts([]);
   };
 
-  const handleViewThreads = () => {
+  const handleViewThreads = async () => {
     // Logic for viewing user's threads to be implemented
     console.log('Viewing threads...');
+    const posts = await getUserPosts(userId); // Fetch user posts
+    const filteredPosts = posts.filter(post => 
+      post.mediaType === 'text' || post.mediaType === 'threads'
+  );
+    setUserPosts(filteredPosts);
+    setShowModel(true); // Show model
   };
 
   const handleRequest = async () => {
