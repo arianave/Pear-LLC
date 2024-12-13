@@ -280,7 +280,7 @@ app.post('/api/login', async (req, res) => {
         console.log('Request body:', req.body);
         console.log('Uploaded file:', req.file);
 
-        const { userID, postType, textContent, communityName, description } = req.body;
+        const { userID, postType, textContent, communityName, description, communityID, threadContent } = req.body;
 
         if (!postType || !userID) {
             return res.status(400).json({ success: false, message: 'Post type and user ID are required' });
@@ -359,7 +359,7 @@ app.post('/api/login', async (req, res) => {
             return res.status(400).json({ success: false, message: 'Media content is required for picture or video posts' });
         }
 
-        if (type !== "community") {
+        if (type !== ("community" || "thread")) {
         const newPost = new Post({
             userID,
             textContent,
@@ -367,6 +367,18 @@ app.post('/api/login', async (req, res) => {
             mediaUrl: mediaUrl, // Save public URL
             creationDate: new Date(),
             mediaType: type,
+        });
+        await newPost.save();
+        res.status(201).json({ success: true, post: newPost });
+      } else if (type !== "community") {
+        const newPost = new Post({
+            userID,
+            textContent: threadContent,
+            mediaContent: mediaKey,
+            mediaUrl: mediaUrl,
+            creationDate: new Date(),
+            mediaType: type,
+            communityID, 
         });
         await newPost.save();
         res.status(201).json({ success: true, post: newPost });
@@ -723,6 +735,35 @@ app.get('/api/community/:communityId', async (req, res) => {
     res.json(community);
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+
+app.post('/api/community/join', async (req, res) => {
+  const { communityId, userId } = req.body;
+
+  try{
+    const communityObjectId = new mongoose.Types.ObjectId(communityId);
+    const userObjectId = new mongoose.Types.ObjectId(userId);
+    const community = await Thread.findById( communityObjectId );
+
+    if (!community) {
+      return res.status(404).json({ success: false, message: 'Community not found' });
+    }
+
+    if (community.joins.includes(userObjectId)){
+      community.joins = community.joins.filter(id => !id.equals(userObjectId));
+      await community.save();
+
+      return res.status(200).json({ success: true, message: 'Left the community' });
+    } else {
+      community.joins.push(userObjectId);
+      await community.save();
+
+      return res.status(200).json({ success: true, message: 'Joined the community' });
+    }
+  } catch (err) {
+    console.error('Error in joinCommunity API:', err);
+    return res.status(500).json({ success: false, message: 'Internal server error', error: err.message });
   }
 });
 
