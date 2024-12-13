@@ -5,6 +5,7 @@ import {
   faArrowUp,
   faArrowDown,
   faTimes,
+  faPlay,
 } from "@fortawesome/free-solid-svg-icons";
 import {
   getPostComments,
@@ -15,17 +16,26 @@ import {
   checkIfUserHasVoted,
 } from "../userData/postComments";
 import { getUserId, getUsername } from "../userData/user";
+import { getUserCommunity } from "../userData/userThreads";
+import { Link } from "react-router-dom";
 
-function Post({ creator, postDate, postContent, postId, mediaType, mediaUrl }) {
+function Post({ creator, postDate, postContent, postId, mediaType, mediaUrl, communityID = null }) {
   const [comments, setComments] = useState([]);
   const [votesCount, setVotesCount] = useState(0);
   const [newComment, setNewComment] = useState("");
   const [hasUpvoted, setUpvote] = useState(false);
   const [hasDownvoted, setDownvote] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [community, setCommunity] = useState(null);
   const userId = getUserId();
 
   useEffect(() => {
+    const fetchCommunity = async () => {
+      const communityData = await getUserCommunity(communityID);
+      const communityObject = communityData[0];
+      setCommunity(communityObject);
+    }
+
     // Function to fetch votes
     const fetchVotes = async () => {
       const initialVoteCount = await getPostVoteCount(postId);
@@ -66,6 +76,10 @@ function Post({ creator, postDate, postContent, postId, mediaType, mediaUrl }) {
 
     if (postId) {
       fetchVotes(); // Always fetch votes when postId changes
+
+      if(communityID){
+        fetchCommunity();
+      }
 
       if (isExpanded) {
         fetchComments(); // Fetch comments only if the post is expanded
@@ -122,6 +136,19 @@ function Post({ creator, postDate, postContent, postId, mediaType, mediaUrl }) {
       <div className="post-compact" onClick={() => setIsExpanded(true)}>
         <div className="post-header">
           <h4 className="post-creator">{creator}</h4>
+          {community && (
+            <p className="thread-arrow">
+              <FontAwesomeIcon icon={faPlay} />
+              <Link
+                  to={`/CommunityPage/${community._id}`}
+                  onClick={(e) => e.stopPropagation()}
+                  key={community._id}
+                  className="community-link"
+              >
+                  <p>{community.communityName}</p>
+              </Link>
+            </p>
+          )}
           <p className="post-date">{new Date(postDate).toLocaleDateString()}</p>
         </div>
         {mediaType && mediaUrl && (

@@ -294,3 +294,16 @@ hr {
   cursor: pointer;
   z-index: 1001;
 }
+
+.thread-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-left: -260px;
+  gap: 5px;
+}
+
+.community-link{
+  text-decoration: none;
+  color: inherit;
+}

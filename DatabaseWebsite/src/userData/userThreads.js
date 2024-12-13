@@ -72,8 +72,8 @@ export const getCommunityThreads = async (threadIds) => {
   }
 };
 
-export const addThread = async (communityId, threadContent) => {
-  const userId = getUserId();
+export const addThread = async (communityID, threadContent) => {
+  const userID = getUserId();
   const postType = "thread";
   try {
     const response = await fetch(`${getServerURL()}/api/post`, {
@@ -81,12 +81,12 @@ export const addThread = async (communityId, threadContent) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ communityId, threadContent, userId, postType }),
+      body: JSON.stringify({ communityID, threadContent, userID, postType }),
   });
 
   const result = await response.json();
   if (result.success) {
-    return true;
+    return result.post;
   }
   } catch (error) {
     console.error('Error, unable to add thread: ', error);

@@ -52,7 +52,13 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    overflow-y: auto;
+    max-height: 400px;
 }
+
+.threads-container > * {
+    flex-shrink: 0;
+  }
 
 .thread-card {
     background-color: white;

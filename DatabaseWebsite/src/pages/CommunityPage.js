@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import '../CSS/CommunityPage.css'; // Importing the CSS
 import { getUserCommunity, getCommunityThreads, addThread, joinCommunity } from '../userData/userThreads';
 import { getUsername, getUserId } from '../userData/user';
+import Post from '../components/Post';
 
 function CommunityPage() {
     const { communityId } = useParams(); // Extract community ID from the URL
@@ -26,7 +27,20 @@ function CommunityPage() {
                 if (communityData && communityData.threads) {
                     // Fetch threads using the array of thread IDs
                     const communityThreads = await getCommunityThreads(communityData.threads);
-                    setThreads(communityThreads || []); // Set threads once they are fetched
+
+                    if (communityThreads && communityThreads.length > 0) {
+                    // Fetch usernames for each thread
+                    const threadsWithUsernames = await Promise.all(
+                        communityThreads.map(async (thread) => {
+                        const username = await getUsername(thread.userID); // Retrieve username
+                        return { ...thread, username };
+                        })
+                    );
+
+                    setThreads(threadsWithUsernames); // Set threads with usernames
+                    } else {
+                    setThreads([]); 
+                    }
                 } else {
                     console.log('No threads found for this community'); // Log if no threads are found
                     setThreads([]); // Set empty threads if no threads exist
@@ -57,9 +71,15 @@ function CommunityPage() {
 
     const handleAddThread = async () => {
         try {
-            addThread(communityId, threadContent);
-            setThreadContent(""); // Clear input
-            setIsModalOpen(false); // Close modal
+            const newThread = await addThread(communityId, threadContent);
+    
+            const username = await getUsername(newThread.userID);
+    
+            const threadWithUsername = { ...newThread, username };
+            setThreads((prevThreads) => [threadWithUsername, ...prevThreads]);
+    
+            setThreadContent("");
+            setIsModalOpen(false);
         } catch (error) {
             console.error("Error adding thread:", error);
         }
@@ -136,13 +156,20 @@ function CommunityPage() {
                 <h2>Threads</h2>
                 <div className="threads-container">
                     {threads.length > 0 ? (
-                        threads.map((thread) => (
-                            <div className="thread-card" key={thread._id}>
-                                <h3 className="thread-title">{thread.title}</h3>
-                                <p className="thread-snippet">{thread.content.slice(0, 100)}...</p>
-                                <p className="thread-meta">Posted by {thread.creatorUsername || "Unknown"} on {new Date(thread.creationDate).toLocaleDateString()}</p>
-                            </div>
-                        ))
+                        [...threads]
+                        .sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate))
+                        .map((thread) => (
+                            <Post
+                              key={thread._id}
+                              creator={thread.username}
+                              postDate={thread.creationDate}
+                              postContent={thread.textContent || 'No content available'}
+                              postId={thread._id}
+                              mediaType={thread.mediaType} // Pass media type
+                              mediaUrl={thread.mediaUrl}
+                              communityID={thread.communityID}
+                            />
+                          ))
                     ) : (
                         <p>No threads found in this community.</p>
                     )}

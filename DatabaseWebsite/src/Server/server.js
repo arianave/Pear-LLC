@@ -65,7 +65,8 @@ const PostSchema = new mongoose.Schema({
   mediaContent: String,                        
   creationDate: Date, 
   mediaUrl: String,
-  mediaType: String,                              
+  mediaType: String,
+  communityID: String,                              
 });
 
 const Post = mongoose.model('Post', PostSchema);
@@ -359,7 +360,7 @@ app.post('/api/login', async (req, res) => {
             return res.status(400).json({ success: false, message: 'Media content is required for picture or video posts' });
         }
 
-        if (type !== ("community" || "thread")) {
+        if (type !== "community" && type !== "thread") {
         const newPost = new Post({
             userID,
             textContent,
@@ -381,6 +382,12 @@ app.post('/api/login', async (req, res) => {
             communityID, 
         });
         await newPost.save();
+
+        await Thread.findByIdAndUpdate(
+          communityID, 
+          { $push: { threads: newPost._id } },
+      );
+
         res.status(201).json({ success: true, post: newPost });
       } else {
         const newThread = new Thread({
