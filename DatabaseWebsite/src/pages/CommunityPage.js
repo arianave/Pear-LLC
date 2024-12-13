@@ -87,12 +87,9 @@ function CommunityPage() {
 
     const handleJoin = async () => {
         try {
-            joinCommunity(communityId, userID);
-            if (isJoined) {
-                setIsJoined(true);
-            } else {
-                setIsJoined(false);
-            }
+            await joinCommunity(communityId, userID);
+            
+            setIsJoined((prevIsJoined) => !prevIsJoined);
         } catch (error) {
             console.error("Error joining community:", error);
         }

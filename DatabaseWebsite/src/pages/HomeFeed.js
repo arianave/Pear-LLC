@@ -57,6 +57,7 @@ function HomeFeed() {
               mediaUrl={post.mediaUrl}
               mediaType={post.mediaType}
               postId={post._id}
+              {...(post.communityID && { communityID: post.communityID })}
             />
 
           ))

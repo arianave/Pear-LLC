@@ -135,6 +135,7 @@ function Post({ creator, postDate, postContent, postId, mediaType, mediaUrl, com
       {/* Compact View */}
       <div className="post-compact" onClick={() => setIsExpanded(true)}>
         <div className="post-header">
+          <div className="name-arrow">
           <h4 className="post-creator">{creator}</h4>
           {community && (
             <p className="thread-arrow">
@@ -149,6 +150,7 @@ function Post({ creator, postDate, postContent, postId, mediaType, mediaUrl, com
               </Link>
             </p>
           )}
+          </div>
           <p className="post-date">{new Date(postDate).toLocaleDateString()}</p>
         </div>
         {mediaType && mediaUrl && (

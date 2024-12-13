@@ -716,6 +716,7 @@ app.get('/api/users', async (req, res) => {
             creationDate: post.creationDate,
             mediaUrl: post.mediaUrl,
             mediaType: post.mediaType,
+            ...(post.communityID && { communityID: post.communityID }),
         }));
 
         res.status(200).json({ success: true, posts: formattedPosts });

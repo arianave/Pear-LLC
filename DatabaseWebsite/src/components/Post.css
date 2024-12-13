@@ -28,6 +28,12 @@
   margin-bottom: 10px;
 }
 
+.name-arrow{
+  display: flex;
+  align-items: center;
+  justify-content: left;
+}
+
 .post-creator {
   font-size: 20px;
   font-weight: bold;
@@ -299,7 +305,7 @@ hr {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  margin-left: -260px;
+
   gap: 5px;
 }
 
