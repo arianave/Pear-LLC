@@ -6,6 +6,7 @@
 body {
   font-family: 'Arial', sans-serif; /* Use a font of your choice */
   background-color: #f0f0f0; /* Light background color */
+  background: linear-gradient(to bottom, #6e529d 0%, #d97b93 100%);
 }
 
 .profile-container {

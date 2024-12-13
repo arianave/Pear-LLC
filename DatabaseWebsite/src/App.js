@@ -30,7 +30,7 @@ function AppContent() {
   const location = useLocation(); // Hook to get the current location
 
   // Define the pages where the BottomBar should not appear
-  const hideBottomBarOnPages = ['/', '/CreateAccountPage', '/ResetPassword'];//', /LogInPage'
+  const hideBottomBarOnPages = ['/', '/CreateAccountPage',  '/ResetPassword'];//', /LogInPage'
 
   return (
     <div>

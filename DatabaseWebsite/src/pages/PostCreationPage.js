@@ -109,7 +109,7 @@ function PostCreationPage() {
 
   return (
     <div className="post-creation-container">
-      <h2>Create a Post</h2>
+      <h6>Create a Post</h6>
 
       {/* Post type selection */}
       <div className="post-type-buttons">

@@ -37,7 +37,7 @@ function HomeFeed() {
           <button className="activity-button">Activity</button>
         </Link>
         <Link to="/FeedColumn">
-          <button className="column-button">Column</button>
+          <button className="column-button">Community</button>
         </Link>
         <Link to="/FeedSearch">
           <button className="search-button">🔍</button> {/* Search button */}
