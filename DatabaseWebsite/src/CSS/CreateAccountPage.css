@@ -78,7 +78,7 @@ createaccountpage is scrollable and needs the height and width to cover window *
   }
   
   /* Styling for input fields */
-  .input-LC {
+  input {
     width: 100%;              
     padding: 10px;           
     border: 1px solid #ccc;  /*Border style */
