@@ -64,6 +64,7 @@ function ProfilePage() {
         userId: userInfo.userId,
         username: userInfo.username || 'No username', // Use the username or a default value
         bio: userInfo.profileBiography || 'No bio yet',      // Use the bio or a default value
+        profilePicture: userInfo.profilePicture || '/gray_pfp.png',
         totalPosts: num, // Update the post count
         followers: followers.length, // Set followers count
         following: following.length, // Set following count
@@ -178,7 +179,11 @@ function ProfilePage() {
 
       <div className="profile-body">
         <div className="profile-picture">
-          <img src="/gray_pfp.png" alt="Anonymous user" className="avatar" />
+          <img 
+            src={profile.profilePicture || "/gray_pfp.png"} 
+            alt="Profile" 
+            className="avatar" 
+          />
         </div>
         <div className="profile-info">
           <p>{profile.bio}</p>

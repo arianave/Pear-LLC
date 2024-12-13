@@ -68,7 +68,7 @@ body {
   height: 200px;
   /*margin-right: 0;*/
   flex-shrink: 0; /* Preventing profile pic shrinkage */
-  overflow: visible;
+  /*overflow: visible;*/
   cursor: default;
 }
 

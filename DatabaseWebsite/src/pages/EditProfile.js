@@ -4,8 +4,10 @@ import '../CSS/EditProfile.css'; //importing the css
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from 'react-router-dom'; // Import Link from react-router-dom
 import { getUserId, getUserInfo, setProfileInfo } from '../userData/user';
+import getServerURL from './serverURL';
 
 const EditProfile = () => {
+  const [profilePictureFile, setProfilePictureFile] = useState(null);
   const [profilePicture, setProfilePicture] = useState(null);
   const [isPrivate, setIsPrivate] = useState(false);
   const [biography, setBiography] = useState("");
@@ -30,18 +32,40 @@ const EditProfile = () => {
     fetchUserInfo();
   }, [userId]);
 
+  const handleSaveChanges = async () => {
+    const formData = new FormData();
+    formData.append('biography', biography);
+    formData.append('isPrivate', isPrivate);
+    if (profilePictureFile) {
+      formData.append('profilePicture', profilePictureFile); // Attach the file
+    }
+  
+    try {
+      const response = await fetch(`${getServerURL()}/api/users/${userId}/profile`, {
+        method: 'POST',
+        body: formData, // Send FormData
+      });
+  
+      const result = await response.json();
+      if (response.ok) {
+        alert('Profile updated successfully!');
+        setProfilePicture(result.profilePicture); // Update the profile picture preview
+      } else {
+        alert(`Error: ${result.message}`);
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert('An error occurred while updating your profile.');
+    }
+  };
+  
   const handleProfilePictureChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setProfilePicture(URL.createObjectURL(file));
+      setProfilePictureFile(file); // Store file
+      setProfilePicture(URL.createObjectURL(file)); // Update preview
     }
-  };
-
-  const handleSaveChanges = () => {
-    console.log("Profile changes saved:", { profilePicture, isPrivate, biography });
-    setProfileInfo(biography, profilePicture, isPrivate);
-    alert("Profile updated successfully!");
-  };
+  };  
 
   const handleDeleteAccount = () => {
     setShowDeletePopup(true);
