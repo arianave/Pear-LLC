@@ -17,7 +17,7 @@ function FeedSearch() {
   
   return (
     <div className="feed-search-page">
-      <form onSubmit={handleSearchSubmit} className="feed-search-form">
+      <form onSubmit={handleSearchSubmit} className="feed-search-form">   
         <input
           type="text"
           placeholder="Search for accounts, threads, or keywords"

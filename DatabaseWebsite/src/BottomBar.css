@@ -1,14 +1,17 @@
 .bottom-bar {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
+    bottom: 10px;
+    left: 50%; /* Start positioning from the middle */
+  transform: translateX(-50%); /* Center the bar horizontally */
+  width: 75%; /* Make the bar 2/3 of the screen width */
+    align-items: center; /* Center icons vertically */
     background-color: #f8f8f8;
     display: flex;
     justify-content: space-around;
     padding: 10px;
     box-shadow: 0px -2px 5px rgba(0, 0, 0, 0.1);
     margin: 0;
+    border-radius: 70px; /* Add rounded corners */
   }
   
   .bottom-bar a {
@@ -16,4 +19,33 @@
     color: #333;
     font-size: 16px;
   }
+
+  .bottom-bar img {
+    width: 50px; /* Adjust size to match text height */
+    height: 40px; /* Maintain square aspect ratio */
+    object-fit: contain; /* Ensure image doesn't stretch */
+    border-radius: 50%;  
+
+  }
+
+
+  .message-icon {
+    height: 30px;
+    transform: scale(1.5); /* Slightly larger */
+    border-radius: 50%;
+  }
+
+  .profile-icon {
+    height: 30px;
+    transform: scale(1.5); /* Slightly larger */
+    border-radius: 50%;
+  }
+
+  .post-icon {
+    height: 30px;
+    transform: scale(1.5); /* Slightly larger */
+    border-radius: 50%;
+  }
+
+
   

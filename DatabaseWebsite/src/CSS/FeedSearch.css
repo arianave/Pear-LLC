@@ -1,31 +1,42 @@
 .feed-search-page {
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
+    justify-content: center; /* Center the search form on the page */
+    align-items: center; /* Center vertically */
     height: 100vh;
     padding: 20px;
+    box-sizing: border-box; /* Ensure padding is included in the width calculation */
     background-color: #f9f9f9; /* Optional background color */
   }
-  
+
   .feed-search-form {
     display: flex;
-    justify-content: center; /* Center the search bar horizontally */
+    width: 100%; /* Take the full width of the container */
+    max-width: 800px; /* Limit the maximum width of the search bar and button */
+    align-items: center; /* Align search bar and button vertically */
     margin-top: 20px;
   }
   
   .feed-search-input {
     padding: 10px;
+    flex: 1; /* Allows the input to grow and take up available space */
     width: 70%; /* Adjust the width as needed */
     border: 1px solid #ccc;
     border-radius: 5px;
+    box-sizing: border-box; /* Ensures padding is included in the width */
   }
   
   .feed-search-button {
     padding: 10px;
     margin-left: 10px;
+    margin-top: 20px;
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    height: 100%; /* Matches the height of the input */
+    white-space: nowrap; /* Prevents text from wrapping */
+
   }
-  
+   
