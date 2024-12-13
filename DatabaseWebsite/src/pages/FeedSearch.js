@@ -87,7 +87,7 @@ function FeedSearch() {
         {searchResults.map((user) => (
           <div key={user._id} className="search-result-item">
             <p>{user.username}</p>
-            <Link to={`/ProfilePage/${user._id}`} className="profile-link">
+            <Link to={`/ProfilePage/${user._id}`} className="username-link-search">
               {user.username}
             </Link>
           </div>
