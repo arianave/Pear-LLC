@@ -30,20 +30,6 @@ function HomeFeed() {
     fetchPosts();
 }, []);
 
-  // Navigate to the activity page
-  //const handleActivityClick = () => {
-    // You can use navigate here if you have a route for activity
-    // navigate('/Activity');
-    //console.log('Navigating to Activity'); // Placeholder action
-  //};
-
-  // Navigate to the column page
-  //const handleColumnClick = () => {
-    // You can use navigate here if you have a route for column
-    // navigate('/Column');
-    //console.log('Navigating to Column'); // Placeholder action
-  //};
-
   return (
     <div className="home-feed">
       <div className="header">

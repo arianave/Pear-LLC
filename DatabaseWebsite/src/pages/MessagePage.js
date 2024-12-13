@@ -245,6 +245,7 @@ function MessagePage({}) {
           ))
         )}
       </div>
+      
        {/* Popup for showing messages */}
        {showPopup && (
         <div className="chat-popup">

@@ -1,13 +1,45 @@
+.user-list {
+  display: flex;
+  flex-direction: column; /* Stack the user items vertically */
+  width: 100%;
+  max-width: 800px; /* Limit the width of the list */
+  margin-top: 20px; /* Space between search bar and results */
+}
+
+.user-item {
+  padding: 10px;
+  background-color: #fff;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease; /* Add hover effect */
+}
+
+.user-item:hover {
+  background-color: #f1f1f1;
+}
+
+.username-link {
+  text-decoration: none;
+  color: #333;
+}
+
+.username-link p {
+  font-size: 1.1em;
+  margin: 0;
+}
+
 .feed-search-page {
-    display: flex;
-    /* flex-direction: column; */
-    justify-content: center; /* Center the search form on the page */
-    align-items: center; /* Center vertically */
-    height: 100vh;
-    padding: 20px;
-    box-sizing: border-box; /* Ensure padding is included in the width calculation */
-    background-color: #f9f9f9; /* Optional background color */
-  }
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto; /* Allow the height to adjust with content */
+  max-height: 100vh;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: #f9f9f9;
+  overflow-y: auto; /* Add scrolling for long lists */
+}
 
   .feed-search-form {
     display: flex;
@@ -27,16 +59,15 @@
   }
   
   .feed-search-button {
+    flex-grow: 0; /* Prevents button from growing */
     padding: 10px;
     margin-left: 10px;
-    margin-top: 20px;
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    height: 100%; /* Matches the height of the input */
-    white-space: nowrap; /* Prevents text from wrapping */
-
+    height: 100%;
+    white-space: nowrap;
   }
    
