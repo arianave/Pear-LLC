@@ -140,7 +140,7 @@ function CreateAccountPage() {
         <form onSubmit={handleSubmit}>
           <div>
             <label htmlFor="first name">First Name:</label>
-            <input s
+            <input classname = "input-LC"
               type="text"
               id = "first name"
               name="firstName"
@@ -152,7 +152,7 @@ function CreateAccountPage() {
           </div>
           <div>
             <label htmlFor="last name">Last Name:</label>
-            <input s
+            <input classname = "input-LC"
               type="text"
               id = "last name"
               name="lastName"
@@ -164,7 +164,7 @@ function CreateAccountPage() {
           </div>
           <div>
             <label htmlFor="birth date">Birth Date:</label>
-            <input s
+            <input classname = "input-LC"
               type="date"
               id = "birth date"
               name="birthDate"
@@ -176,7 +176,7 @@ function CreateAccountPage() {
           </div>
           <div>
             <label htmlFor="email">Email:</label>
-            <input s
+            <input classname = "input-LC"
               type="email"
               id = "email"
               name="email"
@@ -188,7 +188,7 @@ function CreateAccountPage() {
           </div>
           <div>
             <label htmlFor="username">Username:</label>
-            <input s
+            <input classname = "input-LC"
               type="text"
               id ="username"
               name="username"
@@ -199,7 +199,7 @@ function CreateAccountPage() {
           </div>
           <div>
             <label htmlFor="password">Password:</label>
-            <input s
+            <input classname = "input-LC"
               type="password"
               id="password"
               name="password"
@@ -211,7 +211,7 @@ function CreateAccountPage() {
           </div>
           <div>
             <label htmlFor="confirmPassword">Password Confirmation:</label>
-            <input s
+            <input classname = "input-LC"
               type="password"
               id = "confirmPassword"
               name="confirmPassword"
