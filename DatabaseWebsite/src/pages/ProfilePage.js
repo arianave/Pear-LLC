@@ -141,7 +141,7 @@ function ProfilePage() {
     console.log('Viewing threads...');
     const posts = await getUserPosts(userId); // Fetch user posts
     const filteredPosts = posts.filter(post => 
-      post.mediaType === 'text' || post.mediaType === 'threads'
+      post.mediaType === 'text' || post.mediaType === 'thread'
   );
     setUserPosts(filteredPosts);
     setShowModel(true); // Show model
@@ -262,6 +262,7 @@ function ProfilePage() {
                       postId={post._id}
                       mediaType={post.mediaType} // Pass media type
                       mediaUrl={post.mediaUrl}
+                      {...(post.communityID && { communityID: post.communityID })}
                     />
                   ))
               ) : (
