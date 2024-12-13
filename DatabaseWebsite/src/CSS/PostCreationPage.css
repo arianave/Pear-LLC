@@ -42,7 +42,7 @@
     background-color: #45a049;
   }
   
-  textarea, input-PCP[type="file"], input-PCP[type="text"] {
+  textarea, input-PCP[type="file"] {
     width: 60%;
     padding: 10px;
     margin-bottom: 15px;
@@ -50,7 +50,7 @@
     border-radius: 5px;
     font-size: 1rem;
   }
-/*  
+
   textarea, input-PCP[type="text"] {
     width: 60%;
     padding: 10px;
@@ -59,7 +59,7 @@
     border-radius: 5px;
     font-size: 1rem;
   }
- */
+ 
   textarea {
     height: 100px; /* Default height for textareas */
     resize: none; /* Prevent resizing */
