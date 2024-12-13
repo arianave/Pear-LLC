@@ -130,7 +130,7 @@ function PostCreationPage() {
       )}
       {(postType === 'picture' || postType === 'video') && (
         <>
-          <input
+          <inputPCP
             type="file"
             accept={postType === 'picture' ? 'image/*' : 'video/*'}
             onChange={handleMediaChange}
@@ -145,7 +145,7 @@ function PostCreationPage() {
       )}
       {postType === 'community' && (
         <>
-          <input
+          <inputPCP
             type="text"
             placeholder="Community Name (max 25 characters)..."
             value={communityName}

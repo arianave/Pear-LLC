@@ -38,7 +38,7 @@
     background-color: #45a049;
   }
   
-  textarea, input[type="file"] {
+  textarea, input-PCP[type="file"] {
     width: 60%;
     padding: 10px;
     margin-bottom: 15px;
@@ -47,7 +47,7 @@
     font-size: 1rem;
   }
 
-  textarea, input[type="text"] {
+  textarea, input-PCP[type="text"] {
     width: 60%;
     padding: 10px;
     margin-bottom: 15px;

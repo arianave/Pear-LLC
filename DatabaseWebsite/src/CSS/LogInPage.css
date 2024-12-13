@@ -77,8 +77,9 @@ when user is not logged into the application to avoid styling conflict once logg
   
   .login-form label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     font-weight: bold;
+    /* font-size: 20px; */
   }
 
   /* left off checking global css styling here */  
