@@ -136,7 +136,6 @@
 .chat-messages {
   flex-grow: 1; /* Take up available space */
   padding: 10px;
-  overflow-y: auto; 
   max-height: 400px; /* Limit height so that it becomes scrollable */
   background-color: #f9f9f9;
 }
