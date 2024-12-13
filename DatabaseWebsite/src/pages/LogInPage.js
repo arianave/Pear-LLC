@@ -85,13 +85,13 @@ function LogInPage() { //manage state of log in form
           <h2>Welcome to Pear to Peer</h2>
           <div>
             <label htmlFor="username">Username:</label>
-            <input
+            <input 
               type="text"
               id = "username"
               name="username"
               value={formData.username} // bind to component state between username and entered value 
               onChange={handleChange} // listen to changes 
-              className="input"
+              className="input-LC"
               required // form will not submit if either field is empty 
             />
             {errors.username && <p className="error">{errors.username}</p>}
@@ -104,7 +104,7 @@ function LogInPage() { //manage state of log in form
               name="password"
               value={formData.password}
               onChange={handleChange}
-              className="input"
+              className="input-LC"
               required
             />
             {errors.password && <p className="error">{errors.password}</p>}

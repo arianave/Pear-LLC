@@ -130,11 +130,13 @@ function PostCreationPage() {
       )}
       {(postType === 'picture' || postType === 'video') && (
         <>
-          <inputPCP
+          <input className="input-PCP" type="file" accept={postType === 'picture' ? 'image/*' : 'video/*'} onChange={handleMediaChange} />
+
+          {/* <input   
             type="file"
             accept={postType === 'picture' ? 'image/*' : 'video/*'}
             onChange={handleMediaChange}
-          />
+          />*/}
           {/* Caption input for media posts */}
           <textarea
             placeholder="Add a caption (max 250 characters)..."
@@ -145,6 +147,8 @@ function PostCreationPage() {
       )}
       {postType === 'community' && (
         <>
+        <input className="input-PCP" type="text" placeholder="Community Name (max 25 characters)..." value={communityName} onChange={handleCommunityNameChange} maxLength={25} />
+        {/*}
           <inputPCP
             type="text"
             placeholder="Community Name (max 25 characters)..."
@@ -152,6 +156,7 @@ function PostCreationPage() {
             onChange={handleCommunityNameChange}
             maxLength={25} // Character limit for community name
           />
+          */}
           <textarea
             placeholder="Description (max 250 characters)..."
             value={description}

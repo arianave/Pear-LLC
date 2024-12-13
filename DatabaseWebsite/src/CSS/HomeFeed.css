@@ -25,6 +25,28 @@
     border: none; /* Remove border */
     border-radius: 5px; /* Rounded corners */
     cursor: pointer; /* Pointer cursor on hover */
+    height: 40px; /* Ensure consistent button height */
+    display: inline-block; /* Make buttons display as inline-block for horizontal layout */
+    font-size: 16px; /* Standardize font size */
+    vertical-align: middle; /* Align buttons to the same vertical axis */
+    white-space: nowrap; /* Prevent text wrapping */
+}
+
+.search-button {
+    margin-left: 5px; /* Space between buttons */
+    padding: 10px; /* Button padding */
+    background-color: #007bff; /* Button color */
+    color: white; /* Text color */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    height: 40px; /* Ensure it matches the height of other buttons */
+    display: inline-block; /* Flexbox alignment */
+    justify-content: center; /* Center content horizontally */
+    align-items: center; /* Center content vertically */
+    align-self: center; /* Center the search emoji vertically */
+    font-size: 16px; /* Standardize font size */
+    white-space: nowrap; /* Prevent text wrapping */
 }
 
 .post-list {

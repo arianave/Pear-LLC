@@ -39,6 +39,8 @@
     height: 30px;
     transform: scale(1.5); /* Slightly larger */
     border-radius: 50%;
+    border-image: linear-gradient(to bottom, #32cd32, #ffff00) 1;
+
   }
 
   .post-icon {

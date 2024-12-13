@@ -15,6 +15,19 @@
     content: '';
 }
 
+/* Start the gpt code: Global .setup styling for pre-login pages */
+/* .setup { 
+  height: 100vh;
+  width: 100%;
+  overflow: hidden; /* Ensures no scrollbars for the background 
+  justify-content: center;
+  align-items: center;
+  position: relative; /* Necessary for absolute positioning inside 
+  background: linear-gradient(to bottom, #598e64 0%, #f3ee95 100%);
+}
+ */
+/*   background: linear-gradient(to bottom, #6e529d 0%, #d97b93 100%); */
+
 /* here we are defining the global .setup styling for the pages a user would encounter before logging in. Defined here since 
 createaccountpage is scrollable and needs the height and width to cover window */
 .setup {
