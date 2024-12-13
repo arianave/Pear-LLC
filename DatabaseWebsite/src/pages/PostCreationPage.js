@@ -130,11 +130,13 @@ function PostCreationPage() {
       )}
       {(postType === 'picture' || postType === 'video') && (
         <>
-          <inputPCP
+          <input className="input-PCP" type="file" accept={postType === 'picture' ? 'image/*' : 'video/*'} onChange={handleMediaChange} />
+
+          {/* <input   
             type="file"
             accept={postType === 'picture' ? 'image/*' : 'video/*'}
             onChange={handleMediaChange}
-          />
+          />*/}
           {/* Caption input for media posts */}
           <textarea
             placeholder="Add a caption (max 250 characters)..."
