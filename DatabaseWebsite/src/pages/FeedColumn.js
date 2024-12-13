@@ -43,7 +43,7 @@ useEffect(() => {
                                 className="community-card"
                             >
                                 <p className="community-name">{community.communityName}</p>
-                                <p className="community-description">{community.description || "No description provided"}</p>
+                                <p className="community-description-column">{community.description || "No description provided"}</p>
                             </Link>
                         ))
                     ) : (
@@ -64,7 +64,7 @@ useEffect(() => {
                                 className="community-card"
                             >
                                 <p className="community-name">{community.communityName}</p>
-                                <p className="community-description">{community.description || "No description provided"}</p>
+                                <p className="community-description-column">{community.description || "No description provided"}</p>
                             </Link>
                         ))
                     ) : (

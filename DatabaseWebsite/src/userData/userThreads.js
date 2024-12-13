@@ -1,4 +1,5 @@
 import getServerURL from '../pages/serverURL';
+import { getUserId } from './user';
 
 // Retrives all communities made by the user
 export const getUserCommunities = async (userId) => {
@@ -71,3 +72,43 @@ export const getCommunityThreads = async (threadIds) => {
   }
 };
 
+export const addThread = async (communityId, threadContent) => {
+  const userId = getUserId();
+  const postType = "thread";
+  try {
+    const response = await fetch(`${getServerURL()}/api/post`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ communityId, threadContent, userId, postType }),
+  });
+
+  const result = await response.json();
+  if (result.success) {
+    return true;
+  }
+  } catch (error) {
+    console.error('Error, unable to add thread: ', error);
+    return false;
+  }
+};
+
+export const joinCommunity = async (communityId, userId) => {
+  try {
+    const response = await fetch(`${getServerURL()}/api/community/join`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ communityId, userId }),
+  });
+  const result = await response.json();
+  if (result.success) {
+    return true;
+  }
+  } catch (error) {
+    console.error('Error while joining community', error);
+    return false;
+  }
+};
